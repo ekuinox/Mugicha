@@ -1,15 +1,15 @@
 #pragma once
 
 #include "polygonsquare.h"
-#include "conf.h"
 
-class Background : public SquarePolygonBase {
+class ScalableObject : public SquarePolygonBase
+{
 private:
-	float aspect_ratio;
+	float aspect_ratio; // ‘½•ª
 	void generate_vertexes();
 public:
-	Background(LPDIRECT3DTEXTURE9 _tex, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
-	~Background();
+	ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	~ScalableObject();
 	void update();
 	void draw();
 	bool is_drawing();

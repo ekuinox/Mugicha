@@ -45,6 +45,7 @@ void Player::update()
 			direction = 0;
 			moving = true;
 		}
+
 #ifdef __ENABLE_PLAYER_ROTATION
 		if (GetKeyboardPress(DIK_Q)) // ç∂âÒì]
 		{

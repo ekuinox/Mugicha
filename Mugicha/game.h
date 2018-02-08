@@ -5,6 +5,7 @@
 #include "polygonsquare.h"
 #include "player.h"
 #include "background.h"
+#include "scalable_object.h"
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
 

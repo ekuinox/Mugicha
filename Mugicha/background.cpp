@@ -3,11 +3,15 @@
 
 void Background::generate_vertexes()
 {
+	auto left_bottom_x = 0;
+	auto left_bottom_y = SCREEN_HEIGHT; 
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = {
-			this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			this->y + this->h / (i < 2 ? -2 : 2),
+//			this->x + this->w / (i % 3 == 0 ? -2 : 2),
+			left_bottom_x + (i % 3 == 0 ? 0 : this->w),
+//			this->y + this->h / (i < 2 ? -2 : 2),
+			left_bottom_y - (i < 2 ? this->h : 0),
 			0.0f,
 			1.0f,
 			D3DCOLOR_RGBA(255, 255, 255, 200),
@@ -25,6 +29,7 @@ Background::Background(LPDIRECT3DTEXTURE9 _tex, float _u, float _v, float _uw, f
 	w = BACKGROUND_WIDTH;
 	h = BACKGROUND_HEIGHT;
 	tex = _tex;
+	aspect_ratio = h / w;
 	// 引数でuv受け取れるようにしてあるけど，実際使うときにuvはもうクラス内でいじるようにしていいと思う
 	u = _u;
 	v = _v;
@@ -58,6 +63,18 @@ void Background::update()
 		else if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
 		{
 			u += 0.0001f;
+		}
+
+		// 拡縮
+		if (GetKeyboardPress(DIK_NUMPAD8)) // 拡大
+		{
+			w += 1.0f;
+			h += 1.0f * aspect_ratio;
+		}
+		else if (GetKeyboardPress(DIK_NUMPAD2)) // 縮小
+		{
+			w -= 1.0f;
+			h -= 1.0f * aspect_ratio;
 		}
 
 		latest_update = current;

@@ -32,6 +32,7 @@ void Game::init()
 //			{ "__TAG__", "__FILE_PATH__" },
 			{ "BACKGROUND", "./resources/textures/background.jpg" },
 			{ "PLAYER", "./resources/textures/player.jpg" },
+			{ "BLOCK", "./resources/textures/block.png" },
 		});
 	}
 	
@@ -44,6 +45,10 @@ void Game::init()
 	// ƒvƒŒƒCƒ„‚Ì“o˜^
 	polygons["PLAYERS"].push_back(new Player(textures["PLAYER"]));
 	polygons["PLAYERS"][0]->switch_status(false);
+
+	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ð“o˜^
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(500, SCREEN_HEIGHT - 20, 20, 20, textures["BLOCK"]));
+	polygons["SCALABLE_OBJECTS"][0]->switch_status(false);
 
 	// ƒV[ƒ“Ø‚è‘Ö‚¦
 	switch_scene(scene::TITLE);
@@ -86,6 +91,7 @@ void Game::switch_scene(enum scene _scene)
 		labels = {
 			"BACKGROUNDS",
 			"PLAYERS",
+			"SCALABLE_OBJECTS",
 		};
 		break;
 	case scene::GAMEOVER:
@@ -131,6 +137,7 @@ void Game::update()
 	{
 		// ƒƒCƒ“‚ÅŽg‚¤ƒ|ƒŠƒSƒ“‚Ì—LŒø‰»
 		polygons["PLAYERS"][0]->switch_status(TRUE);
+		polygons["SCALABLE_OBJECTS"][0]->switch_status(TRUE);
 
 		main();
 		latest_scene_update = current;
