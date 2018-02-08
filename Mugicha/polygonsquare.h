@@ -5,16 +5,13 @@
 #include <cmath>
 #include <vector>
 #include <time.h>
+#include "conf.h"
 
 /*
 * 四角形のPolygonを管理描画するクラス
 * SquarePolygonBase => 抽象
 * PlainSquarePolygon => SquarePolygonBaseを継承したシンプルな四角形用のクラス
 */
-
-// constant
-#define SCREEN_WIDTH (800)
-#define SCREEN_HEIGHT (600)
 
 // ドローする本体
 typedef struct
