@@ -31,7 +31,7 @@ Background::Background(LPDIRECT3DTEXTURE9 _tex, float _u, float _v, float _uw, f
 	v = _v;
 	uw = _uw;
 	vh = _vh;
-
+	layer = INT_MAX;
 }
 
 Background::~Background()

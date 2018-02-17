@@ -2,12 +2,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "polygonsquare.h"
-#include "player.h"
-#include "background.h"
-#include "scalable_object.h"
-
-using polygon_vec = std::vector<SquarePolygonBase*>;
+#include "stage.h"
 
 // ƒV[ƒ“ŠÇ——p‚Ì—ñ‹“Œ^
 enum scene
@@ -25,13 +20,11 @@ class Game
 private:
 	enum scene scene;
 	int loops;
-	DWORD exec_latest;
-	DWORD latest_update; // for main
-	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
-	std::map<std::string, polygon_vec> polygons;
+	DWORD latest_draw;
+	DWORD latest_update;
+	Stage *stage;
 	void update();
 	void draw();
-	void multi_texture_loader(std::map<std::string, std::string>);
 public:
 	Game();
 	~Game();

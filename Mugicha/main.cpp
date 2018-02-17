@@ -35,13 +35,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		(SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2),
-		(SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION)),
+		(SCREEN_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION)),
 		NULL,
 		NULL,
 		hInstance,
 		NULL
 	);
-
+#ifdef _DEBUG
+	DebugConsole::create_console_window();
+	std::cout << "ハロー　ハロー" << std::endl;
+#endif
 	if (FAILED(Init(hInstance, hWnd, TRUE))) return -1;
 
 	ShowWindow(hWnd, nCmdShow);

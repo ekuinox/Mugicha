@@ -26,7 +26,7 @@ SquarePolygonBase::~SquarePolygonBase()
 */
 
 // コンストラクタ 座標とかをセットしていく
-PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, float _u, float _v, float _uw, float _vh)
+PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -38,6 +38,7 @@ PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, L
 	uw = _uw;
 	vh = _vh;
 	drawing = false;
+	layer = _layer;
 }
 
 // デストラクタ

@@ -7,6 +7,11 @@
 #include <time.h>
 #include "conf.h"
 
+#ifdef _DEBUG
+#include <iostream>
+#include "debug_console.h"
+#endif
+
 /*
 * 四角形のPolygonを管理描画するクラス
 * SquarePolygonBase => 抽象
@@ -43,11 +48,12 @@ protected:
 	LPDIRECT3DTEXTURE9 tex; // テクスチャ
 	VERTEX_2D vertexes[4]; // ポリゴン頂点情報 => 実際ドローするときに生成して使います
 
-						   // === 関数 ===
+	// === 関数 ===
 	virtual void generate_vertexes() = 0; // vertexesを生成するのに使う．draw()より呼ばれるべきで，publicにはしてません
 
 public:
 	// == 変数 ===
+	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
 	float x, y, w, h; // x, y => 中心座標
 	int priority; // 描画優先度 => 今のところ使っていない
 	bool flags[3]; // 予備のフラグ，何かに使える多分
@@ -74,7 +80,7 @@ class PlainSquarePolygon : public SquarePolygonBase
 private:
 	void generate_vertexes();
 public:
-	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~PlainSquarePolygon();
 	void update();
 	void draw();

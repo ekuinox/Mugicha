@@ -1,7 +1,7 @@
 #include "player.h"
 
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -16,6 +16,7 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, float _x, float _y, float _w, float _h, 
 	speed = 0.5f;
 	status = true;
 	angle = 0.0f;
+	layer = _layer;
 }
 
 // デストラクタ
@@ -31,6 +32,13 @@ void Player::update()
 
 	DWORD current = timeGetTime();
 
+#ifdef _DEBUG
+	if (GetKeyboardTrigger(DIK_0))
+	{
+		std::cout << "ぴょい～ん" << std::endl;
+	}
+#endif
+
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
@@ -44,11 +52,6 @@ void Player::update()
 		{
 			direction = 0;
 			moving = true;
-		}
-		if (GetKeyboardTrigger(DIK_SPACE))
-		{
-			jumping = true;
- 			direction = (direction + 90) / 2;
 		}
 
 		if (moving)
@@ -75,6 +78,15 @@ void Player::update()
 
 	}
 
+	if (GetKeyboardTrigger(DIK_SPACE))
+	{
+		jumping = true;
+		direction = (direction + 90) / 2;
+#ifdef _DEBUG
+		std::cout << "ぴょい～ん" << std::endl;
+#endif
+
+	}
 }
 
 void Player::draw()
