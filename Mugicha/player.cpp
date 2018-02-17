@@ -1,7 +1,7 @@
 #include "player.h"
 
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -16,6 +16,7 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, float _x, float _y, float _w, float _h, 
 	speed = 0.5f;
 	status = true;
 	angle = 0.0f;
+	layer = _layer;
 }
 
 // デストラクタ
@@ -31,6 +32,13 @@ void Player::update()
 
 	DWORD current = timeGetTime();
 
+#ifdef _DEBUG
+	if (GetKeyboardTrigger(DIK_0))
+	{
+		std::cout << "ぴょい～ん" << std::endl;
+	}
+#endif
+
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
@@ -45,19 +53,11 @@ void Player::update()
 			direction = 0;
 			moving = true;
 		}
-#ifdef __ENABLE_PLAYER_ROTATION
-		if (GetKeyboardPress(DIK_Q)) // 左回転
-		{
-			angle -= 0.1f;
-		}
-		else if (GetKeyboardPress(DIK_E)) // 右回転
-		{
-			angle += 0.1f;
-		}
-#endif
+
 		if (moving)
 		{
 			x += cos(D3DXToRadian(direction)) * speed;
+			y -= sin(D3DXToRadian(direction)) * speed;
 			if (x > SCREEN_WIDTH)
 			{
 				x = SCREEN_WIDTH;
@@ -66,10 +66,30 @@ void Player::update()
 			{
 				x = 0;
 			}
-			latest_update = current;
+
 		}
+
+		if (jumping)
+		{
+			direction -= 0.1f;
+			if (direction < 0) jumping = false;
+		}
+		latest_update = current;
+
 	}
 
+	if (GetKeyboardTrigger(DIK_SPACE))
+	{
+		jumping = true;
+		direction = (direction + 90) / 2;
+#ifdef _DEBUG
+		std::cout << "ぴょい～ん" << std::endl;
+#endif
+
+	}
+
+	drawing_coord.x = x;
+	drawing_coord.y = y * -1 + SCREEN_HEIGHT;
 }
 
 void Player::draw()
@@ -94,16 +114,14 @@ bool Player::is_drawing()
 	return drawing;
 }
 
-// drawingフラグを引数で変更する
-void Player::switch_drawing(bool _drawing)
+void Player::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-// drawingフラグの反転を行う
-void Player::switch_drawing()
+void Player::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 // テクスチャの変更
@@ -116,16 +134,26 @@ void Player::change_texture(LPDIRECT3DTEXTURE9 _tex)
 bool Player::is_collision(SquarePolygonBase *pol)
 {
 	return
-		this->x - this->w / 2 <= pol->x + pol->w / 2 // 左と右
-		&& this->x + this->w / 2 >= pol->x - pol->w // 右と左
-		&& this->y - this->h / 2 <= pol->y + pol->h / 2 // 上と下
-		&& this->y + this->h / 2 >= pol->y - pol->h / 2 // 下と上
+		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // 左と右
+		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // 右と左
+		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // 上と下
+		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // 下と上
 		? true : false;
 }
 
-void Player::switch_status(bool _status)
+D3DXVECTOR2 Player::get_coords()
 {
-	status = _status;
+	return D3DXVECTOR2(x, y);
+}
+
+POLSIZE Player::get_size()
+{
+	return { w, h };
+}
+
+void Player::add_coord(float _x, float _y)
+{
+	// 外部からは操作させないぞ！
 }
 
 bool Player::is_active()
@@ -133,33 +161,29 @@ bool Player::is_active()
 	return status;
 }
 
+void Player::enable()
+{
+	status = true;
+}
+
+void Player::disable()
+{
+	status = false;
+}
+
 // 座標とサイズからvertexesを生成します
 void Player::generate_vertexes()
 {
-#ifdef __ENABLE_PLAYER_ROTATION
-	D3DXMATRIX matRot;
-	D3DXMatrixRotationZ(&matRot, angle);
-#endif
 	for (auto i = 0; i < 4; ++i)
 	{
-#ifdef __ENABLE_PLAYER_ROTATION
-		D3DXVECTOR3 srcVec(this->x + this->w / (i % 3 == 0 ? -2 : 2), this->y + this->h / (i < 2 ? -2 : 2), 0), destVec;
-		D3DXVec3TransformCoord(&destVec, &srcVec, &matRot);
-#endif
 		vertexes[i] = {
-#ifdef __ENABLE_PLAYER_ROTATION
-			destVec.x + this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			destVec.y + this->y + this->h / (i < 2 ? -2 : 2),
-#else
-			this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			this->y + this->h / (i < 2 ? -2 : 2),
-#endif
+			drawing_coord.x + this->w / (i % 3 == 0 ? -2 : 2),
+			drawing_coord.y + this->h / (i < 2 ? -2 : 2),
 			0.0f,
 			1.0f,
 			D3DCOLOR_RGBA(255, 255, 255, 200),
 			this->u + (i % 3 == 0 ? 0 : this->uw),
 			this->v + (i < 2 ? 0 : this->vh)
-
 		};
 	}
 }

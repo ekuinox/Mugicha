@@ -5,6 +5,12 @@
 #include <cmath>
 #include <vector>
 #include <time.h>
+#include "conf.h"
+
+#ifdef _DEBUG
+#include <iostream>
+#include "debug_console.h"
+#endif
 
 /*
 * 四角形のPolygonを管理描画するクラス
@@ -12,18 +18,20 @@
 * PlainSquarePolygon => SquarePolygonBaseを継承したシンプルな四角形用のクラス
 */
 
-// constant
-#define SCREEN_WIDTH (800)
-#define SCREEN_HEIGHT (600)
-
 // ドローする本体
-typedef struct
+using VERTEX_2D = struct
 {
 	float x, y, z;
 	float rhw;
 	D3DCOLOR diffuse;
 	float u, v;
-} VERTEX_2D;
+};
+
+using POLSIZE = struct _POLSIZE
+{
+	float w;
+	float h;
+};
 
 /*
 * NOTES
@@ -39,6 +47,8 @@ protected:
 	DWORD latest_update;
 	float direction; // 移動方向
 	float angle; // 本体の回転角度
+	float x, y, w, h; // x, y => 中心座標
+	D3DXVECTOR2 drawing_coord; // 描画用の座標
 	float u, v, uw, vh; // u,v => 左上，uv, vh => 幅高さ
 	float speed; // 移動速度
 	bool drawing; // 描画するかどうかのフラグ
@@ -46,12 +56,12 @@ protected:
 	LPDIRECT3DTEXTURE9 tex; // テクスチャ
 	VERTEX_2D vertexes[4]; // ポリゴン頂点情報 => 実際ドローするときに生成して使います
 
-						   // === 関数 ===
+	// === 関数 ===
 	virtual void generate_vertexes() = 0; // vertexesを生成するのに使う．draw()より呼ばれるべきで，publicにはしてません
 
 public:
 	// == 変数 ===
-	float x, y, w, h; // x, y => 中心座標
+	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
 	int priority; // 描画優先度 => 今のところ使っていない
 	bool flags[3]; // 予備のフラグ，何かに使える多分
 				   // === 関数 ===
@@ -63,13 +73,19 @@ public:
 	virtual void draw() = 0; // drawing見てからdraw
 							 // drawingフラグに関して
 	virtual bool is_drawing() = 0; // return drawing;
-	virtual void switch_drawing(bool) = 0; // 受け取った変数でdrawingフラグを切り替える
-	virtual void switch_drawing() = 0; // drawing = !drawing;
+	virtual void show() = 0; // 描画する
+	virtual void hide() = 0; // 描画しなくする
 	virtual void change_texture(LPDIRECT3DTEXTURE9) = 0; // テクスチャ変更に使います
 	virtual bool is_collision(SquarePolygonBase*) = 0; // ポリゴン同士の当たり判定に
 
-	virtual void switch_status(bool) = 0; // Update用のフラグ，更新するかを判断するのに
 	virtual bool is_active() = 0; // return status;
+	virtual void enable() = 0; // 更新させる
+	virtual void disable() = 0; // 更新しなくする
+
+	virtual D3DXVECTOR2 get_coords() = 0;
+	virtual POLSIZE get_size() = 0;
+
+	virtual void add_coord(float _x, float _y) = 0;
 };
 
 class PlainSquarePolygon : public SquarePolygonBase
@@ -77,17 +93,23 @@ class PlainSquarePolygon : public SquarePolygonBase
 private:
 	void generate_vertexes();
 public:
-	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~PlainSquarePolygon();
 	void update();
 	void draw();
 	bool is_drawing();
-	void switch_drawing(bool _drawing);
-	void switch_drawing();
-	void change_texture(LPDIRECT3DTEXTURE9 _tex);
-	bool is_collision(SquarePolygonBase *pol);
-	void switch_status(bool _status);
+	void show();
+	void hide();
 	bool is_active();
+	void enable();
+	void disable();
+	bool is_collision(SquarePolygonBase *pol);
+	void change_texture(LPDIRECT3DTEXTURE9 _tex);
+
+	D3DXVECTOR2 get_coords();
+	POLSIZE get_size();
+
+	void add_coord(float _x, float _y);
 };
 
 /* global variable */

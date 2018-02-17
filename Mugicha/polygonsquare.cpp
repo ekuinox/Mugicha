@@ -26,7 +26,7 @@ SquarePolygonBase::~SquarePolygonBase()
 */
 
 // コンストラクタ 座標とかをセットしていく
-PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, float _u, float _v, float _uw, float _vh)
+PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -38,6 +38,7 @@ PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, L
 	uw = _uw;
 	vh = _vh;
 	drawing = false;
+	layer = _layer;
 }
 
 // デストラクタ
@@ -76,16 +77,14 @@ bool PlainSquarePolygon::is_drawing()
 	return drawing;
 }
 
-// drawingフラグを引数で変更する
-void PlainSquarePolygon::switch_drawing(bool _drawing)
+void PlainSquarePolygon::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-// drawingフラグの反転を行う
-void PlainSquarePolygon::switch_drawing()
+void PlainSquarePolygon::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 // テクスチャの変更
@@ -94,25 +93,46 @@ void PlainSquarePolygon::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
+D3DXVECTOR2 PlainSquarePolygon::get_coords()
+{
+	return D3DXVECTOR2(x, y);
+}
+
+POLSIZE PlainSquarePolygon::get_size()
+{
+	return { w, h };
+}
+
+void PlainSquarePolygon::add_coord(float _x, float _y)
+{
+	x += _x;
+	y += _y;
+}
+
 // 当たり判定を取る
 bool PlainSquarePolygon::is_collision(SquarePolygonBase *pol)
 {
 	return
-		this->x - this->w / 2 <= pol->x + pol->w / 2 // 左と右
-		&& this->x + this->w / 2 >= pol->x - pol->w // 右と左
-		&& this->y - this-> h / 2 <= pol->y + pol->h / 2 // 上と下
-		&& this->y + this->h / 2 >= pol->y - pol->h / 2 // 下と上
+		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // 左と右
+		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // 右と左
+		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // 上と下
+		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // 下と上
 		? true : false;
-}
-
-void PlainSquarePolygon::switch_status(bool _status)
-{
-	status = _status;
 }
 
 bool PlainSquarePolygon::is_active()
 {
 	return status;
+}
+
+void PlainSquarePolygon::enable()
+{
+	status = true;
+}
+
+void PlainSquarePolygon::disable()
+{
+	status = false;
 }
 
 // 座標とサイズからvertexesを生成します

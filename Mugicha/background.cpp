@@ -1,6 +1,5 @@
 #include "background.h"
 
-
 void Background::generate_vertexes()
 {
 	for (auto i = 0; i < 4; ++i)
@@ -25,12 +24,13 @@ Background::Background(LPDIRECT3DTEXTURE9 _tex, float _u, float _v, float _uw, f
 	w = BACKGROUND_WIDTH;
 	h = BACKGROUND_HEIGHT;
 	tex = _tex;
+	aspect_ratio = h / w;
 	// à¯êîÇ≈uvéÛÇØéÊÇÍÇÈÇÊÇ§Ç…ÇµÇƒÇ†ÇÈÇØÇ«ÅCé¿ç€égÇ§Ç∆Ç´Ç…uvÇÕÇ‡Ç§ÉNÉâÉXì‡Ç≈Ç¢Ç∂ÇÈÇÊÇ§Ç…ÇµÇƒÇ¢Ç¢Ç∆évÇ§
 	u = _u;
 	v = _v;
 	uw = _uw;
 	vh = _vh;
-
+	layer = INT_MAX;
 }
 
 Background::~Background()
@@ -60,6 +60,22 @@ void Background::update()
 			u += 0.0001f;
 		}
 
+		// ägèk
+		if (GetKeyboardPress(DIK_NUMPAD8)) // ägëÂ
+		{
+			w += 1.0f;
+			h += 1.0f * aspect_ratio;
+		}
+		else if (GetKeyboardPress(DIK_NUMPAD2)) // èkè¨
+		{
+			w -= 1.0f;
+			h -= 1.0f * aspect_ratio;
+		}
+
+		// å¿äEí≤êÆ
+		if (w < SCREEN_WIDTH) w = SCREEN_WIDTH;
+		if (h < SCREEN_HEIGHT) h = SCREEN_HEIGHT;
+
 		latest_update = current;
 	}
 }
@@ -85,14 +101,14 @@ bool Background::is_drawing()
 	return drawing;
 }
 
-void Background::switch_drawing(bool _drawing)
+void Background::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-void Background::switch_drawing()
+void Background::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 void Background::change_texture(LPDIRECT3DTEXTURE9 _tex)
@@ -100,22 +116,41 @@ void Background::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
-bool Background::is_collision(SquarePolygonBase * pol)
+bool Background::is_collision(SquarePolygonBase *pol)
 {
 	return
-		this->x - this->w / 2 <= pol->x + pol->w / 2 // ç∂Ç∆âE
-		&& this->x + this->w / 2 >= pol->x - pol->w // âEÇ∆ç∂
-		&& this->y - this->h / 2 <= pol->y + pol->h / 2 // è„Ç∆â∫
-		&& this->y + this->h / 2 >= pol->y - pol->h / 2 // â∫Ç∆è„
+		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // ç∂Ç∆âE
+		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // âEÇ∆ç∂
+		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // è„Ç∆â∫
+		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // â∫Ç∆è„
 		? true : false;
 }
 
-void Background::switch_status(bool _status)
+D3DXVECTOR2 Background::get_coords()
 {
-	status = _status;
+	return D3DXVECTOR2(x, y);
+}
+
+POLSIZE Background::get_size()
+{
+	return { w, h };
+}
+
+void Background::add_coord(float _x, float _y)
+{
 }
 
 bool Background::is_active()
 {
 	return status;
+}
+
+void Background::enable()
+{
+	status = true;
+}
+
+void Background::disable()
+{
+	status = false;
 }
