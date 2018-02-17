@@ -51,8 +51,9 @@ void PlainSquarePolygon::update()
 {
 	if (status)
 	{
-		// “Á‚É‚â‚é‚±‚Æ‚È‚µ
 	}
+	drawing_coord.x = x;
+	drawing_coord.y = y * -1 + SCREEN_HEIGHT;
 }
 
 void PlainSquarePolygon::draw()
@@ -141,8 +142,8 @@ void PlainSquarePolygon::generate_vertexes()
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = {
-			this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			this->y + this->h / (i < 2 ? -2 : 2),
+			drawing_coord.x + this->w / (i % 3 == 0 ? -2 : 2),
+			drawing_coord.y + this->h / (i < 2 ? -2 : 2),
 			0.0f,
 			1.0f,
 			D3DCOLOR_RGBA(255, 255, 255, 200),

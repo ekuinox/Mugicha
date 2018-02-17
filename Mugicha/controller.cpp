@@ -36,7 +36,7 @@ void Controller::init()
 
 	polygons = {
 		{new Background(textures["TITLE_BG"])},
-		{new PlainSquarePolygon(400, 200, 100, 100, textures["SELECTOR"], 0)}
+		{new PlainSquarePolygon(400, 600, 100, 100, textures["SELECTOR"], 0)}
 	};
 
 	// ƒV[ƒ“Ø‚è‘Ö‚¦
@@ -116,6 +116,8 @@ void Controller::update()
 			stage_select += 1;
 			polygons[1]->add_coord(200, 0);
 		}
+
+		polygons[1]->update();
 
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{

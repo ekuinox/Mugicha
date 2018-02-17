@@ -74,16 +74,16 @@ void Stage::init()
 	polygons["PLAYERS"][0]->show();
 
 	// 拡縮できるオブジェクトを登録
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(210, SCREEN_HEIGHT - 200, 50, 50, textures["BLOCK"], 1, 1));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(210, 200, 50, 50, textures["BLOCK"], 1, 1));
 	polygons["SCALABLE_OBJECTS"][0]->enable();
 	polygons["SCALABLE_OBJECTS"][0]->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(261, SCREEN_HEIGHT - 200, 50, 50, textures["BLOCK"], 1, 1));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(261, 200, 50, 50, textures["BLOCK"], 1, 1));
 	polygons["SCALABLE_OBJECTS"][1]->enable();
 	polygons["SCALABLE_OBJECTS"][1]->show();
 
 	// ただのブロック
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, SCREEN_HEIGHT - 200, 100, 100, textures["BLOCK"], 1));
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1));
 	polygons["BLOCKS"][0]->enable();
 	polygons["BLOCKS"][0]->show();
 }

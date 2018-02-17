@@ -10,6 +10,8 @@ ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3
 {
 	x = _x;
 	y = _y;
+	drawing_coord.x = x;
+	drawing_coord.y = y * -1 + SCREEN_HEIGHT;
 	w = _w;
 	h = _h;
 	tex = _tex;
@@ -20,8 +22,8 @@ ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3
 	aspect_ratio = h / w;
 	drawing = false;
 	scaling_dir = _scaling_dir;
-	scaling_base.x = x + w / (scaling_dir % 3 == 0 ? 2 : -2); // 左に大きくするならbaseを右に，逆もまたしかり
-	scaling_base.y = y + h / (scaling_dir < 2 ? 2 : -2); // 上に大きくするならbaseを下に，逆もまた
+	scaling_base.x = drawing_coord.x + w / (scaling_dir % 3 == 0 ? 2 : -2); // 左に大きくするならbaseを右に，逆もまたしかり
+	scaling_base.y = drawing_coord.y + h / (scaling_dir < 2 ? 2 : -2); // 上に大きくするならbaseを下に，逆もまた
 	layer = _layer;
 }
 

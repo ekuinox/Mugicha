@@ -2,6 +2,9 @@
 
 #include "polygonsquare.h"
 
+// ˆÚ“®‚µ‚È‚¢‘O’ñ‚Åì‚Á‚Ä‚é
+// Šgk‚É”º‚¤ˆÚ“®‚Ís‚¤
+// ‚æ‚­‚í‚©‚ç‚ñ
 class ScalableObject : public SquarePolygonBase
 {
 private:
