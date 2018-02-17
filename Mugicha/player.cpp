@@ -87,6 +87,9 @@ void Player::update()
 #endif
 
 	}
+
+	drawing_coord.x = x;
+	drawing_coord.y = y * -1 + SCREEN_HEIGHT;
 }
 
 void Player::draw()
@@ -131,11 +134,26 @@ void Player::change_texture(LPDIRECT3DTEXTURE9 _tex)
 bool Player::is_collision(SquarePolygonBase *pol)
 {
 	return
-		this->x - this->w / 2 <= pol->x + pol->w / 2 // 左と右
-		&& this->x + this->w / 2 >= pol->x - pol->w // 右と左
-		&& this->y - this->h / 2 <= pol->y + pol->h / 2 // 上と下
-		&& this->y + this->h / 2 >= pol->y - pol->h / 2 // 下と上
+		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // 左と右
+		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // 右と左
+		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // 上と下
+		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // 下と上
 		? true : false;
+}
+
+D3DXVECTOR2 Player::get_coords()
+{
+	return D3DXVECTOR2(x, y);
+}
+
+POLSIZE Player::get_size()
+{
+	return { w, h };
+}
+
+void Player::add_coord(float _x, float _y)
+{
+	// 外部からは操作させないぞ！
 }
 
 bool Player::is_active()
@@ -156,30 +174,16 @@ void Player::disable()
 // 座標とサイズからvertexesを生成します
 void Player::generate_vertexes()
 {
-#ifdef __ENABLE_PLAYER_ROTATION
-	D3DXMATRIX matRot;
-	D3DXMatrixRotationZ(&matRot, angle);
-#endif
 	for (auto i = 0; i < 4; ++i)
 	{
-#ifdef __ENABLE_PLAYER_ROTATION
-		D3DXVECTOR3 srcVec(this->x + this->w / (i % 3 == 0 ? -2 : 2), this->y + this->h / (i < 2 ? -2 : 2), 0), destVec;
-		D3DXVec3TransformCoord(&destVec, &srcVec, &matRot);
-#endif
 		vertexes[i] = {
-#ifdef __ENABLE_PLAYER_ROTATION
-			destVec.x + this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			destVec.y + this->y + this->h / (i < 2 ? -2 : 2),
-#else
-			this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			this->y + this->h / (i < 2 ? -2 : 2),
-#endif
+			drawing_coord.x + this->w / (i % 3 == 0 ? -2 : 2),
+			drawing_coord.y + this->h / (i < 2 ? -2 : 2),
 			0.0f,
 			1.0f,
 			D3DCOLOR_RGBA(255, 255, 255, 200),
 			this->u + (i % 3 == 0 ? 0 : this->uw),
 			this->v + (i < 2 ? 0 : this->vh)
-
 		};
 	}
 }

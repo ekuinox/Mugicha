@@ -12,6 +12,7 @@ Stage::Stage()
 
 Stage::Stage(char _stage_select)
 {
+	// _stage_selectによって読み込むステージ情報を切り替えたい
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
 	status = prep;
@@ -39,11 +40,11 @@ void Stage::exec()
 	draw();
 }
 
-void Stage::multi_texture_loader(std::map<std::string, std::string> _textures)
+void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
 {
 	for (auto _texture : _textures)
 	{
-		D3DXCreateTextureFromFile(d3d_device, _texture.second.c_str(), &textures[_texture.first]); // 一斉読み込み
+		D3DXCreateTextureFromFile(d3d_device, _texture.second, &textures[_texture.first]); // 一斉読み込み
 	}
 }
 

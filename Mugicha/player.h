@@ -28,4 +28,10 @@ public:
 	void disable();
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 	bool is_collision(SquarePolygonBase *pol);
+
+	D3DXVECTOR2 get_coords();
+	POLSIZE get_size();
+
+	void add_coord(float _x, float _y);
+
 };

@@ -19,13 +19,19 @@
 */
 
 // ドローする本体
-typedef struct
+using VERTEX_2D = struct
 {
 	float x, y, z;
 	float rhw;
 	D3DCOLOR diffuse;
 	float u, v;
-} VERTEX_2D;
+};
+
+using POLSIZE = struct _POLSIZE
+{
+	float w;
+	float h;
+};
 
 /*
 * NOTES
@@ -41,6 +47,8 @@ protected:
 	DWORD latest_update;
 	float direction; // 移動方向
 	float angle; // 本体の回転角度
+	float x, y, w, h; // x, y => 中心座標
+	D3DXVECTOR2 drawing_coord; // 描画用の座標
 	float u, v, uw, vh; // u,v => 左上，uv, vh => 幅高さ
 	float speed; // 移動速度
 	bool drawing; // 描画するかどうかのフラグ
@@ -54,7 +62,6 @@ protected:
 public:
 	// == 変数 ===
 	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
-	float x, y, w, h; // x, y => 中心座標
 	int priority; // 描画優先度 => 今のところ使っていない
 	bool flags[3]; // 予備のフラグ，何かに使える多分
 				   // === 関数 ===
@@ -74,6 +81,11 @@ public:
 	virtual bool is_active() = 0; // return status;
 	virtual void enable() = 0; // 更新させる
 	virtual void disable() = 0; // 更新しなくする
+
+	virtual D3DXVECTOR2 get_coords() = 0;
+	virtual POLSIZE get_size() = 0;
+
+	virtual void add_coord(float _x, float _y) = 0;
 };
 
 class PlainSquarePolygon : public SquarePolygonBase
@@ -93,6 +105,11 @@ public:
 	void disable();
 	bool is_collision(SquarePolygonBase *pol);
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
+
+	D3DXVECTOR2 get_coords();
+	POLSIZE get_size();
+
+	void add_coord(float _x, float _y);
 };
 
 /* global variable */

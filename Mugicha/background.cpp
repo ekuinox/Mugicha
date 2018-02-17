@@ -1,6 +1,5 @@
 #include "background.h"
 
-
 void Background::generate_vertexes()
 {
 	for (auto i = 0; i < 4; ++i)
@@ -117,14 +116,28 @@ void Background::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
-bool Background::is_collision(SquarePolygonBase * pol)
+bool Background::is_collision(SquarePolygonBase *pol)
 {
 	return
-		this->x - this->w / 2 <= pol->x + pol->w / 2 // 左と右
-		&& this->x + this->w / 2 >= pol->x - pol->w // 右と左
-		&& this->y - this->h / 2 <= pol->y + pol->h / 2 // 上と下
-		&& this->y + this->h / 2 >= pol->y - pol->h / 2 // 下と上
+		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // 左と右
+		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // 右と左
+		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // 上と下
+		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // 下と上
 		? true : false;
+}
+
+D3DXVECTOR2 Background::get_coords()
+{
+	return D3DXVECTOR2(x, y);
+}
+
+POLSIZE Background::get_size()
+{
+	return { w, h };
+}
+
+void Background::add_coord(float _x, float _y)
+{
 }
 
 bool Background::is_active()

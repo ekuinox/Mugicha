@@ -28,8 +28,10 @@ private:
 	enum status status;
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画
-
-	void multi_texture_loader(std::map<std::string, std::string> _textures);
+	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
+	char stage_select; // ステージ選択番号
+	
+	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void init();
 	void update();
 	void draw();

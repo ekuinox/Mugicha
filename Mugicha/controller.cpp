@@ -108,13 +108,13 @@ void Controller::update()
 		if (stage_select > 0 && (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW))) // ‘I‘ð¶
 		{
 			stage_select -= 1;
-			polygons[1]->x -= 200;
+			polygons[1]->add_coord(-200, 0);
 		}
 
 		if (stage_select < 2 && (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW))) // ‘I‘ð‰E
 		{
 			stage_select += 1;
-			polygons[1]->x += 200;
+			polygons[1]->add_coord(200, 0);
 		}
 
 		if (GetKeyboardTrigger(DIK_RETURN))
