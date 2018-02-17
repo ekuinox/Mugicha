@@ -1,7 +1,7 @@
 #include "player.h"
 
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -17,6 +17,7 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, int _layer, float _x, float _y, float _w
 	status = true;
 	angle = 0.0f;
 	layer = _layer;
+	camera = _camera;
 }
 
 // デストラクタ
@@ -58,14 +59,6 @@ void Player::update()
 		{
 			x += cos(D3DXToRadian(direction)) * speed;
 			y -= sin(D3DXToRadian(direction)) * speed;
-			if (x > SCREEN_WIDTH)
-			{
-				x = SCREEN_WIDTH;
-			}
-			if (x < 0)
-			{
-				x = 0;
-			}
 
 		}
 
@@ -74,6 +67,7 @@ void Player::update()
 			direction -= 0.1f;
 			if (direction < 0) jumping = false;
 		}
+
 		latest_update = current;
 
 	}
@@ -88,8 +82,8 @@ void Player::update()
 
 	}
 
-	drawing_coord.x = x;
-	drawing_coord.y = y * -1 + SCREEN_HEIGHT;
+	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
+	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 }
 
 void Player::draw()

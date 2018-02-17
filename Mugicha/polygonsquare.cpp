@@ -26,7 +26,7 @@ SquarePolygonBase::~SquarePolygonBase()
 */
 
 // コンストラクタ 座標とかをセットしていく
-PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, float _u, float _v, float _uw, float _vh)
+PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -39,6 +39,7 @@ PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, L
 	vh = _vh;
 	drawing = false;
 	layer = _layer;
+	camera = _camera;
 }
 
 // デストラクタ
@@ -52,8 +53,9 @@ void PlainSquarePolygon::update()
 	if (status)
 	{
 	}
-	drawing_coord.x = x;
-	drawing_coord.y = y * -1 + SCREEN_HEIGHT;
+	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
+	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+	
 }
 
 void PlainSquarePolygon::draw()

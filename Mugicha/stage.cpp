@@ -69,21 +69,21 @@ void Stage::init()
 	polygons["BACKGROUNDS"][0]->show();
 
 	// プレイヤの登録
-	polygons["PLAYERS"].push_back(new Player(textures["PLAYER"]));
+	polygons["PLAYERS"].push_back(new Player(textures["PLAYER"], &camera));
 	polygons["PLAYERS"][0]->enable();
 	polygons["PLAYERS"][0]->show();
 
 	// 拡縮できるオブジェクトを登録
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(210, 200, 50, 50, textures["BLOCK"], 1, 1));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(210, 200, 50, 50, textures["BLOCK"], 1, 1, &camera));
 	polygons["SCALABLE_OBJECTS"][0]->enable();
 	polygons["SCALABLE_OBJECTS"][0]->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(261, 200, 50, 50, textures["BLOCK"], 1, 1));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(261, 200, 50, 50, textures["BLOCK"], 1, 1, &camera));
 	polygons["SCALABLE_OBJECTS"][1]->enable();
 	polygons["SCALABLE_OBJECTS"][1]->show();
 
 	// ただのブロック
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1));
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
 	polygons["BLOCKS"][0]->enable();
 	polygons["BLOCKS"][0]->show();
 }
@@ -96,6 +96,8 @@ void Stage::update()
 	latest_update = current;
 
 	// ここから更新処理
+	camera.x = polygons["PLAYERS"][0]->get_coords().x;
+	camera.y = polygons["PLAYERS"][0]->get_coords().y;
 
 	// ポリゴンの全更新
 	for (const auto& _polygons : polygons)

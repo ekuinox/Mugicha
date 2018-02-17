@@ -25,6 +25,7 @@ private:
 	polygon_vec polygons;
 	char stage_select;
 	Stage *stage;
+	D3DXVECTOR2 camera;
 	void update();
 	void draw();
 public:

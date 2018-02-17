@@ -30,7 +30,8 @@ private:
 	DWORD latest_draw; // 最終描画
 	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
 	char stage_select; // ステージ選択番号
-	
+	D3DXVECTOR2 camera;
+
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void init();
 	void update();

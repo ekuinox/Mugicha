@@ -6,7 +6,7 @@
 */
 
 // コンストラクタ 座標とかをセットしていく
-ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, char _scaling_dir, int _layer, float _u, float _v, float _uw, float _vh)
+ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, char _scaling_dir, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
 {
 	x = _x;
 	y = _y;
@@ -25,6 +25,7 @@ ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3
 	scaling_base.x = drawing_coord.x + w / (scaling_dir % 3 == 0 ? 2 : -2); // 左に大きくするならbaseを右に，逆もまたしかり
 	scaling_base.y = drawing_coord.y + h / (scaling_dir < 2 ? 2 : -2); // 上に大きくするならbaseを下に，逆もまた
 	layer = _layer;
+	camera = _camera;
 }
 
 // デストラクタ
@@ -86,6 +87,17 @@ void ScalableObject::update()
 
 		latest_update = current;
 	}
+	/*
+	scaling_base.x -= camera->x - SCREEN_WIDTH / 2;
+	scaling_base.y -= camera->y - SCREEN_HEIGHT / 2;
+	*/
+	scaling_base.x = drawing_coord.x + w / (scaling_dir % 3 == 0 ? 2 : -2) - camera->x - SCREEN_WIDTH / 2; // 左に大きくするならbaseを右に，逆もまたしかり
+	scaling_base.y = drawing_coord.y + h / (scaling_dir < 2 ? 2 : -2) - camera->y - SCREEN_HEIGHT / 2; // 上に大きくするならbaseを下に，逆もまた
+#ifdef _DEBUG
+	std::cout << scaling_base.x;
+	std::cout << ", ";
+	std::cout << scaling_base.y << std::endl;
+#endif
 }
 
 // 座標とサイズからvertexesを生成します
@@ -98,22 +110,22 @@ void ScalableObject::generate_vertexes()
 			[&]() {
 				if (scaling_dir % 3 == 0) // dirが左の場合，baseは右にある
 				{
-					return scaling_base.x - (i % 3 == 0 ? w : 0);
+					return scaling_base.x - (i % 3 == 0 ? w : 0);// -(camera->x - SCREEN_WIDTH / 2);
 				}
 				else // dirが右の場合，baseは左にある
 				{
-					return scaling_base.x + (i % 3 == 0 ? w : 0);
+					return scaling_base.x + (i % 3 == 0 ? w : 0);// - (camera->x - SCREEN_WIDTH / 2);
 				}
 			}(),
 //			this->y + this->h / (i < 2 ? -2 : 2),
 			[&]() {
 				if (scaling_dir < 2) // dirが上の場合，baseは下にある
 				{
-					return scaling_base.y - (i < 2 ? h : 0);
+					return scaling_base.y - (i < 2 ? h : 0);// - (camera->y - SCREEN_HEIGHT / 2);
 				}
 				else // dirが下の場合，baseは上にある
 				{
-					return scaling_base.y + (i < 2 ? h : 0);
+					return scaling_base.y + (i < 2 ? h : 0);// - (camera->y - SCREEN_HEIGHT / 2);
 				}
 			}(),
 			0.0f,
