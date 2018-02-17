@@ -3,15 +3,11 @@
 
 void Background::generate_vertexes()
 {
-	auto left_bottom_x = 0;
-	auto left_bottom_y = SCREEN_HEIGHT; 
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = {
-//			this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			left_bottom_x + (i % 3 == 0 ? 0 : this->w),
-//			this->y + this->h / (i < 2 ? -2 : 2),
-			left_bottom_y - (i < 2 ? this->h : 0),
+			this->x + this->w / (i % 3 == 0 ? -2 : 2),
+			this->y + this->h / (i < 2 ? -2 : 2),
 			0.0f,
 			1.0f,
 			D3DCOLOR_RGBA(255, 255, 255, 200),
@@ -76,6 +72,10 @@ void Background::update()
 			w -= 1.0f;
 			h -= 1.0f * aspect_ratio;
 		}
+
+		// ŒÀŠE’²®
+		if (w < SCREEN_WIDTH) w = SCREEN_WIDTH;
+		if (h < SCREEN_HEIGHT) h = SCREEN_HEIGHT;
 
 		latest_update = current;
 	}

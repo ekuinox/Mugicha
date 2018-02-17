@@ -29,7 +29,13 @@ ScalableObject::~ScalableObject()
 
 void ScalableObject::update()
 {
-	if (status)
+	// ñ≥
+	if (!status) return;
+
+	DWORD current = timeGetTime();
+
+	// ëÄçÏ
+	if (current - latest_update > 1)
 	{
 		// ägèk
 		if (GetKeyboardPress(DIK_NUMPAD8)) // ägëÂ
@@ -42,6 +48,12 @@ void ScalableObject::update()
 			w -= 1.0f;
 			h -= 1.0f * aspect_ratio;
 		}
+
+		//  å¿äEí≤êÆ
+		if (w < 1) w = 1;
+		if (h < 1) h = 1;
+
+		latest_update = current;
 	}
 }
 
@@ -109,13 +121,11 @@ bool ScalableObject::is_active()
 // ç¿ïWÇ∆ÉTÉCÉYÇ©ÇÁvertexesÇê∂ê¨ÇµÇ‹Ç∑
 void ScalableObject::generate_vertexes()
 {
-	auto left_bottom_x = x - w / 2;
-	auto left_bottom_y = y + h / 2;
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = {
-			x + (i % 3 == 0 ? 0 : this->w),
-			y - (i < 2 ? this->h : 0),
+			this->x + this->w / (i % 3 == 0 ? -2 : 2),
+			this->y + this->h / (i < 2 ? -2 : 2),
 			0.0f,
 			1.0f,
 			D3DCOLOR_RGBA(255, 255, 255, 200),

@@ -45,20 +45,16 @@ void Player::update()
 			direction = 0;
 			moving = true;
 		}
+		if (GetKeyboardTrigger(DIK_SPACE))
+		{
+			jumping = true;
+ 			direction = (direction + 90) / 2;
+		}
 
-#ifdef __ENABLE_PLAYER_ROTATION
-		if (GetKeyboardPress(DIK_Q)) // ¶‰ñ“]
-		{
-			angle -= 0.1f;
-		}
-		else if (GetKeyboardPress(DIK_E)) // ‰E‰ñ“]
-		{
-			angle += 0.1f;
-		}
-#endif
 		if (moving)
 		{
 			x += cos(D3DXToRadian(direction)) * speed;
+			y -= sin(D3DXToRadian(direction)) * speed;
 			if (x > SCREEN_WIDTH)
 			{
 				x = SCREEN_WIDTH;
@@ -67,8 +63,16 @@ void Player::update()
 			{
 				x = 0;
 			}
-			latest_update = current;
+
 		}
+
+		if (jumping)
+		{
+			direction -= 0.1f;
+			if (direction < 0) jumping = false;
+		}
+		latest_update = current;
+
 	}
 
 }
