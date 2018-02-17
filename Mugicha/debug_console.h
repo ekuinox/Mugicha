@@ -1,7 +1,7 @@
 #pragma once
 #ifdef _DEBUG
 
-#include <cstdio> // FILE
+#include <cstdio>
 
 class DebugConsole {
 	FILE *out;
