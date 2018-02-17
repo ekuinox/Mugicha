@@ -111,16 +111,14 @@ bool Player::is_drawing()
 	return drawing;
 }
 
-// drawingフラグを引数で変更する
-void Player::switch_drawing(bool _drawing)
+void Player::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-// drawingフラグの反転を行う
-void Player::switch_drawing()
+void Player::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 // テクスチャの変更
@@ -140,14 +138,19 @@ bool Player::is_collision(SquarePolygonBase *pol)
 		? true : false;
 }
 
-void Player::switch_status(bool _status)
-{
-	status = _status;
-}
-
 bool Player::is_active()
 {
 	return status;
+}
+
+void Player::enable()
+{
+	status = true;
+}
+
+void Player::disable()
+{
+	status = false;
 }
 
 // 座標とサイズからvertexesを生成します

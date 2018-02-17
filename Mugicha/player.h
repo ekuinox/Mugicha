@@ -21,10 +21,11 @@ public:
 	void update();
 	void draw();
 	bool is_drawing();
-	void switch_drawing(bool _drawing);
-	void switch_drawing();
+	void show();
+	void hide();
+	bool is_active();
+	void enable();
+	void disable();
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 	bool is_collision(SquarePolygonBase *pol);
-	void switch_status(bool _status);
-	bool is_active();
 };

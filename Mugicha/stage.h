@@ -35,6 +35,7 @@ private:
 	void draw();
 public:
 	Stage();
+	Stage(char _stage_select);
 	~Stage();
 
 	void exec();

@@ -146,16 +146,14 @@ bool ScalableObject::is_drawing()
 	return drawing;
 }
 
-// drawingフラグを引数で変更する
-void ScalableObject::switch_drawing(bool _drawing)
+void ScalableObject::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-// drawingフラグの反転を行う
-void ScalableObject::switch_drawing()
+void ScalableObject::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 // テクスチャの変更
@@ -175,14 +173,19 @@ bool ScalableObject::is_collision(SquarePolygonBase *pol)
 		? true : false;
 }
 
-void ScalableObject::switch_status(bool _status)
-{
-	status = _status;
-}
-
 bool ScalableObject::is_active()
 {
 	return status;
+}
+
+void ScalableObject::enable()
+{
+	status = true;
+}
+
+void ScalableObject::disable()
+{
+	status = false;
 }
 
 // === ScalableObject END ===

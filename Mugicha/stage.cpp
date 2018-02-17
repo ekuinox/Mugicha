@@ -10,6 +10,15 @@ Stage::Stage()
 	init();
 }
 
+Stage::Stage(char _stage_select)
+{
+	latest_update = timeGetTime();
+	latest_draw = timeGetTime();
+	status = prep;
+
+	init();
+}
+
 // デストラクタ
 Stage::~Stage()
 {
@@ -55,27 +64,27 @@ void Stage::init()
 
 	// 背景の登録
 	polygons["BACKGROUNDS"].push_back(new Background(textures["BACKGROUND"]));
-	polygons["BACKGROUNDS"][0]->switch_status(TRUE);
-	polygons["BACKGROUNDS"][0]->switch_drawing(TRUE);
+	polygons["BACKGROUNDS"][0]->enable();
+	polygons["BACKGROUNDS"][0]->show();
 
 	// プレイヤの登録
 	polygons["PLAYERS"].push_back(new Player(textures["PLAYER"]));
-	polygons["PLAYERS"][0]->switch_status(TRUE);
-	polygons["PLAYERS"][0]->switch_drawing(TRUE);
+	polygons["PLAYERS"][0]->enable();
+	polygons["PLAYERS"][0]->show();
 
 	// 拡縮できるオブジェクトを登録
 	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(210, SCREEN_HEIGHT - 200, 50, 50, textures["BLOCK"], 1, 1));
-	polygons["SCALABLE_OBJECTS"][0]->switch_status(TRUE);
-	polygons["SCALABLE_OBJECTS"][0]->switch_drawing(TRUE);
+	polygons["SCALABLE_OBJECTS"][0]->enable();
+	polygons["SCALABLE_OBJECTS"][0]->show();
 
 	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(261, SCREEN_HEIGHT - 200, 50, 50, textures["BLOCK"], 1, 1));
-	polygons["SCALABLE_OBJECTS"][1]->switch_status(TRUE);
-	polygons["SCALABLE_OBJECTS"][1]->switch_drawing(TRUE);
+	polygons["SCALABLE_OBJECTS"][1]->enable();
+	polygons["SCALABLE_OBJECTS"][1]->show();
 
 	// ただのブロック
 	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, SCREEN_HEIGHT - 200, 100, 100, textures["BLOCK"], 1));
-	polygons["BLOCKS"][0]->switch_status(TRUE);
-	polygons["BLOCKS"][0]->switch_drawing(TRUE);
+	polygons["BLOCKS"][0]->enable();
+	polygons["BLOCKS"][0]->show();
 }
 
 // 更新処理

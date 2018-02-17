@@ -149,7 +149,7 @@
   <ItemGroup>
     <ClCompile Include="background.cpp" />
     <ClCompile Include="debug_console.cpp" />
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="controller.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -161,7 +161,7 @@
     <ClInclude Include="background.h" />
     <ClInclude Include="conf.h" />
     <ClInclude Include="debug_console.h" />
-    <ClInclude Include="game.h" />
+    <ClInclude Include="controller.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />

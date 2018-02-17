@@ -8,7 +8,7 @@
 #include <time.h>
 #include <windows.h>
 #include "conf.h"
-#include "game.h"
+#include "controller.h"
 
 #if 1
 #pragma comment(lib, "d3d9.lib")

@@ -66,13 +66,14 @@ public:
 	virtual void draw() = 0; // drawing見てからdraw
 							 // drawingフラグに関して
 	virtual bool is_drawing() = 0; // return drawing;
-	virtual void switch_drawing(bool) = 0; // 受け取った変数でdrawingフラグを切り替える
-	virtual void switch_drawing() = 0; // drawing = !drawing;
+	virtual void show() = 0; // 描画する
+	virtual void hide() = 0; // 描画しなくする
 	virtual void change_texture(LPDIRECT3DTEXTURE9) = 0; // テクスチャ変更に使います
 	virtual bool is_collision(SquarePolygonBase*) = 0; // ポリゴン同士の当たり判定に
 
-	virtual void switch_status(bool) = 0; // Update用のフラグ，更新するかを判断するのに
 	virtual bool is_active() = 0; // return status;
+	virtual void enable() = 0; // 更新させる
+	virtual void disable() = 0; // 更新しなくする
 };
 
 class PlainSquarePolygon : public SquarePolygonBase
@@ -85,12 +86,13 @@ public:
 	void update();
 	void draw();
 	bool is_drawing();
-	void switch_drawing(bool _drawing);
-	void switch_drawing();
-	void change_texture(LPDIRECT3DTEXTURE9 _tex);
-	bool is_collision(SquarePolygonBase *pol);
-	void switch_status(bool _status);
+	void show();
+	void hide();
 	bool is_active();
+	void enable();
+	void disable();
+	bool is_collision(SquarePolygonBase *pol);
+	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 };
 
 /* global variable */

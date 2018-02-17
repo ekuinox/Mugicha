@@ -102,14 +102,14 @@ bool Background::is_drawing()
 	return drawing;
 }
 
-void Background::switch_drawing(bool _drawing)
+void Background::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-void Background::switch_drawing()
+void Background::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 void Background::change_texture(LPDIRECT3DTEXTURE9 _tex)
@@ -127,12 +127,17 @@ bool Background::is_collision(SquarePolygonBase * pol)
 		? true : false;
 }
 
-void Background::switch_status(bool _status)
-{
-	status = _status;
-}
-
 bool Background::is_active()
 {
 	return status;
+}
+
+void Background::enable()
+{
+	status = true;
+}
+
+void Background::disable()
+{
+	status = false;
 }

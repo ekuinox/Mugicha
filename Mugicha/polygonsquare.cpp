@@ -77,16 +77,14 @@ bool PlainSquarePolygon::is_drawing()
 	return drawing;
 }
 
-// drawingフラグを引数で変更する
-void PlainSquarePolygon::switch_drawing(bool _drawing)
+void PlainSquarePolygon::show()
 {
-	drawing = _drawing;
+	drawing = true;
 }
 
-// drawingフラグの反転を行う
-void PlainSquarePolygon::switch_drawing()
+void PlainSquarePolygon::hide()
 {
-	drawing = !drawing;
+	drawing = false;
 }
 
 // テクスチャの変更
@@ -106,14 +104,19 @@ bool PlainSquarePolygon::is_collision(SquarePolygonBase *pol)
 		? true : false;
 }
 
-void PlainSquarePolygon::switch_status(bool _status)
-{
-	status = _status;
-}
-
 bool PlainSquarePolygon::is_active()
 {
 	return status;
+}
+
+void PlainSquarePolygon::enable()
+{
+	status = true;
+}
+
+void PlainSquarePolygon::disable()
+{
+	status = false;
 }
 
 // 座標とサイズからvertexesを生成します

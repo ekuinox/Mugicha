@@ -51,7 +51,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	UpdateWindow(hWnd);
 
 	/* message loop */
-	auto game = new Game();
+	auto controller = new Controller();
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
@@ -69,10 +69,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		}
 		else
 		{
-			game->exec();
+			controller->exec();
 		}
 	}
-	delete game;
+	delete controller;
 
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
 

@@ -7,29 +7,30 @@
 // シーン管理用の列挙型
 enum scene
 {
-	TITLE,
-	MAIN,
-	GAMEOVER,
-	GAMECLEAR,
-	END,
+	Title,
+	Select,
+	Gaming,
+	End,
 };
 
 // ゲーム管理用のクラス
-class Game
+class Controller
 {
 private:
 	enum scene scene;
 	int loops;
 	DWORD latest_draw;
 	DWORD latest_update;
+	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
+	polygon_vec polygons;
+	char stage_select;
 	Stage *stage;
 	void update();
 	void draw();
 public:
-	Game();
-	~Game();
+	Controller();
+	~Controller();
 	void init();
 	void exec();
 	void switch_scene(enum scene _scene);
-	bool main(bool reset = false);
 };
