@@ -87,7 +87,9 @@ public:
 	virtual D3DXVECTOR2 get_coords() = 0;
 	virtual POLSIZE get_size() = 0;
 
-	virtual void add_coord(float _x, float _y) = 0;
+	virtual void add_coord(float _x, float _y) = 0; // x, yç¿ïWÇ…â¡éZ
+
+	virtual void zoom(POLSIZE _zoom_level) = 0; // î{ó¶ïœçXÇçsÇ§
 };
 
 class PlainSquarePolygon : public SquarePolygonBase
@@ -112,6 +114,8 @@ public:
 	POLSIZE get_size();
 
 	void add_coord(float _x, float _y);
+
+	void zoom(POLSIZE _zoom_level);
 };
 
 /* global variable */

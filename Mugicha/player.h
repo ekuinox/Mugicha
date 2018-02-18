@@ -33,5 +33,6 @@ public:
 	POLSIZE get_size();
 
 	void add_coord(float _x, float _y);
+	void zoom(POLSIZE _zoom_level);
 
 };

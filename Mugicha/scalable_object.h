@@ -8,7 +8,7 @@
 class ScalableObject : public SquarePolygonBase
 {
 private:
-	float aspect_ratio; // ëΩï™
+	POLSIZE zoom_level; // ägëÂî{ó¶
 	D3DXVECTOR2 scaling_base; // ägëÂÇ∑ÇÈÇΩÇﬂÇÃäÓèÄÅDÉRÉìÉXÉgÉâÉNÉgéûÇ…åàÇﬂÇÈ
 	char scaling_dir; // ägëÂÇ∑ÇÈå¸Ç´ 0 => ç∂è„, 1 => âEè„, 2 => âEâ∫, 3 => ç∂â∫
 	void generate_vertexes();
@@ -28,4 +28,5 @@ public:
 	D3DXVECTOR2 get_coords();
 	POLSIZE get_size();
 	void add_coord(float _x, float _y);
+	void zoom(POLSIZE _zoom_level);
 };

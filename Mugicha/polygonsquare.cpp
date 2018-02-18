@@ -112,6 +112,11 @@ void PlainSquarePolygon::add_coord(float _x, float _y)
 	y += _y;
 }
 
+void PlainSquarePolygon::zoom(POLSIZE _zoom_level)
+{
+	// ŽÀ‘•‚È‚µ
+}
+
 // “–‚½‚è”»’è‚ðŽæ‚é
 bool PlainSquarePolygon::is_collision(SquarePolygonBase *pol)
 {

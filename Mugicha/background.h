@@ -23,4 +23,5 @@ public:
 	D3DXVECTOR2 get_coords();
 	POLSIZE get_size();
 	void add_coord(float _x, float _y);
+	void zoom(POLSIZE _zoom_level);
 };

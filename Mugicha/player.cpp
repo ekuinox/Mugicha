@@ -55,6 +55,17 @@ void Player::update()
 			moving = true;
 		}
 
+#ifdef _DEBUG
+		else if (GetKeyboardPress(DIK_W))
+		{
+			y += 1;
+		}
+		else if (GetKeyboardPress(DIK_S))
+		{
+			y -= 1;
+		}
+#endif
+
 		if (moving)
 		{
 			x += cos(D3DXToRadian(direction)) * speed;
@@ -76,14 +87,14 @@ void Player::update()
 	{
 		jumping = true;
 		direction = (direction + 90) / 2;
-#ifdef _DEBUG
-		std::cout << "Ç“ÇÂÇ¢Å`ÇÒ" << std::endl;
-#endif
-
 	}
 
 	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
 	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+
+#ifdef _DEBUG
+	printf("PLAYER: %f, %f\n", x, y);
+#endif
 }
 
 void Player::draw()
@@ -148,6 +159,11 @@ POLSIZE Player::get_size()
 void Player::add_coord(float _x, float _y)
 {
 	// äOïîÇ©ÇÁÇÕëÄçÏÇ≥ÇπÇ»Ç¢ÇºÅI
+}
+
+void Player::zoom(POLSIZE _zoom_level)
+{
+	// é¿ëïÇ»Çµ
 }
 
 bool Player::is_active()

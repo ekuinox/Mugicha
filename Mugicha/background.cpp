@@ -140,6 +140,11 @@ void Background::add_coord(float _x, float _y)
 {
 }
 
+void Background::zoom(POLSIZE _zoom_level)
+{
+	// Ç†Ç∆Ç≈çÏÇÈ
+}
+
 bool Background::is_active()
 {
 	return status;

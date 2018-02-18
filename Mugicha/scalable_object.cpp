@@ -19,9 +19,9 @@ ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3
 	v = _v;
 	uw = _uw;
 	vh = _vh;
-	aspect_ratio = h / w;
 	drawing = false;
 	scaling_dir = _scaling_dir;
+	zoom_level = { 1, 1 }; // 1倍で初期化
 	scaling_base.x = drawing_coord.x + w / (scaling_dir % 3 == 0 ? 2 : -2); // 左に大きくするならbaseを右に，逆もまたしかり
 	scaling_base.y = drawing_coord.y + h / (scaling_dir < 2 ? 2 : -2); // 上に大きくするならbaseを下に，逆もまた
 	layer = _layer;
@@ -43,61 +43,9 @@ void ScalableObject::update()
 
 	// 操作
 	if (current - latest_update > 1)
-	{
-		// 拡縮
-		
-		if (GetKeyboardPress(DIK_NUMPAD8)) // 拡大
-		{
-			w *= 1.01f;
-			h *= 1.01f;
-
-			scaling_base.x *= 1.01f;
-			scaling_base.y /= 1.01f;
-		}
-		else if (GetKeyboardPress(DIK_NUMPAD2)) // 縮小
-		{
-			w /= 1.01f;
-			h /= 1.01f;
-
-			scaling_base.x /= 1.01f;
-			scaling_base.y *= 1.01f;
-		}
-		
-		if (GetKeyboardTrigger(DIK_O)) // 拡大
-		{
-			w *= 2;
-			h *= 2;
-
-			scaling_base.x *= 2;
-			scaling_base.y /= 2;
-		}
-		else if (GetKeyboardTrigger(DIK_L)) // 縮小
-		{
-			w /= 2;
-			h /= 2;
-
-			scaling_base.x /= 2;
-			scaling_base.y *= 2;
-		}
-
-
-		//  限界調整
-		if (w < 1) w = 1;
-		if (h < 1) h = 1;
-
+	{		
 		latest_update = current;
 	}
-	/*
-	scaling_base.x -= camera->x - SCREEN_WIDTH / 2;
-	scaling_base.y -= camera->y - SCREEN_HEIGHT / 2;
-	*/
-	scaling_base.x = drawing_coord.x + w / (scaling_dir % 3 == 0 ? 2 : -2) - camera->x - SCREEN_WIDTH / 2; // 左に大きくするならbaseを右に，逆もまたしかり
-	scaling_base.y = drawing_coord.y + h / (scaling_dir < 2 ? 2 : -2) - camera->y - SCREEN_HEIGHT / 2; // 上に大きくするならbaseを下に，逆もまた
-#ifdef _DEBUG
-	std::cout << scaling_base.x;
-	std::cout << ", ";
-	std::cout << scaling_base.y << std::endl;
-#endif
 }
 
 // 座標とサイズからvertexesを生成します
@@ -106,26 +54,24 @@ void ScalableObject::generate_vertexes()
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = {
-//			this->x + this->w / (i % 3 == 0 ? -2 : 2),
 			[&]() {
 				if (scaling_dir % 3 == 0) // dirが左の場合，baseは右にある
 				{
-					return scaling_base.x - (i % 3 == 0 ? w : 0);// -(camera->x - SCREEN_WIDTH / 2);
+					return (x * -zoom_level.w + w / (i % 3 == 0 ? 2 : -2) * zoom_level.w) - (camera->x - SCREEN_WIDTH / 2);
 				}
 				else // dirが右の場合，baseは左にある
 				{
-					return scaling_base.x + (i % 3 == 0 ? w : 0);// - (camera->x - SCREEN_WIDTH / 2);
+					return (x * zoom_level.w + w / (i % 3 == 0 ? 2 : -2) * zoom_level.w) - (camera->x - SCREEN_WIDTH / 2);
 				}
 			}(),
-//			this->y + this->h / (i < 2 ? -2 : 2),
 			[&]() {
 				if (scaling_dir < 2) // dirが上の場合，baseは下にある
 				{
-					return scaling_base.y - (i < 2 ? h : 0);// - (camera->y - SCREEN_HEIGHT / 2);
+					return (y * -zoom_level.h + h / (i < 2 ? 2 : -2) * zoom_level.h) - (camera->y - SCREEN_HEIGHT / 2);
 				}
 				else // dirが下の場合，baseは上にある
 				{
-					return scaling_base.y + (i < 2 ? h : 0);// - (camera->y - SCREEN_HEIGHT / 2);
+					return (y * zoom_level.h + h / (i < 2 ? 2 : -2) * zoom_level.h) - (camera->y - SCREEN_HEIGHT / 2);
 				}
 			}(),
 			0.0f,
@@ -133,7 +79,6 @@ void ScalableObject::generate_vertexes()
 			D3DCOLOR_RGBA(255, 255, 255, 200),
 			this->u + (i % 3 == 0 ? 0 : this->uw),
 			this->v + (i < 2 ? 0 : this->vh)
-
 		};
 	}
 }
@@ -200,6 +145,11 @@ POLSIZE ScalableObject::get_size()
 void ScalableObject::add_coord(float _x, float _y)
 {
 	
+}
+
+void ScalableObject::zoom(POLSIZE _zoom_level)
+{
+	zoom_level = _zoom_level;
 }
 
 bool ScalableObject::is_active()

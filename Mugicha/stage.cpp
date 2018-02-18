@@ -86,14 +86,36 @@ void Stage::init()
 	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
 	polygons["BLOCKS"][0]->enable();
 	polygons["BLOCKS"][0]->show();
+
+	zoom_level = { 1, 1 };
 }
 
 // 更新処理
 void Stage::update()
 {
 	auto current = timeGetTime();
+
+	// 拡縮
+	if (GetKeyboardTrigger(DIK_O)) // 拡大
+	{
+		zoom_level.w *= 2;
+		zoom_level.h *= 2;
+	}
+	else if (GetKeyboardTrigger(DIK_L)) // 縮小
+	{
+		zoom_level.w /= 2;
+		zoom_level.h /= 2;
+	}
+
 	if (current - latest_update < 1) return;
 	latest_update = current;
+
+	// 全ズーム変更
+	for (const auto& _polygons : polygons)
+	{
+		for (const auto& polygon : _polygons.second) polygon->zoom(zoom_level);
+	}
+
 
 	// ここから更新処理
 	camera.x = polygons["PLAYERS"][0]->get_coords().x;
