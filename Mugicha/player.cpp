@@ -91,10 +91,6 @@ void Player::update()
 
 	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
 	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
-
-#ifdef _DEBUG
-	printf("PLAYER: %f, %f\n", x, y);
-#endif
 }
 
 void Player::draw()
@@ -135,17 +131,6 @@ void Player::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
-// ìñÇΩÇËîªíËÇéÊÇÈ
-bool Player::is_collision(SquarePolygonBase *pol)
-{
-	return
-		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // ç∂Ç∆âE
-		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // âEÇ∆ç∂
-		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // è„Ç∆â∫
-		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // â∫Ç∆è„
-		? true : false;
-}
-
 D3DXVECTOR2 Player::get_coords()
 {
 	return D3DXVECTOR2(x, y);
@@ -154,6 +139,11 @@ D3DXVECTOR2 Player::get_coords()
 POLSIZE Player::get_size()
 {
 	return { w, h };
+}
+
+VERTEX_2D * Player::get_vertexes()
+{
+	return vertexes;
 }
 
 void Player::add_coord(float _x, float _y)

@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="background.cpp" />
+    <ClCompile Include="collision_checker.cpp" />
     <ClCompile Include="debug_console.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="input.cpp" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
+    <ClInclude Include="collision_checker.h" />
     <ClInclude Include="conf.h" />
     <ClInclude Include="debug_console.h" />
     <ClInclude Include="controller.h" />

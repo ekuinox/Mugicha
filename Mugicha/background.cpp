@@ -116,16 +116,6 @@ void Background::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
-bool Background::is_collision(SquarePolygonBase *pol)
-{
-	return
-		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // ç∂Ç∆âE
-		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // âEÇ∆ç∂
-		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // è„Ç∆â∫
-		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // â∫Ç∆è„
-		? true : false;
-}
-
 D3DXVECTOR2 Background::get_coords()
 {
 	return D3DXVECTOR2(x, y);
@@ -143,6 +133,11 @@ void Background::add_coord(float _x, float _y)
 void Background::zoom(POLSIZE _zoom_level)
 {
 	// Ç†Ç∆Ç≈çÏÇÈ
+}
+
+VERTEX_2D * Background::get_vertexes()
+{
+	return vertexes;
 }
 
 bool Background::is_active()

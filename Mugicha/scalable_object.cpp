@@ -51,27 +51,31 @@ void ScalableObject::update()
 // 座標とサイズからvertexesを生成します
 void ScalableObject::generate_vertexes()
 {
+	// ここにいろいろ問題がある
+	
 	for (auto i = 0; i < 4; ++i)
 	{
+		// 結局x, y中心に拡縮が行われてしまっているので，ここは修正しないといけない
 		vertexes[i] = {
 			[&]() {
 				if (scaling_dir % 3 == 0) // dirが左の場合，baseは右にある
 				{
-					return (x * -zoom_level.w + w / (i % 3 == 0 ? 2 : -2) * zoom_level.w) - (camera->x - SCREEN_WIDTH / 2);
+					return (x - w / (i % 3 == 0 ? 2 : -2)) * -zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+
 				}
 				else // dirが右の場合，baseは左にある
 				{
-					return (x * zoom_level.w + w / (i % 3 == 0 ? 2 : -2) * zoom_level.w) - (camera->x - SCREEN_WIDTH / 2);
+					return (x - w / (i % 3 == 0 ? 2 : -2)) * zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
 				}
 			}(),
 			[&]() {
 				if (scaling_dir < 2) // dirが上の場合，baseは下にある
 				{
-					return (y * -zoom_level.h + h / (i < 2 ? 2 : -2) * zoom_level.h) - (camera->y - SCREEN_HEIGHT / 2);
+					return ((y - h / (i < 2 ? 2 : -2)) * zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 				}
 				else // dirが下の場合，baseは上にある
 				{
-					return (y * zoom_level.h + h / (i < 2 ? 2 : -2) * zoom_level.h) - (camera->y - SCREEN_HEIGHT / 2);
+					return ((y - h / (i < 2 ? 2 : -2)) * -zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 				}
 			}(),
 			0.0f,
@@ -121,17 +125,6 @@ void ScalableObject::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
-// 当たり判定を取る
-bool ScalableObject::is_collision(SquarePolygonBase *pol)
-{
-	return
-		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // 左と右
-		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // 右と左
-		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // 上と下
-		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // 下と上
-		? true : false;
-}
-
 D3DXVECTOR2 ScalableObject::get_coords()
 {
 	return D3DXVECTOR2(x, y);
@@ -150,6 +143,11 @@ void ScalableObject::add_coord(float _x, float _y)
 void ScalableObject::zoom(POLSIZE _zoom_level)
 {
 	zoom_level = _zoom_level;
+}
+
+VERTEX_2D * ScalableObject::get_vertexes()
+{
+	return vertexes;
 }
 
 bool ScalableObject::is_active()

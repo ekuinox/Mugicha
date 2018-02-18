@@ -78,7 +78,6 @@ public:
 	virtual void show() = 0; // 描画する
 	virtual void hide() = 0; // 描画しなくする
 	virtual void change_texture(LPDIRECT3DTEXTURE9) = 0; // テクスチャ変更に使います
-	virtual bool is_collision(SquarePolygonBase*) = 0; // ポリゴン同士の当たり判定に
 
 	virtual bool is_active() = 0; // return status;
 	virtual void enable() = 0; // 更新させる
@@ -86,6 +85,7 @@ public:
 
 	virtual D3DXVECTOR2 get_coords() = 0;
 	virtual POLSIZE get_size() = 0;
+	virtual VERTEX_2D *get_vertexes() = 0;
 
 	virtual void add_coord(float _x, float _y) = 0; // x, y座標に加算
 
@@ -107,11 +107,11 @@ public:
 	bool is_active();
 	void enable();
 	void disable();
-	bool is_collision(SquarePolygonBase *pol);
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 
 	D3DXVECTOR2 get_coords();
 	POLSIZE get_size();
+	VERTEX_2D *get_vertexes();
 
 	void add_coord(float _x, float _y);
 

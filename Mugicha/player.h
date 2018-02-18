@@ -27,10 +27,10 @@ public:
 	void enable();
 	void disable();
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
-	bool is_collision(SquarePolygonBase *pol);
 
 	D3DXVECTOR2 get_coords();
 	POLSIZE get_size();
+	VERTEX_2D *get_vertexes();
 
 	void add_coord(float _x, float _y);
 	void zoom(POLSIZE _zoom_level);

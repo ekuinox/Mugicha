@@ -1,4 +1,5 @@
 #include "stage.h"
+#include "collision_checker.h"
 
 // コンストラクタ
 Stage::Stage()
@@ -58,6 +59,7 @@ void Stage::init()
 			{ "BACKGROUND", "./resources/textures/background.jpg" },
 			{ "PLAYER", "./resources/textures/player.jpg" },
 			{ "BLOCK", "./resources/textures/block.png" },
+			{ "ORIGIN", "./resources/textures/origin.png"},
 			});
 	}
 
@@ -74,18 +76,35 @@ void Stage::init()
 	polygons["PLAYERS"][0]->show();
 
 	// 拡縮できるオブジェクトを登録
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(210, 200, 50, 50, textures["BLOCK"], 1, 1, &camera));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["BLOCK"], 1, 1, &camera));
 	polygons["SCALABLE_OBJECTS"][0]->enable();
 	polygons["SCALABLE_OBJECTS"][0]->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(261, 200, 50, 50, textures["BLOCK"], 1, 1, &camera));
+	
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 200, 50, 50, textures["BLOCK"], 1, 2, &camera));
 	polygons["SCALABLE_OBJECTS"][1]->enable();
 	polygons["SCALABLE_OBJECTS"][1]->show();
-
+	/*
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["BLOCK"], 1, 1, &camera));
+	polygons["SCALABLE_OBJECTS"][2]->enable();
+	polygons["SCALABLE_OBJECTS"][2]->show();
+	*/
 	// ただのブロック
 	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
 	polygons["BLOCKS"][0]->enable();
 	polygons["BLOCKS"][0]->show();
+
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
+	polygons["BLOCKS"][1]->enable();
+	polygons["BLOCKS"][1]->show();
+
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK"], 3, &camera));
+	polygons["BLOCKS"][2]->enable();
+	polygons["BLOCKS"][2]->show();
+
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK"], 3, &camera));
+	polygons["BLOCKS"][3]->enable();
+	polygons["BLOCKS"][3]->show();
 
 	zoom_level = { 1, 1 };
 }
@@ -116,6 +135,34 @@ void Stage::update()
 		for (const auto& polygon : _polygons.second) polygon->zoom(zoom_level);
 	}
 
+#ifdef _DEBUG
+	for (const auto& polygon : polygons["SCALABLE_OBJECTS"])
+	{
+		/*
+		if (polygons["PLAYERS"][0]->is_collision(polygon))
+		{
+			std::cout << "hit" << std::endl;
+		}
+		*/
+		/*
+		if (is_collision(static_cast<Player*>(polygons["PLAYERS"][0]), static_cast<ScalableObject*>(polygon)))
+		{
+			std::cout << "hit" << std::endl;
+		}
+		*/
+		if (is_collision(polygons["PLAYERS"][0], polygon))
+		{
+			std::cout << "hit";
+		}
+	}
+	for (const auto& polygon : polygons["BLOCKS"])
+	{
+		if (is_collision(polygons["PLAYERS"][0], polygon))
+		{
+			std::cout << "BLOCKS : hit";
+		}
+	}
+#endif
 
 	// ここから更新処理
 	camera.x = polygons["PLAYERS"][0]->get_coords().x;

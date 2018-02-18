@@ -106,6 +106,11 @@ POLSIZE PlainSquarePolygon::get_size()
 	return { w, h };
 }
 
+VERTEX_2D * PlainSquarePolygon::get_vertexes()
+{
+	return vertexes;
+}
+
 void PlainSquarePolygon::add_coord(float _x, float _y)
 {
 	x += _x;
@@ -115,17 +120,6 @@ void PlainSquarePolygon::add_coord(float _x, float _y)
 void PlainSquarePolygon::zoom(POLSIZE _zoom_level)
 {
 	// é¿ëïÇ»Çµ
-}
-
-// ìñÇΩÇËîªíËÇéÊÇÈ
-bool PlainSquarePolygon::is_collision(SquarePolygonBase *pol)
-{
-	return
-		this->x - this->w / 2 <= pol->get_coords().x + pol->get_size().w / 2 // ç∂Ç∆âE
-		&& this->x + this->w / 2 >= pol->get_coords().x - pol->get_size().w // âEÇ∆ç∂
-		&& this->y - this->h / 2 <= pol->get_coords().y + pol->get_size().h / 2 // è„Ç∆â∫
-		&& this->y + this->h / 2 >= pol->get_coords().y - pol->get_size().h / 2 // â∫Ç∆è„
-		? true : false;
 }
 
 bool PlainSquarePolygon::is_active()
