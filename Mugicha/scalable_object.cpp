@@ -53,6 +53,15 @@ void ScalableObject::generate_vertexes()
 {
 	// ここにいろいろ問題がある
 	
+	auto base = D3DXVECTOR2(
+		scaling_dir % 3 == 0 ? 
+		(x + w / 2) * -zoom_level.w : // 左方向へ右基準で
+		(x - w / 2) * zoom_level.w, // 右方向へ左基準で
+		scaling_dir < 2 ?
+		(y + h / 2) * -zoom_level.h : // 上方向へ下基準で
+		(y + h / 2) * zoom_level.h // 下方向へ上基準で
+	);
+
 	for (auto i = 0; i < 4; ++i)
 	{
 		// 結局x, y中心に拡縮が行われてしまっているので，ここは修正しないといけない
@@ -60,22 +69,29 @@ void ScalableObject::generate_vertexes()
 			[&]() {
 				if (scaling_dir % 3 == 0) // dirが左の場合，baseは右にある
 				{
-					return (x - w / (i % 3 == 0 ? 2 : -2)) * -zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
-
+//					return (x - w / (i % 3 == 0 ? 2 : -2)) * -zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+//					return (base.x - (i % 3 == 0 ? w : 0)) * -zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+					return base.x - (i % 3 == 0 ? -w * zoom_level.w : 0) - (camera->x - SCREEN_WIDTH / 2);
 				}
 				else // dirが右の場合，baseは左にある
 				{
-					return (x - w / (i % 3 == 0 ? 2 : -2)) * zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+//					return (x - w / (i % 3 == 0 ? 2 : -2)) * zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+//					return (base.x - (i % 3 == 0 ? w : 0)) * zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+					return base.x - (i % 3 == 0 ? w * zoom_level.w : 0) - (camera->x - SCREEN_WIDTH / 2);
 				}
 			}(),
 			[&]() {
 				if (scaling_dir < 2) // dirが上の場合，baseは下にある
 				{
-					return ((y - h / (i < 2 ? 2 : -2)) * zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+//					return ((y - h / (i < 2 ? 2 : -2)) * zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+//					return ((base.y - (i < 2 ? h : 0)) * -zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+					return (base.y + (i < 2 ? -h * zoom_level.h : 0) - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 				}
 				else // dirが下の場合，baseは上にある
 				{
-					return ((y - h / (i < 2 ? 2 : -2)) * -zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+//					return ((y - h / (i < 2 ? 2 : -2)) * -zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+//					return ((base.y - (i < 2 ? h : 0)) * zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+					return (base.y + (i < 2 ? h * zoom_level.h : 0) - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 				}
 			}(),
 			0.0f,

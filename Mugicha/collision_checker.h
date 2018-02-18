@@ -12,5 +12,5 @@
 // Šî’ê : Šî’ê
 bool is_collision(SquarePolygonBase* _a, SquarePolygonBase* _b);
 
-// Šî’ê :@Šgk‰»ƒ|ƒŠƒSƒ“
+// Šî’ê :@Šgk‰Âƒ|ƒŠƒSƒ“
 bool is_collision(SquarePolygonBase * _a, ScalableObject * _b);

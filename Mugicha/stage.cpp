@@ -59,7 +59,9 @@ void Stage::init()
 			{ "BACKGROUND", "./resources/textures/background.jpg" },
 			{ "PLAYER", "./resources/textures/player.jpg" },
 			{ "BLOCK", "./resources/textures/block.png" },
-			{ "ORIGIN", "./resources/textures/origin.png"},
+			{ "ORIGIN", "./resources/textures/origin.png" },
+			{ "BLOCK2", "./resources/textures/block2.png" },
+			{ "SAMPLE1", "./resources/textures/sample1.png"},
 			});
 	}
 
@@ -76,7 +78,7 @@ void Stage::init()
 	polygons["PLAYERS"][0]->show();
 
 	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ð“o˜^
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["BLOCK"], 1, 1, &camera));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["SAMPLE1"], 1, 1, &camera));
 	polygons["SCALABLE_OBJECTS"][0]->enable();
 	polygons["SCALABLE_OBJECTS"][0]->show();
 
@@ -98,11 +100,11 @@ void Stage::init()
 	polygons["BLOCKS"][1]->enable();
 	polygons["BLOCKS"][1]->show();
 
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK"], 3, &camera));
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
 	polygons["BLOCKS"][2]->enable();
 	polygons["BLOCKS"][2]->show();
 
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK"], 3, &camera));
+	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
 	polygons["BLOCKS"][3]->enable();
 	polygons["BLOCKS"][3]->show();
 
@@ -150,11 +152,12 @@ void Stage::update()
 			std::cout << "hit" << std::endl;
 		}
 		*/
-		if (is_collision(polygons["PLAYERS"][0], polygon))
+		if (is_collision(polygons["PLAYERS"][0], static_cast<ScalableObject*>(polygon)))
 		{
 			std::cout << "hit";
 		}
 	}
+	/*
 	for (const auto& polygon : polygons["BLOCKS"])
 	{
 		if (is_collision(polygons["PLAYERS"][0], polygon))
@@ -162,6 +165,7 @@ void Stage::update()
 			std::cout << "BLOCKS : hit";
 		}
 	}
+	*/
 #endif
 
 	// ‚±‚±‚©‚çXVˆ—
