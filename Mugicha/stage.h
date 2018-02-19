@@ -25,7 +25,7 @@ enum status {
 class Stage {
 private:
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
-	std::map<std::string, polygon_vec> polygons;
+	std::map<enum PolygonTypes, polygon_vec> polygons;
 	enum status status;
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画

@@ -65,66 +65,66 @@ void Stage::init()
 			});
 	}
 
-	std::map<std::string, polygon_vec>().swap(polygons); // すべて無にする　後のことは考えてない　すみません
+	std::map<enum PolygonTypes, polygon_vec>().swap(polygons); // すべて無にする　後のことは考えてない　すみません
 
 	// 背景の登録
-	polygons["BACKGROUNDS"].push_back(new Background(textures["BACKGROUND"], &camera));
-	polygons["BACKGROUNDS"][0]->enable();
-	polygons["BACKGROUNDS"][0]->show();
+	polygons[BACKGROUND].push_back(new Background(textures["BACKGROUND"], &camera));
+	polygons[BACKGROUND][0]->enable();
+	polygons[BACKGROUND][0]->show();
 
 	// プレイヤの登録
-	polygons["PLAYERS"].push_back(new Player(textures["PLAYER"], &camera));
-	polygons["PLAYERS"][0]->enable();
-	polygons["PLAYERS"][0]->show();
+	polygons[PLAYER].push_back(new Player(textures["PLAYER"], &camera));
+	polygons[PLAYER].back()->enable();
+	polygons[PLAYER].back()->show();
 
 	// 拡縮できるオブジェクトを登録
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["SAMPLE1"], 1, &camera));
-	polygons["SCALABLE_OBJECTS"][0]->enable();
-	polygons["SCALABLE_OBJECTS"][0]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(0, 0, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 
 	
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 60, 50, 50, textures["BLOCK"], 2, &camera));
-	polygons["SCALABLE_OBJECTS"][1]->enable();
-	polygons["SCALABLE_OBJECTS"][1]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(0, 60, 50, 50, textures["BLOCK"], 2, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 	
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(60, 0, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons["SCALABLE_OBJECTS"][2]->enable();
-	polygons["SCALABLE_OBJECTS"][2]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(60, 0, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(60, 60, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons["SCALABLE_OBJECTS"][3]->enable();
-	polygons["SCALABLE_OBJECTS"][3]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(60, 60, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(120, 0, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons["SCALABLE_OBJECTS"][4]->enable();
-	polygons["SCALABLE_OBJECTS"][4]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(120, 0, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(120, 60, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons["SCALABLE_OBJECTS"][5]->enable();
-	polygons["SCALABLE_OBJECTS"][5]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(120, 60, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(-60, 0, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons["SCALABLE_OBJECTS"][6]->enable();
-	polygons["SCALABLE_OBJECTS"][6]->show();
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(-60, 0, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
 
 
 	
 	// ただのブロック
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
-	polygons["BLOCKS"][0]->enable();
-	polygons["BLOCKS"][0]->show();
+	polygons[PLAIN].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
+	polygons[PLAIN].back()->enable();
+	polygons[PLAIN].back()->show();
 
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
-	polygons["BLOCKS"][1]->enable();
-	polygons["BLOCKS"][1]->show();
+	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
+	polygons[PLAIN].back()->enable();
+	polygons[PLAIN].back()->show();
 
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
-	polygons["BLOCKS"][2]->enable();
-	polygons["BLOCKS"][2]->show();
+	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
+	polygons[PLAIN].back()->enable();
+	polygons[PLAIN].back()->show();
 
-	polygons["BLOCKS"].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
-	polygons["BLOCKS"][3]->enable();
-	polygons["BLOCKS"][3]->show();
+	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
+	polygons[PLAIN].back()->enable();
+	polygons[PLAIN].back()->show();
 
 	zoom_level = { 1, 1 };
 }
@@ -148,7 +148,7 @@ void Stage::update()
 
 	if (GetKeyboardTrigger(DIK_SPACE))
 	{
-		static_cast<Player*>(polygons["PLAYERS"][0])->jump();
+		static_cast<Player*>(polygons[PLAYER][0])->jump();
 	}
 
 	if (current - latest_update < 1) return;
@@ -161,8 +161,8 @@ void Stage::update()
 	}
 
 	// ここから更新処理
-	camera.x = polygons["PLAYERS"][0]->get_coords().x;
-	camera.y = polygons["PLAYERS"][0]->get_coords().y + 300;
+	camera.x = polygons[PLAYER][0]->get_coords().x;
+	camera.y = polygons[PLAYER][0]->get_coords().y + 300;
 	
 	// 画面外は見せないようにする
 	if (camera.x < BACKGROUND_X) camera.x = BACKGROUND_X;

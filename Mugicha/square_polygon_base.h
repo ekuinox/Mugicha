@@ -32,6 +32,16 @@ using POLSIZE = struct _POLSIZE
 	_POLSIZE(float _w, float _h) : w(_w), h(_h) {};
 };
 
+// ポリゴンの種別を判定させるアレ，派生を増やせばここに書いてやらないとしんどい
+enum PolygonTypes
+{
+	BACKGROUND,
+	PLAYER,
+	ENEMY,
+	SCALABLE_OBJECT,
+	PLAIN,
+};
+
 /*
 * SquarePolygonBase
 * 四角形のPolygonを管理描画する抽象クラス
