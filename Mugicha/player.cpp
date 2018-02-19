@@ -14,11 +14,12 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, int _layer, float 
 	uw = _uw;
 	vh = _vh;
 	drawing = false;
-	speed = 0.5f;
 	status = true;
+	speed = 0.5f;
 	angle = 0.0f;
 	layer = _layer;
 	camera = _camera;
+	ground = true;
 }
 
 // デストラクタ
@@ -29,7 +30,6 @@ Player::~Player()
 
 void Player::update()
 {
-	// TODO: ジャンプの処理が終わっていないのでやらないのいけない
 	// TODO: 当たり判定自体はできているが，当たり判定を用いてうんたらはできていない
 
 	if (!status) return; // statusみて切る
@@ -42,13 +42,11 @@ void Player::update()
 		bool moving = false;
 		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
 		{
-			direction = 180;
-			moving = true;
+			x -= speed;
 		}
 		else if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
 		{
-			direction = 0;
-			moving = true;
+			x += speed;
 		}
 
 #ifdef _DEBUG
@@ -62,35 +60,42 @@ void Player::update()
 		}
 #endif
 
-		if (moving)
-		{
-			x += cos(D3DXToRadian(direction)) * speed;
-			y -= sin(D3DXToRadian(direction)) * speed;
-
-		}
-
+		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (jumping)
 		{
-			direction -= 0.1f;
-			if (direction < 0) jumping = false;
+			if (timeGetTime() - jumped_at > 500) jumping = false;
+			y += 1.0f;
+		}
+
+		// TODO: 同様に落下速度も調整する必要がある
+		unless(ground)
+		{
+			y -= 0.5f;
 		}
 
 		// 枠外に出ないように => 壁の当たり判定でやりたい
 		if (x - w / 2 < 0) x = w / 2;
-		if (y - h / 2 < 0) y = h / 2;
+		if (y - h / 2 < 0)
+		{
+			y = h / 2;
+			ground = true; // 接地判定
+		}
 
 		latest_update = current;
 
 	}
 
-	if (GetKeyboardTrigger(DIK_SPACE))
-	{
-		jumping = true;
-		direction = (direction + 90) / 2;
-	}
-
 	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
 	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+}
+
+bool Player::jump()
+{
+	unless (ground) return false;
+	ground = false;
+	jumped_at = timeGetTime();
+	jumping = true;
+	return true;
 }
 
 // === Player END ===

@@ -146,6 +146,11 @@ void Stage::update()
 		zoom_level.h /= 2;
 	}
 
+	if (GetKeyboardTrigger(DIK_SPACE))
+	{
+		static_cast<Player*>(polygons["PLAYERS"][0])->jump();
+	}
+
 	if (current - latest_update < 1) return;
 	latest_update = current;
 
