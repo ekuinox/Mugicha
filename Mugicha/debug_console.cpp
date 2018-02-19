@@ -1,3 +1,5 @@
+#ifdef _DEBUG
+
 #include "debug_console.h"
 
 #include <Windows.h>
@@ -50,3 +52,5 @@ void DebugConsole::create_console_window() {
 void DebugConsole::message(const char* str) {
 	std::cout << "Initilize" << str << "." << std::endl;
 }
+
+#endif
