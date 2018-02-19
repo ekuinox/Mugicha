@@ -21,13 +21,6 @@
 #include "debug_console.h"
 #endif
 
-#define unless(expression) if(!expression)
-
-/* Constant */
-#define CLASS_NAME "AppClass"
-#define WINDOW_NAME "É|ÉGÅ["
-
-
 /* Prototype Declaration */
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HRESULT Init(HINSTANCE, HWND, BOOL);

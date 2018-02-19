@@ -1,5 +1,12 @@
 #pragma once
 
+#define unless(expression) if(!(expression))
+
+/* Constant */
+#define CLASS_NAME "AppClass"
+#define WINDOW_NAME "Zooming"
+
+
 // 固定の設定をここにベタ書きする
 
 // スクリーンのデカさ

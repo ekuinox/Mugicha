@@ -35,9 +35,7 @@ PlainSquarePolygon::~PlainSquarePolygon()
 
 void PlainSquarePolygon::update()
 {
-	if (status)
-	{
-	}
+	unless(status) return;
 	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
 	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 	
@@ -45,9 +43,13 @@ void PlainSquarePolygon::update()
 
 void PlainSquarePolygon::draw()
 {
-	if (!drawing) return; // フラグ判定
+	unless (drawing) return; // フラグ判定
 
 	generate_vertexes();
+
+	// 画面外なら描画しない
+	unless (vertexes[0].x <= SCREEN_WIDTH && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT && vertexes[2].y >= 0) return;
+
 	d3d_device->SetTexture(0, tex);
 	d3d_device->SetFVF(FVF_VERTEX_2D);
 
