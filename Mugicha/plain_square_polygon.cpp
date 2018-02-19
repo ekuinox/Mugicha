@@ -1,4 +1,4 @@
-#include "polygonsquare.h"
+#include "plain_square_polygon.h"
 
 /*
 * PlainSquarePolygon

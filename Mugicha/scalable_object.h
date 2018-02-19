@@ -1,6 +1,6 @@
 #pragma once
 
-#include "polygonsquare.h"
+#include "plain_square_polygon.h"
 
 // 0,0の原点を基準にして拡縮を行うクラス．移動しても大丈夫だよ
 

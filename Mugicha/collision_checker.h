@@ -1,9 +1,10 @@
 #pragma once
 
-#include "polygonsquare.h"
+#include "plain_square_polygon.h"
 #include "player.h"
 #include "scalable_object.h"
-
+#include "background.h"
+#include "enemy.h"
 
 // SquarePolygonBaseから派生させたクラス同士の当たり判定を纏めます
 // 基本的にSquarePolygonBase*のvectorで持ってるので，使う時はキャストする必要がある．まあ，別にそのままやっても問題はないと思うけど．

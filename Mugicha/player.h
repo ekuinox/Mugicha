@@ -1,6 +1,6 @@
 #pragma once
 
-#include "polygonsquare.h"
+#include "plain_square_polygon.h"
 #include "conf.h"
 
 // プレイヤークラス

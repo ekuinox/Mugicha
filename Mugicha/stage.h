@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "polygonsquare.h"
+#include "plain_square_polygon.h"
 #include "player.h"
 #include "background.h"
 #include "scalable_object.h"
