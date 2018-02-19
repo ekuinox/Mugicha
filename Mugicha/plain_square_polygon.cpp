@@ -36,8 +36,6 @@ PlainSquarePolygon::~PlainSquarePolygon()
 void PlainSquarePolygon::update()
 {
 	unless(status) return;
-	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
-	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 }
 
 void PlainSquarePolygon::draw()
@@ -126,6 +124,9 @@ void PlainSquarePolygon::disable()
 // 座標とサイズからvertexesを生成します
 void PlainSquarePolygon::generate_vertexes()
 {
+	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
+	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = VERTEX_2D(
