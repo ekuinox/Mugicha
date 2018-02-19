@@ -158,6 +158,9 @@
     <ClCompile Include="plain_square_polygon.cpp" />
     <ClCompile Include="scalable_object.cpp" />
     <ClCompile Include="stage.cpp" />
+    <ClCompile Include="stage1.cpp" />
+    <ClCompile Include="stage2.cpp" />
+    <ClCompile Include="stage3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />

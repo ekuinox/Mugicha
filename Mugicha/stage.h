@@ -36,6 +36,9 @@ private:
 	POLSIZE zoom_level;
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void init();
+	void init1();
+	void init2();
+	void init3();
 	void update();
 	void draw();
 public:

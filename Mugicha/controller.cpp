@@ -77,7 +77,7 @@ void Controller::switch_scene(enum scene _scene)
 		polygons[1]->enable();
 		polygons[1]->show();
 
-		stage_select = 1;
+		stage_select = 2;
 
 		break;
 	case Gaming:
@@ -113,13 +113,13 @@ void Controller::update()
 		}
 		break;
 	case Select:
-		if (stage_select > 0 && (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW))) // 選択左
+		if (stage_select >= 1 && (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW))) // 選択左
 		{
 			stage_select -= 1;
 			polygons[1]->add_coord(-200, 0);
 		}
 
-		if (stage_select < 2 && (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW))) // 選択右
+		if (stage_select < 3 && (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW))) // 選択右
 		{
 			stage_select += 1;
 			polygons[1]->add_coord(200, 0);

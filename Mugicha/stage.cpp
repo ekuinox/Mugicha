@@ -18,7 +18,11 @@ Stage::Stage(char _stage_select)
 	latest_draw = timeGetTime();
 	status = prep;
 
-	init();
+//	init();
+	if (_stage_select == 1) init1();
+	if (_stage_select == 2) init2();
+	if (_stage_select == 3) init3();
+
 }
 
 // デストラクタ
