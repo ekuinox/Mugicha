@@ -55,15 +55,12 @@ void ScalableObject::generate_vertexes()
 
 	for (auto i = 0; i < 4; ++i)
 	{
-		vertexes[i] = {
+		vertexes[i] = VERTEX_2D(
 			drawing_coord.x + zoomed_size.w / (i % 3 == 0 ? -2 : 2),
 			drawing_coord.y + zoomed_size.h / (i < 2 ? -2 : 2),
-			0.0f,
-			1.0f,
-			D3DCOLOR_RGBA(255, 255, 255, 200),
 			this->u + (i % 3 == 0 ? 0 : this->uw),
 			this->v + (i < 2 ? 0 : this->vh)
-		};
+		);
 	}
 }
 

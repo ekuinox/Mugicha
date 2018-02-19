@@ -2,9 +2,14 @@
 
 #include "square_polygon_base.h"
 
+/*
+* PlainSquarePolygon
+* SquarePolygonBase‚ÌŽÀ‘•‚ð‚â‚Á‚Ä‚¢‚é
+*/
+
 class PlainSquarePolygon : public SquarePolygonBase
 {
-private:
+protected:
 	void generate_vertexes();
 public:
 	PlainSquarePolygon();

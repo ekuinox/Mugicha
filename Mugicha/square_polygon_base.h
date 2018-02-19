@@ -14,12 +14,14 @@
 #endif
 
 // ÉhÉçÅ[Ç∑ÇÈñ{ëÃ
-using VERTEX_2D = struct
+using VERTEX_2D = struct _VERTEX_2D
 {
 	float x, y, z;
 	float rhw;
 	D3DCOLOR diffuse;
 	float u, v;
+	_VERTEX_2D() {};
+	_VERTEX_2D(float _x, float _y, float _u, float _v) : x(_x), y(_y), z(0.0f), u(_u), v(_v), rhw(1.0f), diffuse(D3DCOLOR_RGBA(255, 255, 255, 200)){};
 };
 
 using POLSIZE = struct _POLSIZE
