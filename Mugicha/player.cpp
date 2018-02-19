@@ -79,6 +79,10 @@ void Player::update()
 			if (direction < 0) jumping = false;
 		}
 
+		// ˜gŠO‚Éo‚È‚¢‚æ‚¤‚É => •Ç‚Ì“–‚½‚è”»’è‚Å‚â‚è‚½‚¢
+		if (x - w / 2 < 0) x = w / 2;
+		if (y - h / 2 < 0) y = h / 2;
+
 		latest_update = current;
 
 	}

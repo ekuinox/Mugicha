@@ -1,5 +1,10 @@
 #include "scalable_object.h"
 
+ScalableObject::ScalableObject()
+{
+	// 既定のコンストラクタってやつ
+}
+
 // コンストラクタ 座標とかをセットしていく
 ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
 {

@@ -68,7 +68,7 @@ void Stage::init()
 	std::map<std::string, polygon_vec>().swap(polygons); // ‚·‚×‚Ä–³‚É‚·‚é@Œã‚Ì‚±‚Æ‚Íl‚¦‚Ä‚È‚¢@‚·‚Ý‚Ü‚¹‚ñ
 
 	// ”wŒi‚Ì“o˜^
-	polygons["BACKGROUNDS"].push_back(new Background(textures["BACKGROUND"]));
+	polygons["BACKGROUNDS"].push_back(new Background(textures["BACKGROUND"], &camera));
 	polygons["BACKGROUNDS"][0]->enable();
 	polygons["BACKGROUNDS"][0]->show();
 
@@ -155,40 +155,13 @@ void Stage::update()
 		for (const auto& polygon : _polygons.second) polygon->zoom(zoom_level);
 	}
 
-#ifdef _DEBUG
-	for (const auto& polygon : polygons["SCALABLE_OBJECTS"])
-	{
-		/*
-		if (polygons["PLAYERS"][0]->is_collision(polygon))
-		{
-			std::cout << "hit" << std::endl;
-		}
-		*/
-		/*
-		if (is_collision(static_cast<Player*>(polygons["PLAYERS"][0]), static_cast<ScalableObject*>(polygon)))
-		{
-			std::cout << "hit" << std::endl;
-		}
-		*/
-		if (is_collision(polygons["PLAYERS"][0], static_cast<ScalableObject*>(polygon)))
-		{
-			std::cout << "hit";
-		}
-	}
-	/*
-	for (const auto& polygon : polygons["BLOCKS"])
-	{
-		if (is_collision(polygons["PLAYERS"][0], polygon))
-		{
-			std::cout << "BLOCKS : hit";
-		}
-	}
-	*/
-#endif
-
 	// ‚±‚±‚©‚çXVˆ—
 	camera.x = polygons["PLAYERS"][0]->get_coords().x;
-	camera.y = polygons["PLAYERS"][0]->get_coords().y;
+	camera.y = polygons["PLAYERS"][0]->get_coords().y + 300;
+	
+	// ‰æ–ÊŠO‚ÍŒ©‚¹‚È‚¢‚æ‚¤‚É‚·‚é
+	if (camera.x < BACKGROUND_X) camera.x = BACKGROUND_X;
+	if (camera.y < BACKGROUND_X) camera.y = BACKGROUND_X;
 
 	// ƒ|ƒŠƒSƒ“‚Ì‘SXV
 	for (const auto& _polygons : polygons)

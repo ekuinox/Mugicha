@@ -1,36 +1,20 @@
 #include "background.h"
 
-void Background::generate_vertexes()
-{
-	for (auto i = 0; i < 4; ++i)
-	{
-		vertexes[i] = {
-			this->x + this->w / (i % 3 == 0 ? -2 : 2),
-			this->y + this->h / (i < 2 ? -2 : 2),
-			0.0f,
-			1.0f,
-			D3DCOLOR_RGBA(255, 255, 255, 200),
-			this->u + (i % 3 == 0 ? 0 : this->uw),
-			this->v + (i < 2 ? 0 : this->vh)
-
-		};
-	}
-}
-
-Background::Background(LPDIRECT3DTEXTURE9 _tex, float _u, float _v, float _uw, float _vh)
+Background::Background(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
 {
 	x = BACKGROUND_X;
 	y = BACKGROUND_Y;
 	w = BACKGROUND_WIDTH;
 	h = BACKGROUND_HEIGHT;
 	tex = _tex;
-	aspect_ratio = h / w;
 	// 引数でuv受け取れるようにしてあるけど，実際使うときにuvはもうクラス内でいじるようにしていいと思う
 	u = _u;
 	v = _v;
 	uw = _uw;
 	vh = _vh;
 	layer = INT_MAX;
+	camera = _camera;
+	zoom_level = { 1, 1 };
 }
 
 Background::~Background()
@@ -50,6 +34,7 @@ void Background::update()
 	{
 		// uv値の変更などをする
 
+		/*
 		// プレイヤの移動に合わせて背景を左右に移動させる
 		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
 		{
@@ -59,7 +44,8 @@ void Background::update()
 		{
 			u += 0.0001f;
 		}
-
+		
+		
 		// 拡縮
 		if (GetKeyboardPress(DIK_NUMPAD8)) // 拡大
 		{
@@ -75,6 +61,7 @@ void Background::update()
 		// 限界調整
 		if (w < SCREEN_WIDTH) w = SCREEN_WIDTH;
 		if (h < SCREEN_HEIGHT) h = SCREEN_HEIGHT;
+		*/
 
 		latest_update = current;
 	}
@@ -94,63 +81,12 @@ void Background::draw()
 		this->vertexes,
 		sizeof(VERTEX_2D)
 	);
-}
 
-bool Background::is_drawing()
-{
-	return drawing;
-}
-
-void Background::show()
-{
-	drawing = true;
-}
-
-void Background::hide()
-{
-	drawing = false;
-}
-
-void Background::change_texture(LPDIRECT3DTEXTURE9 _tex)
-{
-	tex = _tex;
-}
-
-D3DXVECTOR2 Background::get_coords()
-{
-	return D3DXVECTOR2(x, y);
-}
-
-POLSIZE Background::get_size()
-{
-	return { w, h };
-}
-
-void Background::add_coord(float _x, float _y)
-{
-}
-
-void Background::zoom(POLSIZE _zoom_level)
-{
-	// あとで作る
-}
-
-VERTEX_2D * Background::get_vertexes()
-{
-	return vertexes;
-}
-
-bool Background::is_active()
-{
-	return status;
-}
-
-void Background::enable()
-{
-	status = true;
-}
-
-void Background::disable()
-{
-	status = false;
+#ifdef __DEBUG
+	for (const auto vertex : vertexes)
+	{
+		std::cout << "(" << vertex.x << ", " << vertex.y << "),";
+	}
+	std::cout << std::endl;
+#endif
 }

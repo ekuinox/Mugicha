@@ -35,7 +35,7 @@ void Controller::init()
 	}
 	camera = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
 	polygons = {
-		{new Background(textures["TITLE_BG"])},
+		{new Background(textures["TITLE_BG"], &camera)},
 		{new PlainSquarePolygon(400, 600, 100, 100, textures["SELECTOR"], 0, &camera)}
 	};
 
@@ -95,6 +95,14 @@ void Controller::update()
 
 	auto current = timeGetTime();
 	if (current - latest_update < 1) return;
+
+	if (scene != Gaming)
+	{
+		for (const auto& polygon : polygons)
+		{
+			polygon->update();
+		}
+	}
 
 	switch (scene)
 	{
