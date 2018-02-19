@@ -16,8 +16,8 @@
 // プレイヤのデカさ
 #define PLAYER_WIDTH (50)
 #define PLAYER_HEIGHT (50)
-#define PLAYER_X (100)
-#define PLAYER_Y (100)
+#define PLAYER_X (50)
+#define PLAYER_Y (25)
 
 // 背景のデカさ
 #define BACKGROUND_WIDTH (SCREEN_WIDTH)

@@ -2,7 +2,7 @@
 #include "collision_checker.h"
 
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh) : polygons(_polygons)
 {
 	x = _x;
 	y = _y;
@@ -19,7 +19,7 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, int _layer, float 
 	angle = 0.0f;
 	layer = _layer;
 	camera = _camera;
-	ground = true;
+	ground = false;
 }
 
 // デストラクタ
@@ -39,7 +39,6 @@ void Player::update()
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
-		bool moving = false;
 		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
 		{
 			x -= speed;
@@ -80,6 +79,13 @@ void Player::update()
 			y = h / 2;
 			ground = true; // 接地判定
 		}
+
+#ifdef _DEBUG
+		if (is_collision(this, polygons[SCALABLE_OBJECT].front()))
+		{
+			std::cout << "イッテエヨオ～！";
+		}
+#endif
 
 		latest_update = current;
 	}

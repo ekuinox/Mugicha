@@ -73,55 +73,26 @@ void Stage::init()
 	polygons[BACKGROUND][0]->show();
 
 	// プレイヤの登録
-	polygons[PLAYER].push_back(new Player(textures["PLAYER"], &camera));
+	polygons[PLAYER].push_back(new Player(textures["PLAYER"], &camera, polygons));
 	polygons[PLAYER].back()->enable();
 	polygons[PLAYER].back()->show();
 
 	// 拡縮できるオブジェクトを登録
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(0, 0, 50, 50, textures["SAMPLE1"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-
-	
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(0, 60, 50, 50, textures["BLOCK"], 2, &camera));
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 	
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(60, 0, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(60, 60, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(120, 0, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(120, 60, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(-60, 0, 50, 50, textures["BLOCK"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-
-
-	
-	// ただのブロック
-	polygons[PLAIN].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
-
+	// 原点
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
 	polygons[PLAIN].back()->enable();
 	polygons[PLAIN].back()->show();
 
+	// x軸ガイドライン
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
 	polygons[PLAIN].back()->enable();
 	polygons[PLAIN].back()->show();
 
+	// y軸ガイドライン
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
 	polygons[PLAIN].back()->enable();
 	polygons[PLAIN].back()->show();
@@ -162,7 +133,7 @@ void Stage::update()
 
 	// ここから更新処理
 	camera.x = polygons[PLAYER][0]->get_coords().x;
-	camera.y = polygons[PLAYER][0]->get_coords().y + 300;
+	camera.y = polygons[PLAYER][0]->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
 	
 	// 画面外は見せないようにする
 	if (camera.x < BACKGROUND_X) camera.x = BACKGROUND_X;

@@ -12,6 +12,7 @@
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
 
+
 enum status {
 	prep, // €”õ’†
 	ready, // €”õŠ®—¹
