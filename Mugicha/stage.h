@@ -46,5 +46,5 @@ public:
 	Stage(char _stage_select);
 	~Stage();
 
-	void exec();
+	enum status exec();
 };

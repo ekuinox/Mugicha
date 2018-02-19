@@ -39,10 +39,11 @@ Stage::~Stage()
 }
 
 // ここを叩いてステージを更新したり描画したりする
-void Stage::exec()
+enum status Stage::exec()
 {
 	update();
 	draw();
+	return status;
 }
 
 void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
@@ -108,6 +109,13 @@ void Stage::init()
 void Stage::update()
 {
 	auto current = timeGetTime();
+
+	// タイトルに戻る（無確認）
+	if (GetKeyboardTrigger(DIK_1))
+	{
+		status = end;
+		return;
+	}
 
 	// 拡縮
 	if (GetKeyboardTrigger(DIK_O)) // 拡大

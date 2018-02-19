@@ -64,6 +64,7 @@ void Controller::switch_scene(enum scene _scene)
 	switch (scene)
 	{
 	case Title:
+		polygons[0]->change_texture(textures["TITLE_BG"]);
 		polygons[0]->enable();
 		polygons[0]->show();
 		break;
@@ -113,13 +114,13 @@ void Controller::update()
 		}
 		break;
 	case Select:
-		if (stage_select >= 1 && (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW))) // 選択左
+		if (stage_select >= 2 && (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW))) // 選択左
 		{
 			stage_select -= 1;
 			polygons[1]->add_coord(-200, 0);
 		}
 
-		if (stage_select < 3 && (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW))) // 選択右
+		if (stage_select <= 2 && (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW))) // 選択右
 		{
 			stage_select += 1;
 			polygons[1]->add_coord(200, 0);
@@ -133,7 +134,11 @@ void Controller::update()
 		}
 		break;
 	case Gaming:
-		stage->exec();
+		if (stage->exec() == end) // execがStageのstatusを返すのでそれを見てウンたらしていきたい
+		{
+			delete stage;
+			switch_scene(Title);
+		}
 		break;
 	default:
 		break;
