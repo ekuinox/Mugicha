@@ -36,6 +36,7 @@ void Controller::init()
 	camera = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
 	polygons = {
 		{new Background(textures["TITLE_BG"], &camera)},
+		// TODO: カーソルはカーソルで一つのクラスにわけてやったほうがいいかもね，いやしましょう
 		{new PlainSquarePolygon(400, 600, 100, 100, textures["SELECTOR"], 0, &camera)}
 	};
 
