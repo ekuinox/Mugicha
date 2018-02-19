@@ -171,6 +171,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="polygonsquare.h" />
     <ClInclude Include="scalable_object.h" />
+    <ClInclude Include="square_polygon_base.h" />
     <ClInclude Include="stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
