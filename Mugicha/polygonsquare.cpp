@@ -88,7 +88,7 @@ D3DXVECTOR2 PlainSquarePolygon::get_coords()
 
 POLSIZE PlainSquarePolygon::get_size()
 {
-	return { w, h };
+	return POLSIZE(w, h);
 }
 
 VERTEX_2D * PlainSquarePolygon::get_vertexes()

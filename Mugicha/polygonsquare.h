@@ -31,6 +31,8 @@ using POLSIZE = struct _POLSIZE
 {
 	float w;
 	float h;
+	_POLSIZE() {};
+	_POLSIZE(float _w, float _h) : w(_w), h(_h) {};
 };
 
 /*

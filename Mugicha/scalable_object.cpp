@@ -47,8 +47,6 @@ void ScalableObject::update()
 // 座標とサイズからvertexesを生成します
 void ScalableObject::generate_vertexes()
 {
-	// ここにいろいろ問題がある
-	
 	auto zoomed_coords = D3DXVECTOR2(x * zoom_level.w, y * zoom_level.h);
 	POLSIZE zoomed_size = { w * zoom_level.w, h * zoom_level.h };
 
@@ -69,82 +67,8 @@ void ScalableObject::generate_vertexes()
 	}
 }
 
-void ScalableObject::draw()
-{
-	if (!drawing) return; // フラグ判定
-
-	generate_vertexes();
-	d3d_device->SetTexture(0, tex);
-	d3d_device->SetFVF(FVF_VERTEX_2D);
-
-	d3d_device->DrawPrimitiveUP(
-		D3DPT_TRIANGLEFAN,
-		sizeof(this->vertexes) / sizeof(VERTEX_2D) - 2, // ポリゴン数
-		this->vertexes,
-		sizeof(VERTEX_2D)
-	);
-}
-
-// drawingフラグを返す
-bool ScalableObject::is_drawing()
-{
-	return drawing;
-}
-
-void ScalableObject::show()
-{
-	drawing = true;
-}
-
-void ScalableObject::hide()
-{
-	drawing = false;
-}
-
-// テクスチャの変更
-void ScalableObject::change_texture(LPDIRECT3DTEXTURE9 _tex)
-{
-	tex = _tex;
-}
-
-D3DXVECTOR2 ScalableObject::get_coords()
-{
-	return D3DXVECTOR2(x, y);
-}
-
-POLSIZE ScalableObject::get_size()
-{
-	return {w, h};
-}
-
-void ScalableObject::add_coord(float _x, float _y)
-{
-	
-}
-
 void ScalableObject::zoom(POLSIZE _zoom_level)
 {
 	zoom_level = _zoom_level;
 }
-
-VERTEX_2D * ScalableObject::get_vertexes()
-{
-	return vertexes;
-}
-
-bool ScalableObject::is_active()
-{
-	return status;
-}
-
-void ScalableObject::enable()
-{
-	status = true;
-}
-
-void ScalableObject::disable()
-{
-	status = false;
-}
-
 // === ScalableObject END ===
