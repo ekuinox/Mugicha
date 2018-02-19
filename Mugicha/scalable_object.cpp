@@ -64,8 +64,8 @@ void ScalableObject::generate_vertexes()
 
 	for (auto i = 0; i < 4; ++i)
 	{
-		// 結局x, y中心に拡縮が行われてしまっているので，ここは修正しないといけない
 		vertexes[i] = {
+			// とりあえずデカくして，平行移動させましょう．がんばれ！
 			[&]() {
 				if (scaling_dir % 3 == 0) // dirが左の場合，baseは右にある
 				{
