@@ -38,7 +38,6 @@ void PlainSquarePolygon::update()
 	unless(status) return;
 	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
 	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
-	
 }
 
 void PlainSquarePolygon::draw()
