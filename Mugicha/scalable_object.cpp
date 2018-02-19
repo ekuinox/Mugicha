@@ -53,6 +53,34 @@ void ScalableObject::generate_vertexes()
 	for (auto i = 0; i < 4; ++i)
 	{
 		vertexes[i] = {
+			[&]() {
+				if (scaling_dir % 3 == 0) // dirが左の場合，baseは右にある
+				{
+//					return (x - w / (i % 3 == 0 ? 2 : -2)) * -zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+//					return (base.x - (i % 3 == 0 ? w : 0)) * -zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+					return base.x - (i % 3 == 0 ? -w * zoom_level.w : 0) - (camera->x - SCREEN_WIDTH / 2);
+				}
+				else // dirが右の場合，baseは左にある
+				{
+//					return (x - w / (i % 3 == 0 ? 2 : -2)) * zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+//					return (base.x - (i % 3 == 0 ? w : 0)) * zoom_level.w - (camera->x - SCREEN_WIDTH / 2);
+					return base.x - (i % 3 == 0 ? w * zoom_level.w : 0) - (camera->x - SCREEN_WIDTH / 2);
+				}
+			}(),
+			[&]() {
+				if (scaling_dir < 2) // dirが上の場合，baseは下にある
+				{
+//					return ((y - h / (i < 2 ? 2 : -2)) * zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+//					return ((base.y - (i < 2 ? h : 0)) * -zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+					return (base.y + (i < 2 ? -h * zoom_level.h : 0) - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+				}
+				else // dirが下の場合，baseは上にある
+				{
+//					return ((y - h / (i < 2 ? 2 : -2)) * -zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+//					return ((base.y - (i < 2 ? h : 0)) * zoom_level.h - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+					return (base.y + (i < 2 ? h * zoom_level.h : 0) - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+				}
+			}(),
 			drawing_coord.x + zoomed_size.w / (i % 3 == 0 ? -2 : 2),
 			drawing_coord.y + zoomed_size.h / (i < 2 ? -2 : 2),
 			0.0f,
