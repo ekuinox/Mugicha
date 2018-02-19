@@ -78,19 +78,37 @@ void Stage::init()
 	polygons["PLAYERS"][0]->show();
 
 	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ğ“o˜^
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["SAMPLE1"], 1, 1, &camera));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons["SCALABLE_OBJECTS"][0]->enable();
 	polygons["SCALABLE_OBJECTS"][0]->show();
 
 	
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 200, 50, 50, textures["BLOCK"], 1, 2, &camera));
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 60, 50, 50, textures["BLOCK"], 2, &camera));
 	polygons["SCALABLE_OBJECTS"][1]->enable();
 	polygons["SCALABLE_OBJECTS"][1]->show();
-	/*
-	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(0, 0, 50, 50, textures["BLOCK"], 1, 1, &camera));
+	
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(60, 0, 50, 50, textures["BLOCK"], 1, &camera));
 	polygons["SCALABLE_OBJECTS"][2]->enable();
 	polygons["SCALABLE_OBJECTS"][2]->show();
-	*/
+
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(60, 60, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons["SCALABLE_OBJECTS"][3]->enable();
+	polygons["SCALABLE_OBJECTS"][3]->show();
+
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(120, 0, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons["SCALABLE_OBJECTS"][4]->enable();
+	polygons["SCALABLE_OBJECTS"][4]->show();
+
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(120, 60, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons["SCALABLE_OBJECTS"][5]->enable();
+	polygons["SCALABLE_OBJECTS"][5]->show();
+
+	polygons["SCALABLE_OBJECTS"].push_back(new ScalableObject(-60, 0, 50, 50, textures["BLOCK"], 1, &camera));
+	polygons["SCALABLE_OBJECTS"][6]->enable();
+	polygons["SCALABLE_OBJECTS"][6]->show();
+
+
+	
 	// ‚½‚¾‚ÌƒuƒƒbƒN
 	polygons["BLOCKS"].push_back(new PlainSquarePolygon(100, 200, 100, 100, textures["BLOCK"], 1, &camera));
 	polygons["BLOCKS"][0]->enable();

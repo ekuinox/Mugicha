@@ -2,18 +2,15 @@
 
 #include "polygonsquare.h"
 
-// à⁄ìÆÇµÇ»Ç¢ëOíÒÇ≈çÏÇ¡ÇƒÇÈ
-// ägèkÇ…î∫Ç§à⁄ìÆÇÕçsÇ§
-// ÇÊÇ≠ÇÌÇ©ÇÁÇÒ
+// 0,0ÇÃå¥ì_ÇäÓèÄÇ…ÇµÇƒägèkÇçsÇ§ÉNÉâÉXÅDà⁄ìÆÇµÇƒÇ‡ëÂè‰ïvÇæÇÊ
+
 class ScalableObject : public SquarePolygonBase
 {
 private:
 	POLSIZE zoom_level; // ägëÂî{ó¶
-	D3DXVECTOR2 scaling_base; // ägëÂÇ∑ÇÈÇΩÇﬂÇÃäÓèÄÅDÉRÉìÉXÉgÉâÉNÉgéûÇ…åàÇﬂÇÈ
-	char scaling_dir; // ägëÂÇ∑ÇÈå¸Ç´ 0 => ç∂è„, 1 => âEè„, 2 => âEâ∫, 3 => ç∂â∫
 	void generate_vertexes();
 public:
-	ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, char _scaling_dir, int _layer, D3DXVECTOR2 *_camera, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~ScalableObject();
 	void update();
 	void draw();
