@@ -1,4 +1,5 @@
 #include "player.h"
+#include "collision_checker.h"
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
@@ -28,6 +29,8 @@ Player::~Player()
 
 void Player::update()
 {
+	// TODO: ジャンプの処理が終わっていないのでやらないのいけない
+	// TODO: 当たり判定自体はできているが，当たり判定を用いてうんたらはできていない
 
 	if (!status) return; // statusみて切る
 
@@ -97,99 +100,4 @@ void Player::update()
 	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 }
 
-void Player::draw()
-{
-	if (!drawing) return; // フラグ判定
-
-	generate_vertexes();
-	d3d_device->SetTexture(0, tex);
-	d3d_device->SetFVF(FVF_VERTEX_2D);
-
-	d3d_device->DrawPrimitiveUP(
-		D3DPT_TRIANGLEFAN,
-		sizeof(this->vertexes) / sizeof(VERTEX_2D) - 2, // ポリゴン数
-		this->vertexes,
-		sizeof(VERTEX_2D)
-	);
-}
-
-// drawingフラグを返す
-bool Player::is_drawing()
-{
-	return drawing;
-}
-
-void Player::show()
-{
-	drawing = true;
-}
-
-void Player::hide()
-{
-	drawing = false;
-}
-
-// テクスチャの変更
-void Player::change_texture(LPDIRECT3DTEXTURE9 _tex)
-{
-	tex = _tex;
-}
-
-D3DXVECTOR2 Player::get_coords()
-{
-	return D3DXVECTOR2(x, y);
-}
-
-POLSIZE Player::get_size()
-{
-	return { w, h };
-}
-
-VERTEX_2D * Player::get_vertexes()
-{
-	return vertexes;
-}
-
-void Player::add_coord(float _x, float _y)
-{
-	// 外部からは操作させないぞ！
-}
-
-void Player::zoom(POLSIZE _zoom_level)
-{
-	// 実装なし
-}
-
-bool Player::is_active()
-{
-	return status;
-}
-
-void Player::enable()
-{
-	status = true;
-}
-
-void Player::disable()
-{
-	status = false;
-}
-
-// 座標とサイズからvertexesを生成します
-void Player::generate_vertexes()
-{
-	for (auto i = 0; i < 4; ++i)
-	{
-		vertexes[i] = {
-			drawing_coord.x + this->w / (i % 3 == 0 ? -2 : 2),
-			drawing_coord.y + this->h / (i < 2 ? -2 : 2),
-			0.0f,
-			1.0f,
-			D3DCOLOR_RGBA(255, 255, 255, 200),
-			this->u + (i % 3 == 0 ? 0 : this->uw),
-			this->v + (i < 2 ? 0 : this->vh)
-		};
-	}
-}
-
-// === Player END ==="
+// === Player END ===

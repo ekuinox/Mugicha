@@ -62,14 +62,10 @@ protected:
 	virtual void generate_vertexes() = 0; // vertexesを生成するのに使う．draw()より呼ばれるべきで，publicにはしてません
 
 public:
-	// == 変数 ===
+	// === 変数 ===
 	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
-	int priority; // 描画優先度 => 今のところ使っていない
-	bool flags[3]; // 予備のフラグ，何かに使える多分
-				   // === 関数 ===
-	SquarePolygonBase();
-	virtual ~SquarePolygonBase();
 
+	// === 関数 ===
 	// Update & Draw
 	virtual void update() = 0;
 	virtual void draw() = 0; // drawing見てからdraw
@@ -97,6 +93,7 @@ class PlainSquarePolygon : public SquarePolygonBase
 private:
 	void generate_vertexes();
 public:
+	PlainSquarePolygon();
 	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~PlainSquarePolygon();
 	void update();

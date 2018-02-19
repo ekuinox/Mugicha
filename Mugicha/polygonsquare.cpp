@@ -1,29 +1,14 @@
 #include "polygonsquare.h"
 
 /*
-* SquarePolygonBase
-* 四角のポリゴン用の抽象クラス
-*/
-
-// デフォルトコンストラクタ なんでこれ書かなきゃいけないのか未だにわからん
-SquarePolygonBase::SquarePolygonBase()
-{
-	// なにもしない
-}
-
-// デストラクタ
-SquarePolygonBase::~SquarePolygonBase()
-{
-	// なにもしない
-}
-
-// === SquarePolygonBase END ===
-
-
-/*
 * PlainSquarePolygon
 * SquarePolygonBaseを継承した簡単なポリゴンクラス
 */
+
+PlainSquarePolygon::PlainSquarePolygon()
+{
+
+}
 
 // コンストラクタ 座標とかをセットしていく
 PlainSquarePolygon::PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)

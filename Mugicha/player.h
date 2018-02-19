@@ -3,15 +3,11 @@
 #include "polygonsquare.h"
 #include "conf.h"
 
-/*
-* PLAYER
-* SquarePolygonBaseを継承した簡単なポリゴンクラス
-*/
+// プレイヤークラス
 
-class Player : public SquarePolygonBase
+class Player : public PlainSquarePolygon
 {
 private:
-	void generate_vertexes();
 	bool jumping; // ジャンプしている
 	bool falling; // 落ちている
 	bool moving; // 動いている(x軸)
@@ -19,20 +15,4 @@ public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, int _layer = 0, float _x = PLAYER_X, float _y = PLAYER_Y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~Player();
 	void update();
-	void draw();
-	bool is_drawing();
-	void show();
-	void hide();
-	bool is_active();
-	void enable();
-	void disable();
-	void change_texture(LPDIRECT3DTEXTURE9 _tex);
-
-	D3DXVECTOR2 get_coords();
-	POLSIZE get_size();
-	VERTEX_2D *get_vertexes();
-
-	void add_coord(float _x, float _y);
-	void zoom(POLSIZE _zoom_level);
-
 };
