@@ -36,13 +36,6 @@ void Player::update()
 
 	DWORD current = timeGetTime();
 
-#ifdef _DEBUG
-	if (GetKeyboardTrigger(DIK_0))
-	{
-		std::cout << "‚Ò‚å‚¢`‚ñ" << std::endl;
-	}
-#endif
-
 	// ‘€ì
 	if (current - latest_update > 1) // 1msŠÔŠu‚Å
 	{
