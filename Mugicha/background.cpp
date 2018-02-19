@@ -24,7 +24,6 @@ Background::~Background()
 
 void Background::update()
 {
-	// –³
 	if (!status) return;
 	
 	DWORD current = timeGetTime();
@@ -34,59 +33,6 @@ void Background::update()
 	{
 		// uv’l‚Ì•ÏX‚È‚Ç‚ğ‚·‚é
 
-		/*
-		// ƒvƒŒƒCƒ„‚ÌˆÚ“®‚É‡‚í‚¹‚Ä”wŒi‚ğ¶‰E‚ÉˆÚ“®‚³‚¹‚é
-		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // ¶•ûŒü‚Ö‚ÌˆÚ“®
-		{
-			u -= 0.0001f;
-		}
-		else if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // ‰E•ûŒü‚Ö‚ÌˆÚ“®
-		{
-			u += 0.0001f;
-		}
-		
-		
-		// Šgk
-		if (GetKeyboardPress(DIK_NUMPAD8)) // Šg‘å
-		{
-			w += 1.0f;
-			h += 1.0f * aspect_ratio;
-		}
-		else if (GetKeyboardPress(DIK_NUMPAD2)) // k¬
-		{
-			w -= 1.0f;
-			h -= 1.0f * aspect_ratio;
-		}
-
-		// ŒÀŠE’²®
-		if (w < SCREEN_WIDTH) w = SCREEN_WIDTH;
-		if (h < SCREEN_HEIGHT) h = SCREEN_HEIGHT;
-		*/
-
 		latest_update = current;
 	}
-}
-
-void Background::draw()
-{
-	if(!drawing) return;
-	
-	generate_vertexes();
-	d3d_device->SetTexture(0, tex);
-	d3d_device->SetFVF(FVF_VERTEX_2D);
-
-	d3d_device->DrawPrimitiveUP(
-		D3DPT_TRIANGLEFAN,
-		sizeof(this->vertexes) / sizeof(VERTEX_2D) - 2, // ƒ|ƒŠƒSƒ“”
-		this->vertexes,
-		sizeof(VERTEX_2D)
-	);
-
-#ifdef __DEBUG
-	for (const auto vertex : vertexes)
-	{
-		std::cout << "(" << vertex.x << ", " << vertex.y << "),";
-	}
-	std::cout << std::endl;
-#endif
 }
