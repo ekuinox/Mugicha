@@ -10,8 +10,8 @@ enum HitLine {
 	NONE = 0x00,
 	TOP = 0x01,
 	BOTTOM = 0x02,
-	LEFT = 0x03,
-	RIGHT = 0x04
+	LEFT = 0x04,
+	RIGHT = 0x08
 };
 
 // SquarePolygonBase‚©‚ç”h¶‚³‚¹‚½ƒNƒ‰ƒX“¯m‚Ì“–‚½‚è”»’è‚ğ“Z‚ß‚Ü‚·

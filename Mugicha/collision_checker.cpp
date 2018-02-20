@@ -33,19 +33,19 @@ bool is_collisionA(SquarePolygonBase * _a, SquarePolygonBase * _b)
 
 HitLine where_collision(SquarePolygonBase *_a, SquarePolygonBase *_b)
 {
-	auto result = NONE;
+	char result = 0x00;
 	if (is_collisionA(_a, _b))
 	{
 		auto a = _a->get_vertexes();
 		auto b = _b->get_vertexes();
 
-		if (a[1].x <= b[0].x) result = RIGHT;
-		else if (a[0].x >= b[1].x) result = LEFT;
+		if (a[1].x <= b[0].x) result |= RIGHT;
+		if (a[0].x >= b[1].x) result |= LEFT;
 
-		else if (a[0].y >= b[2].y) result = TOP;
-		else if (a[0].y <= b[2].y) result = BOTTOM;
+		if (a[0].y >= b[2].y) result |= TOP;
+		if (a[0].y <= b[2].y) result |= BOTTOM;
 	}
 
-	return result;
+	return static_cast<HitLine>(result);
 }
 

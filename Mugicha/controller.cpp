@@ -81,6 +81,7 @@ void Controller::switch_scene(enum scene _scene)
 		background->show();
 
 		// ƒZƒŒƒNƒ^
+		selector->init();
 		selector->enable();
 		selector->show();
 
@@ -130,7 +131,6 @@ void Controller::update()
 
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{
-			selector->init();
 			switch_scene(Gaming);
 		}
 		break;

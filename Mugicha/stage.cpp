@@ -137,10 +137,7 @@ void Stage::update()
 
 	if (GetKeyboardTrigger(DIK_SPACE))
 	{
-#ifdef _DEBUG
-		std::cout << "Trigger SPACE" << std::endl;
-#endif
-		static_cast<Player*>(polygons[PLAYER][0])->jump();
+		player->jump();
 	}
 
 

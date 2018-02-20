@@ -16,17 +16,16 @@ void Stage::init3()
 	}
 
 	std::map<enum PolygonTypes, polygon_vec>().swap(polygons); // ‚·‚×‚Ä–³‚É‚·‚é@Œã‚Ì‚±‚Æ‚Íl‚¦‚Ä‚È‚¢@‚·‚Ý‚Ü‚¹‚ñ
-
-															   // ”wŒi‚Ì“o˜^
-	polygons[BACKGROUND].push_back(new Background(textures["BACKGROUND"], &camera));
-	polygons[BACKGROUND][0]->enable();
-	polygons[BACKGROUND][0]->show();
+	
+	// ”wŒi‚Ì“o˜^
+	background = push_polygon_back(BACKGROUND, new Background(textures["BACKGROUND"], &camera));
+	background->enable();
+	background->show();
 
 	// ƒvƒŒƒCƒ„‚Ì“o˜^
-	polygons[PLAYER].push_back(new Player(textures["PLAYER"], &camera, polygons));
-	polygons[PLAYER].back()->enable();
-	polygons[PLAYER].back()->show();
-
+	player = push_polygon_back(PLAYER, new Player(textures["PLAYER"], &camera, polygons));
+	player->enable();
+	player->show();
 	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ð“o˜^
 	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons[SCALABLE_OBJECT].back()->enable();
@@ -56,4 +55,8 @@ void Stage::init3()
 	polygons[PLAIN].back()->show();
 	
 	zoom_level = { 1, 1 };
+
+#ifdef _DEBUG
+	printf("LOADED STAGE3\n");
+#endif
 }

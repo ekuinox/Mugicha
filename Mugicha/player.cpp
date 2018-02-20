@@ -37,8 +37,7 @@ void Player::update()
 	DWORD current = timeGetTime();
 
 	std::vector<SquarePolygonBase*> to_check_polygons;
-	PolygonTypes types[] = { PLAIN, SCALABLE_OBJECT };
-	for (const auto& type : types) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+	for (const auto& type : { PLAIN, SCALABLE_OBJECT }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
 	auto old_pos = D3DXVECTOR2(x, y);
 
@@ -67,23 +66,33 @@ void Player::update()
 			y -= 0.5f;
 		}
 
-#ifdef _DEBUG
-		else if (GetKeyboardPress(DIK_W))
-		{
-			y += 1;
-		}
-		else if (GetKeyboardPress(DIK_S))
-		{
-			y -= 1;
-		}
-#endif // _DEBUG
-
 		// ìñÇΩÇËê∏ç∏
-		generate_vertexes();
-		ground = false;
 		for (const auto& polygon : to_check_polygons)
 		{
-			switch (where_collision(this, polygon))
+			char result = where_collision(this, polygon);
+			if (result & BOTTOM)
+			{
+				y = old_pos.y;
+				ground = true;
+#ifdef _DEBUG
+			//	printf("%d\n", result);
+#endif
+			}
+			if (result & TOP)
+			{
+				y = old_pos.y;
+			}
+			if (result & LEFT)
+			{
+				x = old_pos.x;
+			}
+			if (result & RIGHT)
+			{
+				x = old_pos.x;
+			}
+
+			/*
+			switch (result)
 			{
 			case TOP:
 				y = old_pos.y;
@@ -99,6 +108,8 @@ void Player::update()
 				x = old_pos.x;
 				break;
 			}
+			if (result == BOTTOM) ground = false;
+			*/
 		}
 
 		latest_update = current;
