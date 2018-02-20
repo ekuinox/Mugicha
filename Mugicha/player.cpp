@@ -105,7 +105,7 @@ void Player::update()
 
 bool Player::jump()
 {
-	unless (ground) return false;
+	unless (ground) return false; 
 	ground = false;
 	jumped_at = timeGetTime();
 	jumping = true;
