@@ -108,7 +108,7 @@ void Stage::init()
 // 更新処理
 void Stage::update()
 {
-	auto current = timeGetTime();
+	// 時間を気にしないもの
 
 	// タイトルに戻る（無確認）
 	if (GetKeyboardTrigger(DIK_1))
@@ -118,15 +118,21 @@ void Stage::update()
 	}
 
 	// 拡縮
-	if (GetKeyboardTrigger(DIK_O)) // 拡大
+	if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // 拡大
 	{
 		zoom_level.w *= 2;
 		zoom_level.h *= 2;
+#ifdef _DEBUG
+		printf("zoom_level: (%f, %f)\n", zoom_level.w, zoom_level.h);
+#endif
 	}
-	else if (GetKeyboardTrigger(DIK_L)) // 縮小
+	else if (GetKeyboardTrigger(DIK_L) && zoom_level.w > 0.5f) // 縮小
 	{
 		zoom_level.w /= 2;
 		zoom_level.h /= 2;
+#ifdef _DEBUG
+		printf("zoom_level: (%f, %f)\n", zoom_level.w, zoom_level.h);
+#endif
 	}
 
 	if (GetKeyboardTrigger(DIK_SPACE))
@@ -134,6 +140,9 @@ void Stage::update()
 		static_cast<Player*>(polygons[PLAYER][0])->jump();
 	}
 
+
+	// 時間を気にするもの
+	auto current = timeGetTime();
 	if (current - latest_update < 1) return;
 	latest_update = current;
 

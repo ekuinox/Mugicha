@@ -40,34 +40,31 @@ void Player::update()
 	PolygonTypes types[] = { PLAIN, SCALABLE_OBJECT };
 	for (const auto& type : types) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
+	auto old_pos = D3DXVECTOR2(x, y);
+
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
 		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
 		{
 			x -= speed;
-			generate_vertexes();
-			for (const auto& polygon : to_check_polygons)
-			{
-				if (is_collision(this, polygon))
-				{
-					x += speed;
-					break;
-				}
-			}
 		}
 		else if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
 		{
 			x += speed;
-			generate_vertexes();
-			for (const auto& polygon : to_check_polygons)
-			{
-				if (is_collision(this, polygon))
-				{
-					x -= speed;
-					break;
-				}
-			}
+		}
+
+		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
+		if (jumping)
+		{
+			if (timeGetTime() - jumped_at > 500) jumping = false;
+			y += 1.0f;
+		}
+
+		// TODO: 同様に落下速度も調整する必要がある
+		unless(ground)
+		{
+			y -= 0.5f;
 		}
 
 #ifdef _DEBUG
@@ -80,52 +77,28 @@ void Player::update()
 			y -= 1;
 		}
 #endif
-
-		// これ落下していって足元にブロックがあるかの判定ですね
 		generate_vertexes();
+		ground = false;
 		for (const auto& polygon : to_check_polygons)
 		{
-			unless(is_collision(this, polygon))
+			switch (where_collision(this, polygon))
 			{
-				ground = false;
+			case TOP:
+				y = old_pos.y;
+				break;
+			case BOTTOM:
+				y = old_pos.y;
+				ground = true;
+				break;
+			case LEFT:
+				x = old_pos.x;
+				break;
+			case RIGHT:
+				x = old_pos.x;
 				break;
 			}
+
 		}
-
-		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
-		if (jumping)
-		{
-			if (timeGetTime() - jumped_at > 500) jumping = false;
-			y += 1.0f;
-
-			generate_vertexes();
-			for (const auto& polygon : to_check_polygons)
-			{
-				if (is_collision(this, polygon))
-				{
-					y -= 1.0f;
-					break;
-				}
-			}
-		}
-
-		// TODO: 同様に落下速度も調整する必要がある
-		unless(ground)
-		{
-			y -= 0.5f;
-
-			generate_vertexes();
-			for (const auto& polygon : to_check_polygons)
-			{
-				if (is_collision(this, polygon))
-				{
-					y += 0.5f;
-					ground = true;
-					break;
-				}
-			}
-		}
-
 		latest_update = current;
 	}
 }
