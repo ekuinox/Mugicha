@@ -76,7 +76,7 @@ void Player::update()
 		{
 			y -= 1;
 		}
-#endif
+#endif // _DEBUG
 		generate_vertexes();
 		ground = false;
 		for (const auto& polygon : to_check_polygons)
