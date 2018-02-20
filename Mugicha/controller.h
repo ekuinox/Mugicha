@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "stage.h"
+#include "selector.h"
 
 // シーン管理用の列挙型
 enum scene
@@ -23,7 +24,8 @@ private:
 	DWORD latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
 	polygon_vec polygons;
-	char stage_select;
+	Background *background; // 背景ポリゴン
+	Selector *selector; // セレクターポリゴン
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();

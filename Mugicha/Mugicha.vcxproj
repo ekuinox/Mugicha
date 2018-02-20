@@ -157,6 +157,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="plain_square_polygon.cpp" />
     <ClCompile Include="scalable_object.cpp" />
+    <ClCompile Include="selector.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="stage1.cpp" />
     <ClCompile Include="stage2.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="plain_square_polygon.h" />
     <ClInclude Include="scalable_object.h" />
+    <ClInclude Include="selector.h" />
     <ClInclude Include="square_polygon_base.h" />
     <ClInclude Include="stage.h" />
   </ItemGroup>

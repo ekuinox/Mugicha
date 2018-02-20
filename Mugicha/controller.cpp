@@ -33,12 +33,17 @@ void Controller::init()
 #endif
 		}
 	}
+
+	// カメラ位置の初期化
 	camera = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-	polygons = {
-		{new Background(textures["TITLE_BG"], &camera)},
-		// TODO: カーソルはカーソルで一つのクラスにわけてやったほうがいいかもね，いやしましょう
-		{new PlainSquarePolygon(400, 600, 100, 100, textures["SELECTOR"], 0, &camera)}
-	};
+	
+	// 背景の登録
+	background = new Background(textures["TITLE_BG"], &camera);
+	polygons.push_back(background);
+
+	// セレクタの登録
+	selector = new Selector(textures["SELECTOR"], &camera);
+	polygons.push_back(selector);
 
 	// シーン切り替え
 	switch_scene(scene::Title);
@@ -65,25 +70,23 @@ void Controller::switch_scene(enum scene _scene)
 	switch (scene)
 	{
 	case Title:
-		polygons[0]->change_texture(textures["TITLE_BG"]);
-		polygons[0]->enable();
-		polygons[0]->show();
+		background->change_texture(textures["TITLE_BG"]);
+		background->enable();
+		background->show();
 		break;
 	case Select:
 		// 背景
-		polygons[0]->change_texture(textures["STAGE_SELECT_BG"]);
-		polygons[0]->enable();
-		polygons[0]->show();
+		background->change_texture(textures["STAGE_SELECT_BG"]);
+		background->enable();
+		background->show();
 
 		// セレクタ
-		polygons[1]->enable();
-		polygons[1]->show();
-
-		stage_select = 2;
+		selector->enable();
+		selector->show();
 
 		break;
 	case Gaming:
-		stage = new Stage(stage_select);
+		stage = new Stage(selector->get_selection());
 		break;
 	default:
 		break;
@@ -115,22 +118,19 @@ void Controller::update()
 		}
 		break;
 	case Select:
-		if (stage_select >= 2 && (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW))) // 選択左
+		if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW)) // 選択左
 		{
-			stage_select -= 1;
-			polygons[1]->add_coord(-200, 0);
+			selector->left();
 		}
 
-		if (stage_select <= 2 && (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW))) // 選択右
+		if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW)) // 選択右
 		{
-			stage_select += 1;
-			polygons[1]->add_coord(200, 0);
+			selector->right();
 		}
-
-		polygons[1]->update();
 
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{
+			selector->init();
 			switch_scene(Gaming);
 		}
 		break;
