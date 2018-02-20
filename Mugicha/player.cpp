@@ -31,8 +31,6 @@ Player::~Player()
 
 void Player::update()
 {
-	// TODO: 当たり判定自体はできているが，当たり判定を用いてうんたらはできていない
-	//これが正解かわからないけど，x,y正負に加減算するたびにgenerate_vertexして，is_collisonを取るととりあえず通る
 	if (!status) return; // statusみて切る
 
 	DWORD current = timeGetTime();
@@ -72,22 +70,33 @@ void Player::update()
 		}
 
 		// 当たり精査
+
+		// TODO: 当たると登りやがる
+		// TODO: 連続したポリゴンの上で滑れないというかなんというかアレ
 		ground = false;
 		for (const auto& polygon : to_check_polygons)
 		{
 			char result = where_collision(this, polygon);
-			if (result & BOTTOM)
+			if (result & LEFT)
+			{
+				auto square = polygon->get_square();
+				x = square.x + square.w / 2 + w / 2;
+			}
+			if (result & RIGHT)
+			{
+				auto square = polygon->get_square();
+				x = square.x - square.w / 2 - w / 2;
+			}
+			if (result == BOTTOM)
 			{
 				ground = true;
+				auto square = polygon->get_square();
+				y = square.y + square.h / 2 + h / 2;
 			}
-			if (result & TOP)
+			if (result == TOP)
 			{
 				jumping = false; // 頭ぶつけた時点でジャンプ解除
 				y = old_pos.y;
-			}
-			if (result & (LEFT | RIGHT))
-			{
-				x = old_pos.x;
 			}
 		}
 
