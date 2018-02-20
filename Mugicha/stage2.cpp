@@ -52,7 +52,7 @@ void Stage::init2()
 	polygons[PLAIN].back()->show();
 	
 	zoom_level = { 1, 1 };
-
+	zoom_sign = ZERO;
 #ifdef _DEBUG
 	printf("LOADED STAGE2\n");
 #endif

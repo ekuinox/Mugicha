@@ -28,11 +28,18 @@ void Stage::init1()
 	player->show();
 
 	// 拡縮できるオブジェクトを登録
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	for (auto i = 0; i < 3; ++i)
+	{
+		push_polygon_back(SCALABLE_OBJECT, new ScalableObject(25 + i * 55, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+		polygons[SCALABLE_OBJECT].back()->enable();
+		polygons[SCALABLE_OBJECT].back()->show();
+	}
+
+	push_polygon_back(SCALABLE_OBJECT, new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(100, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	push_polygon_back(SCALABLE_OBJECT, new ScalableObject(80, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 
@@ -52,7 +59,7 @@ void Stage::init1()
 	polygons[PLAIN].back()->show();
 
 	zoom_level = { 1, 1 };
-
+	zoom_sign = ZERO;
 #ifdef _DEBUG
 		printf("LOADED STAGE1\n");
 #endif

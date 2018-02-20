@@ -55,7 +55,7 @@ void Stage::init3()
 	polygons[PLAIN].back()->show();
 	
 	zoom_level = { 1, 1 };
-
+	zoom_sign = ZERO;
 #ifdef _DEBUG
 	printf("LOADED STAGE3\n");
 #endif

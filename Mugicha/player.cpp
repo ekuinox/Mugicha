@@ -20,6 +20,7 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum Pol
 	layer = _layer;
 	camera = _camera;
 	ground = false;
+	controll_lock = false;
 }
 
 // デストラクタ
@@ -44,14 +45,18 @@ void Player::update()
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
-		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
+		unless(controll_lock)
 		{
-			x -= speed;
+			if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
+			{
+				x -= speed;
+			}
+			if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
+			{
+				x += speed;
+			}
 		}
-		else if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
-		{
-			x += speed;
-		}
+		
 
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (jumping)
@@ -67,49 +72,23 @@ void Player::update()
 		}
 
 		// 当たり精査
+		ground = false;
 		for (const auto& polygon : to_check_polygons)
 		{
 			char result = where_collision(this, polygon);
 			if (result & BOTTOM)
 			{
-				y = old_pos.y;
 				ground = true;
-#ifdef _DEBUG
-			//	printf("%d\n", result);
-#endif
 			}
 			if (result & TOP)
 			{
+				jumping = false; // 頭ぶつけた時点でジャンプ解除
 				y = old_pos.y;
 			}
-			if (result & LEFT)
+			if (result & (LEFT | RIGHT))
 			{
 				x = old_pos.x;
 			}
-			if (result & RIGHT)
-			{
-				x = old_pos.x;
-			}
-
-			/*
-			switch (result)
-			{
-			case TOP:
-				y = old_pos.y;
-				break;
-			case BOTTOM:
-				y = old_pos.y;
-				ground = true;
-				break;
-			case LEFT:
-				x = old_pos.x;
-				break;
-			case RIGHT:
-				x = old_pos.x;
-				break;
-			}
-			if (result == BOTTOM) ground = false;
-			*/
 		}
 
 		latest_update = current;
@@ -118,11 +97,22 @@ void Player::update()
 
 bool Player::jump()
 {
-	unless (ground) return false; 
+	unless(ground) return false;
+	if (controll_lock) return false;
 	ground = false;
 	jumped_at = timeGetTime();
 	jumping = true;
 	return true;
+}
+
+void Player::lock()
+{
+	controll_lock = true;
+}
+
+void Player::unlock()
+{
+	controll_lock = false;
 }
 
 // === Player END ===

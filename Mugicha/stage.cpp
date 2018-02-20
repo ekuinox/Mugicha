@@ -83,7 +83,7 @@ void Stage::init()
 	player->show();
 
 	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ğ“o˜^
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	push_polygon_back(SCALABLE_OBJECT, new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 	
@@ -103,6 +103,7 @@ void Stage::init()
 	polygons[PLAIN].back()->show();
 
 	zoom_level = { 1, 1 };
+	zoom_sign = ZERO;
 }
 
 // XVˆ—
@@ -118,23 +119,25 @@ void Stage::update()
 	}
 
 	// Šgk
-	if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // Šg‘å
+	if (zoom_sign == ZERO)
 	{
-		zoom_level.w *= 2;
-		zoom_level.h *= 2;
-#ifdef _DEBUG
-		printf("zoom_level: (%f, %f)\n", zoom_level.w, zoom_level.h);
-#endif
+		if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // Šg‘å
+		{
+			zoom_sign = PLUS;
+			zoom_level_target.w = zoom_level.w * 2;
+			zoom_level_target.h = zoom_level.h * 2;
+			player->lock();
+		}
+		if (GetKeyboardTrigger(DIK_L) && zoom_level.w > 0.5f) // k¬
+		{
+			zoom_sign = MINUS;
+			zoom_level_target.w = zoom_level.w / 2;
+			zoom_level_target.h = zoom_level.h / 2;
+			player->lock();
+		}
 	}
-	else if (GetKeyboardTrigger(DIK_L) && zoom_level.w > 0.5f) // k¬
-	{
-		zoom_level.w /= 2;
-		zoom_level.h /= 2;
-#ifdef _DEBUG
-		printf("zoom_level: (%f, %f)\n", zoom_level.w, zoom_level.h);
-#endif
-	}
-
+	
+	// ƒvƒŒƒCƒ„‚ğƒWƒƒƒ“ƒv‚³‚¹‚é
 	if (GetKeyboardTrigger(DIK_SPACE))
 	{
 		player->jump();
@@ -145,6 +148,36 @@ void Stage::update()
 	auto current = timeGetTime();
 	if (current - latest_update < 1) return;
 	latest_update = current;
+
+	if (zoom_sign == PLUS)
+	{
+		if (zoom_level.w < zoom_level_target.w)
+		{
+			zoom_level.w *= 1.001f;
+			zoom_level.h *= 1.001f;
+		}
+		else
+		{
+			zoom_level = zoom_level_target;
+			zoom_sign = ZERO;
+			player->unlock();
+		}
+	}
+
+	if (zoom_sign == MINUS)
+	{
+		if (zoom_level.w > zoom_level_target.w)
+		{
+			zoom_level.w /= 1.001f;
+			zoom_level.h /= 1.001f;
+		}
+		else
+		{
+			zoom_level = zoom_level_target;
+			zoom_sign = ZERO;
+			player->unlock();
+		}
+	}
 
 	// ‘SƒY[ƒ€•ÏX
 	for (const auto& _polygons : polygons)

@@ -23,6 +23,12 @@ enum status {
 	end, // 終了
 };
 
+enum Sign {
+	ZERO,
+	PLUS,
+	MINUS,
+};
+
 class Stage {
 private:
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
@@ -37,6 +43,8 @@ private:
 	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
 	char stage_select; // ステージ選択番号
 	D3DXVECTOR2 camera;
+	enum Sign zoom_sign; // 拡大状態か縮小状態かってアレです
+	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
 	POLSIZE zoom_level;
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void init();

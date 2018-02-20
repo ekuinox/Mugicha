@@ -13,12 +13,16 @@ private:
 	bool ground; // ’…’nó‘Ô
 	bool moving; // “®‚¢‚Ä‚¢‚é(x²)
 	DWORD jumped_at;
+	bool controll_lock; // ‘€ì‚ğó‚¯•t‚¯‚È‚­‚·‚é
 	std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // “–‚½‚èŒ©‚é‚æ‚¤‚É‚Á‚Æ‚«‚Ü‚·
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, int _layer = 0, float _x = PLAYER_X, float _y = PLAYER_Y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~Player();
+
 	void update();
 
 	// “Æ©ŠÖ”
 	bool jump();
+	void lock();
+	void unlock();
 };
