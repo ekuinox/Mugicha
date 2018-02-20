@@ -36,6 +36,10 @@ void Player::update()
 
 	DWORD current = timeGetTime();
 
+	std::vector<SquarePolygonBase*> to_check_polygons;
+	PolygonTypes types[] = { PLAIN, SCALABLE_OBJECT };
+	for (const auto& type : types) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
@@ -43,7 +47,7 @@ void Player::update()
 		{
 			x -= speed;
 			generate_vertexes();
-			for (const auto& polygon : polygons[PLAIN])
+			for (const auto& polygon : to_check_polygons)
 			{
 				if (is_collision(this, polygon))
 				{
@@ -56,7 +60,7 @@ void Player::update()
 		{
 			x += speed;
 			generate_vertexes();
-			for (const auto& polygon : polygons[PLAIN])
+			for (const auto& polygon : to_check_polygons)
 			{
 				if (is_collision(this, polygon))
 				{
@@ -77,6 +81,17 @@ void Player::update()
 		}
 #endif
 
+		// これ落下していって足元にブロックがあるかの判定ですね
+		generate_vertexes();
+		for (const auto& polygon : to_check_polygons)
+		{
+			unless(is_collision(this, polygon))
+			{
+				ground = false;
+				break;
+			}
+		}
+
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (jumping)
 		{
@@ -84,7 +99,7 @@ void Player::update()
 			y += 1.0f;
 
 			generate_vertexes();
-			for (const auto& polygon : polygons[PLAIN])
+			for (const auto& polygon : to_check_polygons)
 			{
 				if (is_collision(this, polygon))
 				{
@@ -100,7 +115,7 @@ void Player::update()
 			y -= 0.5f;
 
 			generate_vertexes();
-			for (const auto& polygon : polygons[PLAIN])
+			for (const auto& polygon : to_check_polygons)
 			{
 				if (is_collision(this, polygon))
 				{
@@ -109,7 +124,7 @@ void Player::update()
 					break;
 				}
 			}
-		}		
+		}
 
 		latest_update = current;
 	}
