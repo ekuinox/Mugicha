@@ -1,5 +1,4 @@
-#ifndef _INPUT_H_
-#define _INPUT_H_
+#pragma once
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dinput8.lib")
@@ -17,5 +16,3 @@ bool GetKeyboardPress(int);
 bool GetKeyboardTrigger(int);
 bool GetKeyboardRepeat(int);
 bool GetKeyboardRelease(int);
-
-#endif
