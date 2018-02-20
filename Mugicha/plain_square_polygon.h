@@ -25,6 +25,7 @@ public:
 	void disable();
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 
+	SQUARE get_square();
 	D3DXVECTOR2 get_coords();
 	POLSIZE get_size();
 	VERTEX_2D *get_vertexes();

@@ -24,6 +24,13 @@ using VERTEX_2D = struct _VERTEX_2D
 	_VERTEX_2D(float _x, float _y, float _u, float _v) : x(_x), y(_y), z(0.0f), u(_u), v(_v), rhw(1.0f), diffuse(D3DCOLOR_RGBA(255, 255, 255, 200)){};
 };
 
+using SQUARE = struct _SQUARE
+{
+	float x, y, w, h;
+	_SQUARE() {};
+	_SQUARE(float _x, float _y, float _w, float _h) : x(_x), y(_y), w(_w), h(_h) {};
+};
+
 using POLSIZE = struct _POLSIZE
 {
 	float w;
@@ -88,6 +95,7 @@ public:
 	virtual void change_texture(LPDIRECT3DTEXTURE9) = 0; // テクスチャ変更に使います
 
 	// Getter
+	virtual SQUARE get_square() = 0;
 	virtual D3DXVECTOR2 get_coords() = 0;
 	virtual POLSIZE get_size() = 0;
 	virtual VERTEX_2D *get_vertexes() = 0;

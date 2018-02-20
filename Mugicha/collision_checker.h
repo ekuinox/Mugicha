@@ -6,20 +6,6 @@
 #include "background.h"
 #include "enemy.h"
 
-// SquarePolygonBaseから派生させたクラス同士の当たり判定を纏めます
-// 基本的にSquarePolygonBase*のvectorで持ってるので，使う時はキャストする必要がある．まあ，別にそのままやっても問題はないと思うけど．
-// というか当たり判定のとり方をイマイチわかっておらんので，助けて
-
-// なんでポインタなんだ？？？？？
-
-// 基底 : 基底
-bool is_collision(SquarePolygonBase *_a, SquarePolygonBase *_b);
-
-// 基底 :　拡縮可ポリゴン
-bool is_collision(SquarePolygonBase * _a, ScalableObject * _b);
-
-// coordsとsizeから取る
-
 enum HitLine {
 	NONE = 0x00,
 	TOP = 0x01,
@@ -28,6 +14,17 @@ enum HitLine {
 	RIGHT = 0x04
 };
 
-bool is_collision(const PlainSquarePolygon _a, const PlainSquarePolygon _b);
+// SquarePolygonBaseから派生させたクラス同士の当たり判定を纏めます
+// 基本的にSquarePolygonBase*のvectorで持ってるので，使う時はキャストする必要がある．まあ，別にそのままやっても問題はないと思うけど．
+// というか当たり判定のとり方をイマイチわかっておらんので，助けて
 
+bool is_collision(float a_x1, float a_x2, float b_x1, float b_x2, float a_y1, float a_y2, float b_y1, float b_y2);
+
+// 基底 : 基底
+bool is_collision(SquarePolygonBase *_a, SquarePolygonBase *_b);
+
+// coordsとsizeから取る
+bool is_collisionA(SquarePolygonBase *_a, SquarePolygonBase *_b);
+
+// どこに当たったかを拾います _aのどの辺に対してか
 enum HitLine where_collision(SquarePolygonBase *_a, SquarePolygonBase *_b);

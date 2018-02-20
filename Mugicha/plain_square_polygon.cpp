@@ -80,6 +80,11 @@ void PlainSquarePolygon::change_texture(LPDIRECT3DTEXTURE9 _tex)
 	tex = _tex;
 }
 
+SQUARE PlainSquarePolygon::get_square()
+{
+	return SQUARE(x, y, w, h);
+}
+
 D3DXVECTOR2 PlainSquarePolygon::get_coords()
 {
 	return D3DXVECTOR2(x, y);

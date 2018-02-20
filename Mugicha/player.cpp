@@ -77,6 +77,8 @@ void Player::update()
 			y -= 1;
 		}
 #endif // _DEBUG
+
+		// ìñÇΩÇËê∏ç∏
 		generate_vertexes();
 		ground = false;
 		for (const auto& polygon : to_check_polygons)
@@ -97,8 +99,8 @@ void Player::update()
 				x = old_pos.x;
 				break;
 			}
-
 		}
+
 		latest_update = current;
 	}
 }

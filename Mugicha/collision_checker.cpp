@@ -1,41 +1,40 @@
 #include "collision_checker.h"
 
+bool is_collision(float a_x1, float a_x2, float b_x1, float b_x2, float a_y1, float a_y2, float b_y1, float b_y2)
+{
+	return
+		a_x1 <= b_x2
+		&& a_x2 >= b_x1
+		&& a_y1 <= b_y2
+		&& a_y2 >= b_y1
+		? true : false;
+}
+
 bool is_collision(SquarePolygonBase * _a, SquarePolygonBase * _b)
 {
 	auto a = _a->get_vertexes();
 	auto b = _b->get_vertexes();
 
-	return
-		a[0].x <= b[1].x
-		&& a[1].x >= b[0].x
-		&& a[0].y <= b[2].y
-		&& a[2].y >= b[0].y
-		? true : false;
+	return is_collision(a[0].x, a[1].x, b[0].x, b[1].x, a[0].y, a[2].y, b[0].y, b[2].y);
 
 }
 
-bool is_collision(SquarePolygonBase * _a, ScalableObject * _b)
+bool is_collisionA(SquarePolygonBase * _a, SquarePolygonBase * _b)
 {
-	auto a = _a->get_vertexes();
-	auto b = _b->get_vertexes();
-
-	return
-		a[0].x <= b[1].x
-		&& a[1].x >= b[0].x
-		&& a[0].y <= b[2].y
-		&& a[2].y >= b[0].y
-		? true : false;
-}
-
-bool is_collision(const PlainSquarePolygon _a, const PlainSquarePolygon _b)
-{
-	return false;
+	auto a = _a->get_square();
+	auto b = _b->get_square();
+	return is_collision(
+		a.x - a.w / 2, a.x + a.w / 2,
+		b.x - b.w / 2, b.x + b.w / 2,
+		a.y - a.h / 2, a.y + a.h / 2,
+		b.y - b.h / 2, b.y + b.h / 2
+		);
 }
 
 HitLine where_collision(SquarePolygonBase *_a, SquarePolygonBase *_b)
 {
 	auto result = NONE;
-	if (is_collision(_a, _b))
+	if (is_collisionA(_a, _b))
 	{
 		auto a = _a->get_vertexes();
 		auto b = _b->get_vertexes();
