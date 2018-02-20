@@ -31,7 +31,7 @@ Player::~Player()
 void Player::update()
 {
 	// TODO: 当たり判定自体はできているが，当たり判定を用いてうんたらはできていない
-
+	//これが正解かわからないけど，x,y正負に加減算するたびにgenerate_vertexして，is_collisonを取るととりあえず通る
 	if (!status) return; // statusみて切る
 
 	DWORD current = timeGetTime();
@@ -42,10 +42,28 @@ void Player::update()
 		if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
 		{
 			x -= speed;
+			generate_vertexes();
+			for (const auto& polygon : polygons[PLAIN])
+			{
+				if (is_collision(this, polygon))
+				{
+					x += speed;
+					break;
+				}
+			}
 		}
 		else if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
 		{
 			x += speed;
+			generate_vertexes();
+			for (const auto& polygon : polygons[PLAIN])
+			{
+				if (is_collision(this, polygon))
+				{
+					x -= speed;
+					break;
+				}
+			}
 		}
 
 #ifdef _DEBUG
@@ -64,28 +82,34 @@ void Player::update()
 		{
 			if (timeGetTime() - jumped_at > 500) jumping = false;
 			y += 1.0f;
+
+			generate_vertexes();
+			for (const auto& polygon : polygons[PLAIN])
+			{
+				if (is_collision(this, polygon))
+				{
+					y -= 1.0f;
+					break;
+				}
+			}
 		}
 
 		// TODO: 同様に落下速度も調整する必要がある
 		unless(ground)
 		{
 			y -= 0.5f;
-		}
 
-		// 枠外に出ないように => 壁の当たり判定でやりたい
-		if (x - w / 2 < 0) x = w / 2;
-		if (y - h / 2 < 0)
-		{
-			y = h / 2;
-			ground = true; // 接地判定
-		}
-
-#ifdef _DEBUG
-		if (is_collision(this, polygons[SCALABLE_OBJECT].front()))
-		{
-			std::cout << "イッテエヨオ～！";
-		}
-#endif
+			generate_vertexes();
+			for (const auto& polygon : polygons[PLAIN])
+			{
+				if (is_collision(this, polygon))
+				{
+					y += 0.5f;
+					ground = true;
+					break;
+				}
+			}
+		}		
 
 		latest_update = current;
 	}
