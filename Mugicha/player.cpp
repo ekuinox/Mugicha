@@ -95,8 +95,19 @@ void Player::update()
 			}
 			if (result == TOP)
 			{
-				jumping = false; // 頭ぶつけた時点でジャンプ解除
-				y = old_pos.y;
+				if (jumping) // ジャンプして頭ぶつけた場合はいいけど
+				{
+					jumping = false; // 頭ぶつけた時点でジャンプ解除
+					auto square = polygon->get_square();
+					y = square.y - square.h / 2 - h / 2;
+				}
+				else if (ground) // この場合は拡縮で縮んだポリゴンに押し潰さているので，
+				{
+					// ここで死亡処理作らないといけない
+#ifdef _DEBUG
+					std::cout << "グエー挟まれたンゴ\n";
+#endif
+				}
 			}
 		}
 
