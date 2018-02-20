@@ -27,6 +27,10 @@ class Stage {
 private:
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
 	std::map<enum PolygonTypes, polygon_vec> polygons;
+	Background *background;
+	Player *player; // プレイヤの変数
+	std::vector<Enemy*> enemies; // 敵の可変長配列
+
 	enum status status;
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画
@@ -41,6 +45,9 @@ private:
 	void init3();
 	void update();
 	void draw();
+
+	template<typename _T>
+	_T push_polygon_back(enum PolygonTypes type, _T polygon);
 public:
 	Stage();
 	Stage(char _stage_select);
