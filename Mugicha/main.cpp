@@ -171,9 +171,6 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// keyboard
 	InitKeyboard(hInstance, hWnd);
 
-	// xaudio2
-	//	InitSound();
-
 	return S_OK;
 }
 
