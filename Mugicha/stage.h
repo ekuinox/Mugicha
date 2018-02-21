@@ -10,6 +10,7 @@
 #include "scalable_object.h"
 #include "enemy.h"
 #include "ragged_floor.h"
+#include "thorns.h"
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
 

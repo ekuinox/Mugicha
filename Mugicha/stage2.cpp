@@ -56,6 +56,12 @@ void Stage::init2()
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 
+	// ƒgƒQ
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, polygons[SCALABLE_OBJECT].back(), player, true));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
+
+
 	zoom_level = { 1, 1 };
 	zoom_sign = ZERO;
 #ifdef _DEBUG

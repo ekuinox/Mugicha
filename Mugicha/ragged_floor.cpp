@@ -63,10 +63,5 @@ void RaggedFloor::update()
 		{
 			init();
 		}
-
-#ifdef _DEBUG
-		printf("%f, %f, %s, %s, %f, %f\n", x, y, B_TO_S(burdened), B_TO_S(falling), burdened_time, disapper_time);
-
-#endif
 	}
 }

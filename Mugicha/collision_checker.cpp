@@ -28,7 +28,7 @@ bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 		another.x - another.w / 2, another.x + another.w / 2,
 		self.y - self.h / 2, self.y + self.h / 2,
 		another.y - another.h / 2, another.y + another.h / 2
-		);
+	);
 }
 
 HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)

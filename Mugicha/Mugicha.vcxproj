@@ -163,6 +163,7 @@
     <ClCompile Include="stage1.cpp" />
     <ClCompile Include="stage2.cpp" />
     <ClCompile Include="stage3.cpp" />
+    <ClCompile Include="thorns.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="selector.h" />
     <ClInclude Include="square_polygon_base.h" />
     <ClInclude Include="stage.h" />
+    <ClInclude Include="thorns.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
