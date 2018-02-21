@@ -21,10 +21,10 @@ enum HitLine {
 bool is_collision(float a_x1, float a_x2, float b_x1, float b_x2, float a_y1, float a_y2, float b_y1, float b_y2);
 
 // Šî’ê : Šî’ê
-bool is_collision(SquarePolygonBase *_a, SquarePolygonBase *_b);
+bool is_collision(SquarePolygonBase *_self, SquarePolygonBase *_another);
 
 // coords‚Æsize‚©‚çæ‚é
-bool is_collisionA(SquarePolygonBase *_a, SquarePolygonBase *_b);
+bool is_collisionA(SquarePolygonBase *_self, SquarePolygonBase *_another);
 
 // ‚Ç‚±‚É“–‚½‚Á‚½‚©‚ğE‚¢‚Ü‚· _a‚Ì‚Ç‚Ì•Ó‚É‘Î‚µ‚Ä‚©
-enum HitLine where_collision(SquarePolygonBase *_a, SquarePolygonBase *_b);
+enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another);

@@ -54,7 +54,7 @@ void Player::update()
 				x += speed;
 			}
 		}
-		
+
 
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (jumping)
@@ -68,6 +68,17 @@ void Player::update()
 		{
 			y -= 0.5f;
 		}
+
+#ifdef _DEBUG
+		if (GetKeyboardPress(DIK_W))
+		{
+			y += 1;
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			y -= 1;
+		}
+#endif
 
 		// 当たり精査
 
@@ -109,7 +120,14 @@ void Player::update()
 #endif
 				}
 			}
+#ifdef _DEBUG
+			printf("%d ", result);
+#endif
 		}
+
+#ifdef _DEBUG
+		printf("PLAYER: (%f, %f)\n", x, y);
+#endif
 
 		latest_update = current;
 	}

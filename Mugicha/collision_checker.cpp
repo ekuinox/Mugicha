@@ -10,40 +10,59 @@ bool is_collision(float a_x1, float a_x2, float b_x1, float b_x2, float a_y1, fl
 		? true : false;
 }
 
-bool is_collision(SquarePolygonBase * _a, SquarePolygonBase * _b)
+bool is_collision(SquarePolygonBase * _self, SquarePolygonBase * _another)
 {
-	auto a = _a->get_vertexes();
-	auto b = _b->get_vertexes();
+	auto another = _self->get_vertexes();
+	auto self = _another->get_vertexes();
 
-	return is_collision(a[0].x, a[1].x, b[0].x, b[1].x, a[0].y, a[2].y, b[0].y, b[2].y);
+	return is_collision(another[0].x, another[1].x, self[0].x, self[1].x, another[0].y, another[2].y, self[0].y, self[2].y);
 
 }
 
-bool is_collisionA(SquarePolygonBase * _a, SquarePolygonBase * _b)
+bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 {
-	auto a = _a->get_square();
-	auto b = _b->get_square();
+	auto self = _self->get_square();
+	auto another = _another->get_square();
 	return is_collision(
-		a.x - a.w / 2, a.x + a.w / 2,
-		b.x - b.w / 2, b.x + b.w / 2,
-		a.y - a.h / 2, a.y + a.h / 2,
-		b.y - b.h / 2, b.y + b.h / 2
+		self.x - self.w / 2, self.x + self.w / 2,
+		another.x - another.w / 2, another.x + another.w / 2,
+		self.y - self.h / 2, self.y + self.h / 2,
+		another.y - another.h / 2, another.y + another.h / 2
 		);
 }
 
-HitLine where_collision(SquarePolygonBase *_a, SquarePolygonBase *_b)
+HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
 {
 	char result = 0x00;
-	if (is_collisionA(_a, _b))
+	if (is_collisionA(_self, _another))
 	{
-		auto a = _a->get_vertexes();
-		auto b = _b->get_vertexes();
+		
+		auto self = _self->get_vertexes();
+		auto another = _another->get_vertexes();
 
-		if (a[1].x <= b[0].x) result |= RIGHT;
-		if (a[0].x >= b[1].x) result |= LEFT;
+		if (self[1].x <= another[0].x) result |= RIGHT;
+		if (self[0].x >= another[1].x) result |= LEFT;
 
-		if (a[0].y >= b[2].y) result |= TOP;
-		if (a[0].y <= b[2].y) result |= BOTTOM;
+		if (self[0].y >= another[2].y) result |= TOP;
+		if (self[0].y <= another[2].y) result |= BOTTOM;
+		
+		/*
+		auto self = _self->get_square();
+		auto another = _another->get_square();
+
+		if (self.x + self.w / 2 <= another.x - another.w / 2) result |= RIGHT;
+		if (self.x - self.w / 2 >= another.x + another.w / 2) result |= LEFT;
+
+		if (self.y - self.h / 2 >= another.y + another.h / 2) result |= TOP;
+		if (self.y - self.h / 2 <= another.y + another.h / 2) result |= BOTTOM;
+		*/
+		
+		/*
+		if (self.x + self.w / 2 > another.x - another.w / 2) result |= RIGHT; // SELF‚Ì‰E‚ÆANOTHER‚Ì¶‚ð”äŠr‚·‚é >=
+		if (self.x - self.w / 2 < another.x + another.w / 2) result |= LEFT; // SELF‚Ì¶‚ÆANOTHER‚Ì‰E‚ð”äŠr‚·‚é <=
+		if (self.y + self.h / 2 > another.y - another.h / 2) result |= TOP; // SELF‚Ìã‚ÆANOTHER‚Ì‰º‚ð”äŠr‚·‚é >=
+		if (self.y - self.h / 2 < another.y + another.h / 2) result |= BOTTOM; // SELF‚Ì‰º‚ÆANOTHER‚Ìã‚ð”äŠr‚·‚é <=
+		*/
 	}
 
 	return static_cast<HitLine>(result);
