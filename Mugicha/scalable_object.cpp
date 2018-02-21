@@ -21,6 +21,7 @@ ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3
 	zoom_level = { 1, 1 }; // 1倍で初期化
 	layer = _layer;
 	camera = _camera;
+	latest_update = timeGetTime();
 }
 
 // デストラクタ

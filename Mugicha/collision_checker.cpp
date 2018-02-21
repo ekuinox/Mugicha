@@ -36,15 +36,14 @@ HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
 	char result = 0x00;
 	if (is_collisionA(_self, _another))
 	{
-		
 		auto self = _self->get_vertexes();
 		auto another = _another->get_vertexes();
 
 		if (self[1].x <= another[0].x) result |= RIGHT;
 		if (self[0].x >= another[1].x) result |= LEFT;
 
-		if (self[0].y >= another[2].y) result |= TOP;
-		if (self[0].y <= another[2].y) result |= BOTTOM;
+		if (self[0].y > another[2].y) result |= TOP;
+		if (self[0].y < another[2].y) result |= BOTTOM;
 		
 		/*
 		auto self = _self->get_square();

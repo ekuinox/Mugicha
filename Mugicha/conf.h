@@ -29,3 +29,5 @@
 // 各ポリゴンがvertexesを生成するときに参照され，これを引く
 #define CAMERA_X (0)
 #define CAMERA_Y (0)
+
+#define B_TO_S(exp) exp ? "TRUE" : "FALSE"

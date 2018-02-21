@@ -120,14 +120,8 @@ void Player::update()
 #endif
 				}
 			}
-#ifdef _DEBUG
-			printf("%d ", result);
-#endif
 		}
 
-#ifdef _DEBUG
-		printf("PLAYER: (%f, %f)\n", x, y);
-#endif
 
 		latest_update = current;
 	}

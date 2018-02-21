@@ -51,6 +51,11 @@ void Stage::init2()
 	polygons[PLAIN].back()->enable();
 	polygons[PLAIN].back()->show();
 	
+	// —Ž‚¿‚é°‚ð’Ç‰Á‚µ‚Ü‚·
+	polygons[SCALABLE_OBJECT].push_back(new RaggedFloor(200, 200, 100, 20, textures["BLOCK2"], 1, &camera, player));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
+
 	zoom_level = { 1, 1 };
 	zoom_sign = ZERO;
 #ifdef _DEBUG
