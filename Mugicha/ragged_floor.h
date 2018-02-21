@@ -14,8 +14,10 @@ private:
 	D3DXVECTOR2 init_pos; // 初期位置
 	bool burdened; // 上にプレイヤが乗っているときにTRUE
 	float burdened_time; // burdenedがTRUEの間加算する
+	const float burdened_time_max = 5000; // いつまで耐えるか
 	bool falling; // 落下しているときのフラグ
 	float disapper_time; // 消しておく時間
+	const float disapper_time_max = 5000; // いつまで消しておくか
 
 	void init(); // 初期化に使う
 public:

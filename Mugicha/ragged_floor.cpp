@@ -43,7 +43,7 @@ void RaggedFloor::update()
 			burdened_time += 1;
 		}
 
-		if (burdened_time > 5000) // 5秒も踏んづけやがって．．．
+		if (burdened_time > burdened_time_max) // 5秒も踏んづけやがって．．．
 		{
 			burdened = false; // 踏みつけオフ
 			
@@ -59,7 +59,7 @@ void RaggedFloor::update()
 		{
 			disapper_time += 1;
 		}
-		if (disapper_time > 5000)
+		if (disapper_time > disapper_time_max)
 		{
 			init();
 		}
