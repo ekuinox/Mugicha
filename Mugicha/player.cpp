@@ -110,6 +110,7 @@ void Player::update()
 #ifdef _DEBUG
 					std::cout << "ƒOƒG[‹²‚Ü‚ê‚½ƒ“ƒS\n";
 #endif
+					kill();
 				}
 			}
 		}
@@ -137,6 +138,19 @@ void Player::lock()
 void Player::unlock()
 {
 	controll_lock = false;
+}
+
+void Player::kill()
+{
+	alive = false;
+#ifdef _DEBUG
+	std::cout << "¡‚Ì–{”Ô‚â‚Á‚½‚çŽ€‚ñ‚Ç‚Á‚½‚©‚ç‚È``I" << std::endl;
+#endif
+}
+
+bool Player::dead()
+{
+	return !alive;
 }
 
 // === Player END ===

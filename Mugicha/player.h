@@ -9,6 +9,7 @@
 class Player : public PlainSquarePolygon
 {
 private:
+	bool alive; // ¶€
 	bool jumping; // ƒWƒƒƒ“ƒv‚µ‚Ä‚¢‚é
 	bool ground; // ’…’nó‘Ô
 	bool moving; // “®‚¢‚Ä‚¢‚é(x²)
@@ -26,4 +27,6 @@ public:
 	bool jump();
 	void lock();
 	void unlock();
+	void kill();
+	bool dead();
 };

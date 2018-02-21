@@ -43,6 +43,16 @@ enum status Stage::exec()
 {
 	update();
 	draw();
+
+	// いろいろな続行判定をする
+
+	// プレイヤが生きているかでゲームの続行を判定
+	if (player->dead())
+	{
+		status = failed;
+	}
+
+
 	return status;
 }
 

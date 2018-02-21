@@ -135,13 +135,19 @@ void Controller::update()
 		}
 		break;
 	case Gaming:
-		if (stage->exec() == end) // execがStageのstatusを返すのでそれを見てウンたらしていきたい
+		auto result = stage->exec();
+		if (result == end) // execがStageのstatusを返すのでそれを見てウンたらしていきたい
 		{
 			delete stage;
 			switch_scene(Title);
 		}
-		break;
-	default:
+		if (result == failed)
+		{
+			// 失敗したらゲームオーバをみせて，終了．今はとりあえずタイトルに戻す
+		//	switch_scene(GameOver);
+			delete stage;
+			switch_scene(Title);
+		}
 		break;
 	}
 }

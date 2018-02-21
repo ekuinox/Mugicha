@@ -11,6 +11,8 @@ enum scene
 	Title,
 	Select,
 	Gaming,
+	GameOver,
+	GameClear,
 	End,
 };
 

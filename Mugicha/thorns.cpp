@@ -26,9 +26,7 @@ void Thorns::update()
 	if (is_collisionA(player, this) && zoom_level.w >= 1)
 	{
 		// “–‚½‚è”»’è
-#ifdef _DEBUG
-		std::cout << "¡‚Ì–{”Ô‚â‚Á‚½‚çŽ€‚ñ‚Ç‚Á‚½‚©‚ç‚È``I" << std::endl;
-#endif
+		player->kill();
 	}
 }
 

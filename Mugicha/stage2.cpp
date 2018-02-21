@@ -56,8 +56,15 @@ void Stage::init2()
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 
+	auto floor = static_cast<RaggedFloor*>(polygons[SCALABLE_OBJECT].back());
+
 	// ƒgƒQ
-	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, polygons[SCALABLE_OBJECT].back(), player, true));
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, true));
+	polygons[SCALABLE_OBJECT].back()->enable();
+	polygons[SCALABLE_OBJECT].back()->show();
+
+	// ƒgƒQ
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, false));
 	polygons[SCALABLE_OBJECT].back()->enable();
 	polygons[SCALABLE_OBJECT].back()->show();
 
