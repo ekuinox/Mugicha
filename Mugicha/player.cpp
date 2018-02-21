@@ -2,31 +2,23 @@
 #include "collision_checker.h"
 
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh) : polygons(_polygons)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh)
 {
-	x = _x;
-	y = _y;
-	w = _w;
-	h = _h;
-	tex = _tex;
-	u = _u;
-	v = _v;
-	uw = _uw;
-	vh = _vh;
-	drawing = false;
-	status = true;
-	speed = 0.5f;
-	angle = 0.0f;
-	layer = _layer;
-	camera = _camera;
-	ground = false;
-	controll_lock = false;
+	init();
 }
 
 // デストラクタ
 Player::~Player()
 {
 	// 特になし
+}
+
+void Player::init()
+{
+	speed = 0.5f;
+	ground = false;
+	controll_lock = false;
 }
 
 void Player::update()
