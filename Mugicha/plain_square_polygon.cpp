@@ -121,6 +121,18 @@ void PlainSquarePolygon::disable()
 	status = false;
 }
 
+void PlainSquarePolygon::on()
+{
+	enable();
+	show();
+}
+
+void PlainSquarePolygon::off()
+{
+	disable();
+	hide();
+}
+
 // 座標とサイズからvertexesを生成します
 void PlainSquarePolygon::generate_vertexes()
 {

@@ -84,7 +84,7 @@ public:
 		: x(_x), y(_y), w(_w), h(_h), tex(_tex), layer(_layer), camera(_camera), u(_u), v(_v), uw(_uw), vh(_vh), drawing(false), status(false), drawing_coord(_x, _y), speed(1.0f), latest_update(timeGetTime()) {}
 
 	virtual void init() = 0; // 初期化処理
-
+	
 	// Update周り
 	virtual void update() = 0; // 更新を行う
 	virtual bool is_active() = 0; // 更新させるかのフラグを取得
@@ -97,6 +97,10 @@ public:
 	virtual void show() = 0; // 描画する
 	virtual void hide() = 0; // 描画しなくする
 	
+	virtual void on() = 0; // status, drawingを両方trueにする
+	virtual void off() = 0; // status, drawingを両方falseにする
+
+
 	virtual void change_texture(LPDIRECT3DTEXTURE9) = 0; // テクスチャ変更に使います
 
 	// Getter

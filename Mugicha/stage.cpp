@@ -81,33 +81,27 @@ void Stage::stagefile_loader(const char * filepath)
 
 	// ”wŒi‚Ì“o˜^
 	background = push_polygon_back(BACKGROUND, new Background(textures["BACKGROUND"], &camera));
-	background->enable();
-	background->show();
+	background->on();
 
 	// ƒvƒŒƒCƒ„‚Ì“o˜^
 	player = push_polygon_back(PLAYER, new Player(textures["PLAYER"], &camera, polygons));
-	player->enable();
-	player->show();
+	player->on;
 
 	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ð“o˜^
 	push_polygon_back(SCALABLE_OBJECT, new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
+	polygons[SCALABLE_OBJECT].back()->on();
 
 	// Œ´“_
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
+	polygons[PLAIN].back()->on();
 
 	// xŽ²ƒKƒCƒhƒ‰ƒCƒ“
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
+	polygons[PLAIN].back()->on();
 
 	// yŽ²ƒKƒCƒhƒ‰ƒCƒ“
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
+	polygons[PLAIN].back()->on();
 
 }
 

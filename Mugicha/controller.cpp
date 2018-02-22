@@ -64,8 +64,7 @@ void Controller::switch_scene(enum scene _scene)
 	// 一度全て無効かつ描画しない状態にする
 	for (const auto& polygon : polygons)
 	{
-		polygon->disable();
-		polygon->hide();
+		polygon->off();
 	}
 
 	// 変更前のシーンの終了処理
@@ -85,19 +84,16 @@ void Controller::switch_scene(enum scene _scene)
 	{
 	case Title:
 		background->change_texture(textures["TITLE_BG"]);
-		background->enable();
-		background->show();
+		background->on();
 		break;
 	case Select:
 		// 背景
 		background->change_texture(textures["STAGE_SELECT_BG"]);
-		background->enable();
-		background->show();
+		background->on();
 
 		// セレクタ
 		selector->init();
-		selector->enable();
-		selector->show();
+		selector->on();
 
 		break;
 	case Gaming:

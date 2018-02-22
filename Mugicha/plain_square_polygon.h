@@ -25,6 +25,10 @@ public:
 	bool is_active();
 	void enable();
 	void disable();
+
+	void on();
+	void off();
+
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 
 	SQUARE get_square();
