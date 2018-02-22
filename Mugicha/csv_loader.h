@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-bool GetContents(const std::string& filename, std::vector<std::vector<std::string>>& table, const char delimiter = ',')
+bool csv_loader(const std::string& filename, std::vector<std::vector<std::string>>& table, const char delimiter = ',')
 {
 	std::fstream filestream(filename);
 
@@ -23,7 +23,7 @@ bool GetContents(const std::string& filename, std::vector<std::vector<std::strin
 		
 		while (std::getline(streambuffer, token, delimiter))
 		{
-			record.push_back(token);
+			if (token != "") record.push_back(token); // 空白をスキップ
 		}
 
 		table.push_back(record);

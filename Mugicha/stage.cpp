@@ -2,6 +2,11 @@
 #include "collision_checker.h"
 #include "csv_loader.h"
 
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <typeinfo>
+
 // コンストラクタ
 Stage::Stage()
 {
@@ -66,7 +71,7 @@ void Stage::multi_texture_loader(const char * filepath)
 {
 	std::vector<std::vector<std::string>> table;
 
-	if (!(GetContents(filepath, table))) return;
+	if (!(csv_loader(filepath, table))) return;
 
 	for (const auto& record : table)
 	{
@@ -88,9 +93,50 @@ void Stage::multi_texture_loader(const char * filepath)
 void Stage::stagefile_loader(const char * filepath)
 {
 	// TODO: ステージファイルからのローダを作る
+	/*
+	std::vector<std::vector<std::string>> table;
+
+	if (!(csv_loader(filepath, table))) return; // csvの読み込みに失敗
+	if (table[0].size() != 2) return; // 一行目にはw,hにしておいて欲しいので
 
 	// すべて無にする　後のことは考えてない　すみません
 	std::map<enum PolygonTypes, polygon_vec>().swap(polygons);
+	
+	// マップのサイズを入れたい
+	auto map_size = POLSIZE(std::atoi(table[0][0].c_str()) * CELL_WIDTH, std::atoi(table[0][1].c_str()) * CELL_HEIGHT);
+	
+	for (auto i = 1; i < table.size(); ++i)
+	{
+		for (auto j = 0; j < table[i].size(); ++j)
+		{
+			// ここで登録をキメていく
+			auto num = std::atoi(table[i][j].c_str());
+			
+			// やること
+			// x, yを計算して出し，マクロ呼出しでポリゴンを登録する．
+
+			switch (num)
+			{
+			case 0: // 空白である
+				break;
+			case 1: // 地面
+				break;
+			case 2: // 落ちる床
+				break;
+			case 3: // スタート位置 プレイヤの初期位置である
+				break;
+			case 4: // ゴール位置
+				break;
+			case 5: // トゲの配置
+				break;
+			case 6: // 落下する種のトゲ
+				break;
+			case 7: // 空気砲
+				break;
+			}
+		}
+	}
+	*/
 
 	// 背景の登録
 	background = push_polygon_back(BACKGROUND, new Background(textures["BACKGROUND"], &camera));
