@@ -164,6 +164,7 @@
     <ClCompile Include="thorns.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Li553\Li553\csv_loader.h" />
     <ClInclude Include="background.h" />
     <ClInclude Include="collision_checker.h" />
     <ClInclude Include="conf.h" />

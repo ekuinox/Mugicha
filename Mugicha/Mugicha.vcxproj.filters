@@ -134,6 +134,9 @@
     <ClInclude Include="scalable_object.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Li553\Li553\csv_loader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\stages\sample.csv">
