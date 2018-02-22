@@ -28,9 +28,10 @@ enum status {
 using GameInfo = struct _GameInfo
 {
 	int score;
+	int stage_number;
 	enum status status;
 	_GameInfo() {}
-	_GameInfo(int _score, enum status _status) : score(_score), status(_status) {}
+	_GameInfo(int _score, enum status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number) {}
 };
 
 enum Sign {
@@ -51,16 +52,14 @@ private:
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画
 	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
-	char stage_select; // ステージ選択番号
 	D3DXVECTOR2 camera;
 	enum Sign zoom_sign; // 拡大状態か縮小状態かってアレです
 	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
 	POLSIZE zoom_level;
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
+	void multi_texture_loader(const char *filepath);
+	void stagefile_loader(const char* filepath);
 	void init();
-	void init1();
-	void init2();
-	void init3();
 	void update();
 	void draw();
 

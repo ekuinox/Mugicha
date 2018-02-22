@@ -6,8 +6,12 @@
 #define CLASS_NAME "AppClass"
 #define WINDOW_NAME "Zooming"
 
-
 // 固定の設定をここにベタ書きする
+
+// リソースがどこにあるか指定する
+#define RESOURCES_DIR "./resources/"
+#define TEXTURES_DIR RESOURCES_DIR "textures/"
+#define STAGEFILES_DIR RESOURCES_DIR "stages/"
 
 // スクリーンのデカさ
 #define SCREEN_WIDTH (800)
