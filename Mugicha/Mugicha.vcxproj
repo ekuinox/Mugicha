@@ -182,6 +182,9 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="thorns.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\stages\sample.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
