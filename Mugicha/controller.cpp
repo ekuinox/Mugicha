@@ -3,7 +3,7 @@
 /* ゲーム本体 */
 Controller::Controller()
 {
-	scene = scene::Title;
+	scene = Ready;
 	loops = 0;
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
@@ -46,7 +46,7 @@ void Controller::init()
 	polygons.push_back(selector);
 
 	// シーン切り替え
-	switch_scene(scene::Title);
+	switch_scene(Title);
 }
 
 // メインのループ用の処理，60fpsで画面描画をする
@@ -59,15 +59,29 @@ void Controller::exec()
 // シーンの切り替え
 void Controller::switch_scene(enum scene _scene)
 {
-	scene = _scene;
+	if (scene == _scene) return; // 変化なしで切る
 
+	// 一度全て無効かつ描画しない状態にする
 	for (const auto& polygon : polygons)
 	{
 		polygon->disable();
 		polygon->hide();
 	}
 
+	// 変更前のシーンの終了処理
 	switch (scene)
+	{
+	case Title:
+		break;
+	case Select:
+		break;
+	case Gaming: // ステージから抜けて来たときの処理
+		delete stage;
+		break;
+	}
+	
+	// 変更後のシーンの初期化
+	switch (_scene)
 	{
 	case Title:
 		background->change_texture(textures["TITLE_BG"]);
@@ -92,6 +106,9 @@ void Controller::switch_scene(enum scene _scene)
 	default:
 		break;
 	}
+
+	// シーン情報を代入して終わり
+	scene = _scene;
 }
 
 // メインのアップデート処理（分割したい）
@@ -136,17 +153,19 @@ void Controller::update()
 		break;
 	case Gaming:
 		auto result = stage->exec();
-		if (result == end) // execがStageのstatusを返すのでそれを見てウンたらしていきたい
+		switch (result.status)
 		{
-			delete stage;
+		case clear: // ゲームクリア時
+			switch_scene(Title); // リザルトを見せてやるべきだけどとりあえず
+			break;
+		case failed:  // こちらもリザルト画面を見せてやるべきだけどとりあえず
 			switch_scene(Title);
-		}
-		if (result == failed)
-		{
-			// 失敗したらゲームオーバをみせて，終了．今はとりあえずタイトルに戻す
-		//	switch_scene(GameOver);
-			delete stage;
+			break;
+		case retire:
 			switch_scene(Title);
+			break;
+		default:
+			break;
 		}
 		break;
 	}

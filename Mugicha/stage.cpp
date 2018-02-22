@@ -6,7 +6,7 @@ Stage::Stage()
 {
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
-	status = prep;
+	info.status = prep;
 
 	init();
 }
@@ -16,7 +16,7 @@ Stage::Stage(char _stage_select)
 	// _stage_selectによって読み込むステージ情報を切り替えたい
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
-	status = prep;
+	info.status = prep;
 
 //	init();
 	if (_stage_select == 1) init1();
@@ -39,7 +39,7 @@ Stage::~Stage()
 }
 
 // ここを叩いてステージを更新したり描画したりする
-enum status Stage::exec()
+GameInfo Stage::exec()
 {
 	update();
 	draw();
@@ -49,11 +49,11 @@ enum status Stage::exec()
 	// プレイヤが生きているかでゲームの続行を判定
 	if (player->dead())
 	{
-		status = failed;
+		info.status = failed;
 	}
 
 
-	return status;
+	return info;
 }
 
 void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
@@ -124,7 +124,7 @@ void Stage::update()
 	// タイトルに戻る（無確認）
 	if (GetKeyboardTrigger(DIK_1))
 	{
-		status = end;
+		info.status = retire;
 		return;
 	}
 

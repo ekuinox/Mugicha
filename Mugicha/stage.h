@@ -14,7 +14,6 @@
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
 
-
 enum status {
 	prep, // 準備中
 	ready, // 準備完了
@@ -22,7 +21,16 @@ enum status {
 	pause, // ポーズ
 	clear, // クリア
 	failed, // 失敗
+	retire, // 諦めた場合
 	end, // 終了
+};
+
+using GameInfo = struct _GameInfo
+{
+	int score;
+	enum status status;
+	_GameInfo() {}
+	_GameInfo(int _score, enum status _status) : score(_score), status(_status) {}
 };
 
 enum Sign {
@@ -39,7 +47,7 @@ private:
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
 
-	enum status status;
+	GameInfo info; // 続行管理と結果
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画
 	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
@@ -63,5 +71,5 @@ public:
 	Stage(char _stage_select);
 	~Stage();
 
-	enum status exec();
+	GameInfo exec();
 };

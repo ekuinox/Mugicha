@@ -8,6 +8,7 @@
 // ƒV[ƒ“ŠÇ——p‚Ì—ñ‹“Œ^
 enum scene
 {
+	Ready,
 	Title,
 	Select,
 	Gaming,
