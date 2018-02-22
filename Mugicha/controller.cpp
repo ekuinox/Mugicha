@@ -19,9 +19,9 @@ Controller::~Controller()
 void Controller::init()
 {
 	std::map<const char*, const char*> texture_files = {
-		{"TITLE_BG", "./resources/textures/title_bg.png"},
-		{"STAGE_SELECT_BG", "./resources/textures/stage_select_bg.png" },
-		{"SELECTOR", "./resources/textures/selector.png"}
+		{"TITLE_BG", RESOURCES_DIR "title_bg.png"},
+		{"STAGE_SELECT_BG", RESOURCES_DIR "stage_select_bg.png" },
+		{"SELECTOR", RESOURCES_DIR "selector.png"}
 	};
 
 	for (const auto& texture_file : texture_files)
