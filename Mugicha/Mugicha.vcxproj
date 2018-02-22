@@ -152,6 +152,7 @@
     <ClCompile Include="debug_console.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="goal.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="debug_console.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="goal.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />

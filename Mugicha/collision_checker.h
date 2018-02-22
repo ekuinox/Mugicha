@@ -23,6 +23,9 @@ bool is_collision(float a_x1, float a_x2, float b_x1, float b_x2, float a_y1, fl
 // Šî’ê : Šî’ê
 bool is_collision(SquarePolygonBase *_self, SquarePolygonBase *_another);
 
+// SQUARE vs SQUARE
+bool is_collision(SQUARE _self, SQUARE _another);
+
 // coords‚Æsize‚©‚çŽæ‚é
 bool is_collisionA(SquarePolygonBase *_self, SquarePolygonBase *_another);
 

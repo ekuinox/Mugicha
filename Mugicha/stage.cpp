@@ -44,6 +44,12 @@ GameInfo Stage::exec()
 		info.status = failed;
 	}
 
+	// ƒvƒŒƒCƒ„‚ªƒS[ƒ‹‚µ‚Ä‚¢‚é‚©
+	if (goal->is_completed())
+	{
+		info.status = clear;
+	}
+
 	return info;
 }
 
@@ -119,6 +125,10 @@ void Stage::stagefile_loader(const char * filepath)
 	// ƒgƒQ
 	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, false));
 	polygons[SCALABLE_OBJECT].back()->on();
+
+	// ƒS[ƒ‹
+	goal = push_polygon_back(GOAL, new Goal(700, 50, 100, 100, textures["ORIGIN"], 1, &camera, player));
+	goal->on();
 
 }
 

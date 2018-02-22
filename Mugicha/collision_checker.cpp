@@ -19,8 +19,19 @@ bool is_collision(SquarePolygonBase * _self, SquarePolygonBase * _another)
 
 }
 
+bool is_collision(SQUARE _self, SQUARE _another)
+{
+	return is_collision(
+		_self.x - _self.w / 2, _self.x + _self.w / 2,
+		_another.x - _another.w / 2, _another.x + _another.w / 2,
+		_self.y - _self.h / 2, _self.y + _self.h / 2,
+		_another.y - _another.h / 2, _another.y + _another.h / 2
+	);
+}
+
 bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 {
+	/*
 	auto self = _self->get_square();
 	auto another = _another->get_square();
 	return is_collision(
@@ -29,6 +40,9 @@ bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 		self.y - self.h / 2, self.y + self.h / 2,
 		another.y - another.h / 2, another.y + another.h / 2
 	);
+
+	*/
+	return is_collision(_self->get_square(), _another->get_square());
 }
 
 HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)

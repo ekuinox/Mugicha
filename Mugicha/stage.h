@@ -11,6 +11,8 @@
 #include "enemy.h"
 #include "ragged_floor.h"
 #include "thorns.h"
+#include "goal.h"
+
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
 
@@ -45,6 +47,7 @@ private:
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
 	std::map<enum PolygonTypes, polygon_vec> polygons;
 	Background *background;
+	Goal *goal;
 	Player *player; // ƒvƒŒƒCƒ„‚Ì•Ï”
 	std::vector<Enemy*> enemies; // “G‚Ì‰Â•Ï’·”z—ñ
 
