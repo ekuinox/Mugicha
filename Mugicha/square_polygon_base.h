@@ -45,6 +45,9 @@ enum PolygonTypes
 	BACKGROUND,
 	PLAYER,
 	ENEMY,
+	GOAL,
+	THORNS,
+	RAGGED_FLOOR,
 	SCALABLE_OBJECT,
 	PLAIN,
 };
@@ -59,8 +62,6 @@ class SquarePolygonBase
 protected:
 	// === 変数 ===
 	DWORD latest_update;
-	float direction; // 移動方向
-	float angle; // 本体の回転角度
 	float x, y, w, h; // x, y => 中心座標
 	D3DXVECTOR2 drawing_coord; // 描画用の座標
 	float u, v, uw, vh; // u,v => 左上，uv, vh => 幅高さ
@@ -80,6 +81,13 @@ public:
 	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
 
 	// === 関数 ===
+
+	SquarePolygonBase() {}
+	SquarePolygonBase(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
+		: x(_x), y(_y), w(_w), h(_h), tex(_tex), layer(_layer), camera(_camera), u(_u), v(_v), uw(_uw), vh(_vh), drawing(false), status(false), drawing_coord(_x, _y), speed(1.0f), latest_update(timeGetTime()) {}
+
+	virtual void init() = 0; // 初期化処理
+	
 	// Update周り
 	virtual void update() = 0; // 更新を行う
 	virtual bool is_active() = 0; // 更新させるかのフラグを取得
@@ -92,6 +100,10 @@ public:
 	virtual void show() = 0; // 描画する
 	virtual void hide() = 0; // 描画しなくする
 	
+	virtual void on() = 0; // status, drawingを両方trueにする
+	virtual void off() = 0; // status, drawingを両方falseにする
+
+
 	virtual void change_texture(LPDIRECT3DTEXTURE9) = 0; // テクスチャ変更に使います
 
 	// Getter

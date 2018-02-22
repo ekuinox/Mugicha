@@ -13,21 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="リソース ファイル\resources">
+      <UniqueIdentifier>{26167e70-6910-42cf-a751-43a46c9e1cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SquarePolygonBase">
+      <UniqueIdentifier>{0509594d-0f80-4143-b07f-70dfb11ed476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived">
+      <UniqueIdentifier>{87fd952e-3044-41d4-a23b-14bfc2bafcb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived">
+      <UniqueIdentifier>{fbfda332-3ec6-4139-b673-82fd0aa7fcff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SquarePolygonBase">
+      <UniqueIdentifier>{e4f008d4-50da-4018-8ca1-1c795ede5a84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived">
+      <UniqueIdentifier>{fc04e257-b090-440a-bde6-ed750def3234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SquarePolygonBase\ScalableObjectDerived">
+      <UniqueIdentifier>{da960dcb-955d-47c9-b0ff-09072aaff23a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="background.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scalable_object.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="debug_console.cpp">
@@ -42,26 +54,32 @@
     <ClCompile Include="collision_checker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="plain_square_polygon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="stage1.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="stage2.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="stage3.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="selector.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="background.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
     <ClCompile Include="ragged_floor.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="thorns.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="plain_square_polygon.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="scalable_object.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,16 +89,7 @@
     <ClInclude Include="main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="background.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="conf.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scalable_object.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="debug_console.h">
@@ -95,20 +104,40 @@
     <ClInclude Include="collision_checker.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="square_polygon_base.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SquarePolygonBase</Filter>
     </ClInclude>
     <ClInclude Include="plain_square_polygon.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SquarePolygonBase</Filter>
     </ClInclude>
-    <ClInclude Include="selector.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="background.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
     <ClInclude Include="ragged_floor.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
+    <ClInclude Include="thorns.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="selector.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="scalable_object.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\stages\sample.csv">
+      <Filter>リソース ファイル\resources</Filter>
+    </None>
   </ItemGroup>
 </Project>

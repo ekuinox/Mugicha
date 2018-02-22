@@ -3,7 +3,7 @@
 /* ゲーム本体 */
 Controller::Controller()
 {
-	scene = scene::Title;
+	scene = Ready;
 	loops = 0;
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
@@ -19,9 +19,9 @@ Controller::~Controller()
 void Controller::init()
 {
 	std::map<const char*, const char*> texture_files = {
-		{"TITLE_BG", "./resources/textures/title_bg.png"},
-		{"STAGE_SELECT_BG", "./resources/textures/stage_select_bg.png" },
-		{"SELECTOR", "./resources/textures/selector.png"}
+		{"TITLE_BG", TEXTURES_DIR "title_bg.png"},
+		{"STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
+		{"SELECTOR", TEXTURES_DIR "selector.png"}
 	};
 
 	for (const auto& texture_file : texture_files)
@@ -46,7 +46,7 @@ void Controller::init()
 	polygons.push_back(selector);
 
 	// シーン切り替え
-	switch_scene(scene::Title);
+	switch_scene(Title);
 }
 
 // メインのループ用の処理，60fpsで画面描画をする
@@ -59,31 +59,41 @@ void Controller::exec()
 // シーンの切り替え
 void Controller::switch_scene(enum scene _scene)
 {
-	scene = _scene;
+	if (scene == _scene) return; // 変化なしで切る
 
+	// 一度全て無効かつ描画しない状態にする
 	for (const auto& polygon : polygons)
 	{
-		polygon->disable();
-		polygon->hide();
+		polygon->off();
 	}
 
+	// 変更前のシーンの終了処理
 	switch (scene)
 	{
 	case Title:
+		break;
+	case Select:
+		break;
+	case Gaming: // ステージから抜けて来たときの処理
+		delete stage;
+		break;
+	}
+	
+	// 変更後のシーンの初期化
+	switch (_scene)
+	{
+	case Title:
 		background->change_texture(textures["TITLE_BG"]);
-		background->enable();
-		background->show();
+		background->on();
 		break;
 	case Select:
 		// 背景
 		background->change_texture(textures["STAGE_SELECT_BG"]);
-		background->enable();
-		background->show();
+		background->on();
 
 		// セレクタ
 		selector->init();
-		selector->enable();
-		selector->show();
+		selector->on();
 
 		break;
 	case Gaming:
@@ -92,6 +102,9 @@ void Controller::switch_scene(enum scene _scene)
 	default:
 		break;
 	}
+
+	// シーン情報を代入して終わり
+	scene = _scene;
 }
 
 // メインのアップデート処理（分割したい）
@@ -135,13 +148,21 @@ void Controller::update()
 		}
 		break;
 	case Gaming:
-		if (stage->exec() == end) // execがStageのstatusを返すのでそれを見てウンたらしていきたい
+		auto result = stage->exec();
+		switch (result.status)
 		{
-			delete stage;
+		case clear: // ゲームクリア時
+			switch_scene(Title); // リザルトを見せてやるべきだけどとりあえず
+			break;
+		case failed:  // こちらもリザルト画面を見せてやるべきだけどとりあえず
 			switch_scene(Title);
+			break;
+		case retire:
+			switch_scene(Title);
+			break;
+		default:
+			break;
 		}
-		break;
-	default:
 		break;
 	}
 }

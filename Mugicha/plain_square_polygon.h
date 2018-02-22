@@ -15,6 +15,8 @@ public:
 	PlainSquarePolygon();
 	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~PlainSquarePolygon();
+	
+	void init();
 	void update();
 	void draw();
 	bool is_drawing();
@@ -23,6 +25,10 @@ public:
 	bool is_active();
 	void enable();
 	void disable();
+
+	void on();
+	void off();
+
 	void change_texture(LPDIRECT3DTEXTURE9 _tex);
 
 	SQUARE get_square();

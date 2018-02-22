@@ -6,8 +6,12 @@
 #define CLASS_NAME "AppClass"
 #define WINDOW_NAME "Zooming"
 
-
 // 固定の設定をここにベタ書きする
+
+// リソースがどこにあるか指定する
+#define RESOURCES_DIR "./resources/"
+#define TEXTURES_DIR RESOURCES_DIR "textures/"
+#define STAGEFILES_DIR RESOURCES_DIR "stages/"
 
 // スクリーンのデカさ
 #define SCREEN_WIDTH (800)
@@ -29,3 +33,5 @@
 // 各ポリゴンがvertexesを生成するときに参照され，これを引く
 #define CAMERA_X (0)
 #define CAMERA_Y (0)
+
+#define B_TO_S(exp) exp ? "TRUE" : "FALSE"

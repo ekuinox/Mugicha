@@ -2,31 +2,23 @@
 #include "collision_checker.h"
 
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh) : polygons(_polygons)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh)
 {
-	x = _x;
-	y = _y;
-	w = _w;
-	h = _h;
-	tex = _tex;
-	u = _u;
-	v = _v;
-	uw = _uw;
-	vh = _vh;
-	drawing = false;
-	status = true;
-	speed = 0.5f;
-	angle = 0.0f;
-	layer = _layer;
-	camera = _camera;
-	ground = false;
-	controll_lock = false;
+	init();
 }
 
 // デストラクタ
 Player::~Player()
 {
 	// 特になし
+}
+
+void Player::init()
+{
+	speed = 0.5f;
+	ground = false;
+	controll_lock = false;
 }
 
 void Player::update()
@@ -54,7 +46,7 @@ void Player::update()
 				x += speed;
 			}
 		}
-		
+
 
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (jumping)
@@ -69,10 +61,23 @@ void Player::update()
 			y -= 0.5f;
 		}
 
+#ifdef _DEBUG
+		if (GetKeyboardPress(DIK_W))
+		{
+			y += 1;
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			y -= 1;
+		}
+#endif
+
 		// 当たり精査
 
 		// TODO: 当たると登りやがる
 		// TODO: 連続したポリゴンの上で滑れないというかなんというかアレ
+		// TODO: 挟まれた際，無に行ってしまうバグがある
+
 		ground = false;
 		for (const auto& polygon : to_check_polygons)
 		{
@@ -107,9 +112,11 @@ void Player::update()
 #ifdef _DEBUG
 					std::cout << "グエー挟まれたンゴ\n";
 #endif
+					kill();
 				}
 			}
 		}
+
 
 		latest_update = current;
 	}
@@ -133,6 +140,19 @@ void Player::lock()
 void Player::unlock()
 {
 	controll_lock = false;
+}
+
+void Player::kill()
+{
+	alive = false;
+#ifdef _DEBUG
+	std::cout << "今の本番やったら死んどったからな～～！" << std::endl;
+#endif
+}
+
+bool Player::dead()
+{
+	return !alive;
 }
 
 // === Player END ===

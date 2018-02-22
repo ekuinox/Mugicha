@@ -6,23 +6,15 @@ Stage::Stage()
 {
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
-	status = prep;
+	info.status = prep;
 
 	init();
 }
 
 Stage::Stage(char _stage_select)
+	: latest_update(timeGetTime()), latest_draw(timeGetTime()), info(0, prep, _stage_select)
 {
-	// _stage_selectによって読み込むステージ情報を切り替えたい
-	latest_update = timeGetTime();
-	latest_draw = timeGetTime();
-	status = prep;
-
-//	init();
-	if (_stage_select == 1) init1();
-	if (_stage_select == 2) init2();
-	if (_stage_select == 3) init3();
-
+	init();
 }
 
 // デストラクタ
@@ -39,11 +31,26 @@ Stage::~Stage()
 }
 
 // ここを叩いてステージを更新したり描画したりする
-enum status Stage::exec()
+GameInfo Stage::exec()
 {
 	update();
 	draw();
-	return status;
+
+	// いろいろな続行判定をする
+
+	// プレイヤが生きているかでゲームの続行を判定
+	if (player->dead())
+	{
+		info.status = failed;
+	}
+
+	// プレイヤがゴールしているか
+	if (goal->is_completed())
+	{
+		info.status = clear;
+	}
+
+	return info;
 }
 
 void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
@@ -54,53 +61,87 @@ void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
 	}
 }
 
-// 初期化, コンストラクタから呼ぶ
-void Stage::init()
+void Stage::multi_texture_loader(const char * filepath)
 {
+	// TODO: テクスチャのリストからのローダを作る
 	if (textures.empty())
 	{
 		multi_texture_loader({
-//			{ "__TAG__", "__FILE_PATH__" },
-			{ "BACKGROUND", "./resources/textures/background.jpg" },
-			{ "PLAYER", "./resources/textures/player.jpg" },
-			{ "BLOCK", "./resources/textures/block.png" },
-			{ "ORIGIN", "./resources/textures/origin.png" },
-			{ "BLOCK2", "./resources/textures/block2.png" },
-			{ "SAMPLE1", "./resources/textures/sample1.png"},
-			});
+			{ "BACKGROUND", TEXTURES_DIR "background.jpg" },
+			{ "PLAYER", TEXTURES_DIR "player.jpg" },
+			{ "BLOCK", TEXTURES_DIR "block.png" },
+			{ "ORIGIN", TEXTURES_DIR "origin.png" },
+			{ "BLOCK2", TEXTURES_DIR "block2.png" },
+			{ "SAMPLE1", TEXTURES_DIR "sample1.png" },
+			}
+		);
 	}
+}
 
-	std::map<enum PolygonTypes, polygon_vec>().swap(polygons); // すべて無にする　後のことは考えてない　すみません
+void Stage::stagefile_loader(const char * filepath)
+{
+	// TODO: ステージファイルからのローダを作る
+
+	// すべて無にする　後のことは考えてない　すみません
+	std::map<enum PolygonTypes, polygon_vec>().swap(polygons);
 
 	// 背景の登録
 	background = push_polygon_back(BACKGROUND, new Background(textures["BACKGROUND"], &camera));
-	background->enable();
-	background->show();
+	background->on();
 
 	// プレイヤの登録
 	player = push_polygon_back(PLAYER, new Player(textures["PLAYER"], &camera, polygons));
-	player->enable();
-	player->show();
+	player->on();
 
 	// 拡縮できるオブジェクトを登録
-	push_polygon_back(SCALABLE_OBJECT, new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
-	polygons[SCALABLE_OBJECT].back()->enable();
-	polygons[SCALABLE_OBJECT].back()->show();
-	
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(100, 100, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->on();
+
 	// 原点
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
+	polygons[PLAIN].back()->on();
 
 	// x軸ガイドライン
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
+	polygons[PLAIN].back()->on();
 
 	// y軸ガイドライン
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
-	polygons[PLAIN].back()->enable();
-	polygons[PLAIN].back()->show();
+	polygons[PLAIN].back()->on();
+
+	// 落ちる床を追加します
+	polygons[SCALABLE_OBJECT].push_back(new RaggedFloor(200, 200, 100, 20, textures["BLOCK2"], 1, &camera, player));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	auto floor = static_cast<RaggedFloor*>(polygons[SCALABLE_OBJECT].back());
+
+	// トゲ
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, true));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	// トゲ
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, false));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	// ゴール
+	goal = push_polygon_back(GOAL, new Goal(700, 50, 100, 100, textures["ORIGIN"], 1, &camera, player));
+	goal->on();
+
+}
+
+// 初期化, コンストラクタから呼ぶ
+void Stage::init()
+{
+	char filepath[256]; // ファイルパス格納
+
+	sprintf(filepath, STAGEFILES_DIR "%d.csv", info.stage_number);
+	multi_texture_loader(filepath); // テクスチャのリストを読み込む => こっち先
+
+	sprintf(filepath, STAGEFILES_DIR "%d.csv", info.stage_number);
+	stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
 	zoom_level = { 1, 1 };
 	zoom_sign = ZERO;
@@ -114,7 +155,7 @@ void Stage::update()
 	// タイトルに戻る（無確認）
 	if (GetKeyboardTrigger(DIK_1))
 	{
-		status = end;
+		info.status = retire;
 		return;
 	}
 

@@ -7,20 +7,8 @@ ScalableObject::ScalableObject()
 
 // コンストラクタ 座標とかをセットしていく
 ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
+	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), zoom_level(1, 1)
 {
-	x = _x;
-	y = _y;
-	w = _w;
-	h = _h;
-	tex = _tex;
-	u = _u;
-	v = _v;
-	uw = _uw;
-	vh = _vh;
-	drawing = false;
-	zoom_level = { 1, 1 }; // 1倍で初期化
-	layer = _layer;
-	camera = _camera;
 }
 
 // デストラクタ
