@@ -85,10 +85,13 @@ void Stage::stagefile_loader(const char * filepath)
 
 	// ƒvƒŒƒCƒ„‚Ì“o˜^
 	player = push_polygon_back(PLAYER, new Player(textures["PLAYER"], &camera, polygons));
-	player->on;
+	player->on();
 
 	// Šgk‚Å‚«‚éƒIƒuƒWƒFƒNƒg‚ð“o˜^
-	push_polygon_back(SCALABLE_OBJECT, new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(100, 100, 50, 50, textures["SAMPLE1"], 1, &camera));
 	polygons[SCALABLE_OBJECT].back()->on();
 
 	// Œ´“_
@@ -102,6 +105,20 @@ void Stage::stagefile_loader(const char * filepath)
 	// yŽ²ƒKƒCƒhƒ‰ƒCƒ“
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
 	polygons[PLAIN].back()->on();
+
+	// —Ž‚¿‚é°‚ð’Ç‰Á‚µ‚Ü‚·
+	polygons[SCALABLE_OBJECT].push_back(new RaggedFloor(200, 200, 100, 20, textures["BLOCK2"], 1, &camera, player));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	auto floor = static_cast<RaggedFloor*>(polygons[SCALABLE_OBJECT].back());
+
+	// ƒgƒQ
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, true));
+	polygons[SCALABLE_OBJECT].back()->on();
+
+	// ƒgƒQ
+	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, false));
+	polygons[SCALABLE_OBJECT].back()->on();
 
 }
 
