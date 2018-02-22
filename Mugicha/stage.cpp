@@ -108,7 +108,7 @@ void Stage::stagefile_loader(const char * filepath)
 	polygons[SCALABLE_OBJECT].back()->on();
 
 	// —Ž‚¿‚é°‚ð’Ç‰Á‚µ‚Ü‚·
-	auto floor = push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(200, 200, textures["BLOCK2"], &camera, player));
+	auto floor = push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR_1(200, 200, textures["BLOCK2"], &camera, player));
 	floor->on();
 
 	// ƒgƒQ
