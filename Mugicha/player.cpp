@@ -76,6 +76,8 @@ void Player::update()
 
 		// TODO: 当たると登りやがる
 		// TODO: 連続したポリゴンの上で滑れないというかなんというかアレ
+		// TODO: 挟まれた際，無に行ってしまうバグがある
+
 		ground = false;
 		for (const auto& polygon : to_check_polygons)
 		{
