@@ -44,13 +44,13 @@ enum Sign {
 
 class Stage {
 private:
+	// vars
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
 	std::map<enum PolygonTypes, polygon_vec> polygons;
 	Background *background;
 	Goal *goal;
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
-
 	GameInfo info; // 続行管理と結果
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画
@@ -59,6 +59,8 @@ private:
 	enum Sign zoom_sign; // 拡大状態か縮小状態かってアレです
 	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
 	POLSIZE zoom_level;
+
+	// funcs
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void multi_texture_loader(const char *filepath);
 	void stagefile_loader(const char* filepath);

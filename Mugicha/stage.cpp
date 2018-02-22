@@ -1,5 +1,6 @@
 #include "stage.h"
 #include "collision_checker.h"
+#include "csv_loader.h"
 
 // コンストラクタ
 Stage::Stage()
@@ -63,19 +64,25 @@ void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
 
 void Stage::multi_texture_loader(const char * filepath)
 {
-	// TODO: テクスチャのリストからのローダを作る
-	if (textures.empty())
+	std::vector<std::vector<std::string>> table;
+
+	if (!(GetContents(filepath, table))) return;
+
+	for (const auto& record : table)
 	{
-		multi_texture_loader({
-			{ "BACKGROUND", TEXTURES_DIR "background.jpg" },
-			{ "PLAYER", TEXTURES_DIR "player.jpg" },
-			{ "BLOCK", TEXTURES_DIR "block.png" },
-			{ "ORIGIN", TEXTURES_DIR "origin.png" },
-			{ "BLOCK2", TEXTURES_DIR "block2.png" },
-			{ "SAMPLE1", TEXTURES_DIR "sample1.png" },
+		if (record.size() == 2)
+		{
+			char texture_file[256];
+			sprintf(texture_file, "%s%s", TEXTURES_DIR, record[1].c_str());
+			if (FAILED(D3DXCreateTextureFromFile(d3d_device, texture_file, &textures[record[0]])))
+			{
+#ifdef _DEBUG
+				printf("Failed to load texture file: %s\n", record[1].c_str());
+#endif
 			}
-		);
+		}
 	}
+
 }
 
 void Stage::stagefile_loader(const char * filepath)
@@ -137,10 +144,10 @@ void Stage::init()
 {
 	char filepath[256]; // ファイルパス格納
 
-	sprintf(filepath, STAGEFILES_DIR "%d.csv", info.stage_number);
+	sprintf(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
 	multi_texture_loader(filepath); // テクスチャのリストを読み込む => こっち先
 
-	sprintf(filepath, STAGEFILES_DIR "%d.csv", info.stage_number);
+	sprintf(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
 	zoom_level = { 1, 1 };
