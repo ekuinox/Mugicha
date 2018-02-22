@@ -97,15 +97,28 @@ void Stage::stagefile_loader(const char * filepath)
 	background->on();
 
 	// プレイヤの登録
-	player = push_polygon_back(PLAYER, new Player(textures["PLAYER"], &camera, polygons));
+	player = push_polygon_back(PLAYER, REGISTER_PLAYER(300, 50, textures["PLAYER"], &camera, polygons));
 	player->on();
 
 	// 拡縮できるオブジェクトを登録
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(25, 25, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].push_back(REGISTER_BLOCK(25, 25, textures["SAMPLE1"], &camera));
 	polygons[SCALABLE_OBJECT].back()->on();
 
-	polygons[SCALABLE_OBJECT].push_back(new ScalableObject(100, 100, 50, 50, textures["SAMPLE1"], 1, &camera));
+	polygons[SCALABLE_OBJECT].push_back(REGISTER_BLOCK(100, 100, textures["SAMPLE1"], &camera));
 	polygons[SCALABLE_OBJECT].back()->on();
+
+	// 落ちる床を追加します
+	auto floor = push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(200, 200, textures["BLOCK2"], &camera, player));
+	floor->on();
+
+	// トゲ
+	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(200, 0, textures["ORIGIN"], &camera, floor, player, true))->on();
+	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(200, 0, textures["ORIGIN"], &camera, floor, player, false))->on();
+
+	// ゴール
+	(goal = push_polygon_back(GOAL, REGISTER_GOAL(700, 25, textures["ORIGIN"], &camera, player)))->on();
+
+#ifdef _DEBUG
 
 	// 原点
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
@@ -119,24 +132,7 @@ void Stage::stagefile_loader(const char * filepath)
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
 	polygons[PLAIN].back()->on();
 
-	// 落ちる床を追加します
-	polygons[SCALABLE_OBJECT].push_back(new RaggedFloor(200, 200, 100, 20, textures["BLOCK2"], 1, &camera, player));
-	polygons[SCALABLE_OBJECT].back()->on();
-
-	auto floor = static_cast<RaggedFloor*>(polygons[SCALABLE_OBJECT].back());
-
-	// トゲ
-	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, true));
-	polygons[SCALABLE_OBJECT].back()->on();
-
-	// トゲ
-	polygons[SCALABLE_OBJECT].push_back(new Thorns(200, 0, 20, 20, textures["ORIGIN"], 1, &camera, floor, player, false));
-	polygons[SCALABLE_OBJECT].back()->on();
-
-	// ゴール
-	goal = push_polygon_back(GOAL, new Goal(700, 50, 100, 100, textures["ORIGIN"], 1, &camera, player));
-	goal->on();
-
+#endif
 }
 
 // 初期化, コンストラクタから呼ぶ

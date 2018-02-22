@@ -176,6 +176,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="plain_square_polygon.h" />
+    <ClInclude Include="polygons_register.h" />
     <ClInclude Include="ragged_floor.h" />
     <ClInclude Include="scalable_object.h" />
     <ClInclude Include="selector.h" />

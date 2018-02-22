@@ -4,14 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "plain_square_polygon.h"
-#include "player.h"
-#include "background.h"
-#include "scalable_object.h"
-#include "enemy.h"
-#include "ragged_floor.h"
-#include "thorns.h"
-#include "goal.h"
+#include "polygons_register.h"
 
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
