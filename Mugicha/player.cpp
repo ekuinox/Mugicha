@@ -149,7 +149,7 @@ void Player::update()
 #endif
 		//			kill();
 				}
-				y = old_pos.y;
+		//		y = old_pos.y;
 #ifdef _DEBUG
 			//	printf("TOP");
 #endif
@@ -167,7 +167,13 @@ void Player::update()
 
 bool Player::jump()
 {
-	unless(ground) return false;
+	unless(ground)
+	{
+#ifdef _DEBUG
+		printf("”ò‚×‚Ë‚¦III\n");
+#endif
+		return false;
+	}
 	if (controll_lock) return false;
 	ground = false;
 	jumped_at = timeGetTime();
