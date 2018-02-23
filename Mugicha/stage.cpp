@@ -103,8 +103,11 @@ void Stage::stagefile_loader(const char * filepath)
 	std::map<enum PolygonTypes, polygon_vec>().swap(polygons);
 	
 	// マップのサイズを入れたい
-	auto map_size = POLSIZE(std::atoi(table[0][0].c_str()) * CELL_WIDTH, std::atoi(table[0][1].c_str()) * CELL_HEIGHT);
+	map_size = POLSIZE(std::atoi(table[0][0].c_str()) * CELL_WIDTH, std::atoi(table[0][1].c_str()) * CELL_HEIGHT);
 	
+	// 背景の登録
+	(background = push_polygon_back(BACKGROUND, new Background(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
+
 	// NOTES: プレイヤはゴールよりも左下にある必要があります．．．
 
 	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
@@ -121,18 +124,18 @@ void Stage::stagefile_loader(const char * filepath)
 			case 0: // 空白である
 				break;
 			case 1: // 地面
-				push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK"], &camera))->on();
+				push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
 				break;
 			case 2: // 落ちる床
-				push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
+				push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
 				break;
 			case 3: // スタート位置 プレイヤの初期位置である
 				// プレイヤの登録
-				player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons));
+				player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons));
 				player->on();
 				break;
 			case 4: // ゴール位置
-				(goal = push_polygon_back(GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
+				(goal = push_polygon_back(GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
 				break;
 			case 5: // トゲの配置
 			//	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
@@ -144,14 +147,9 @@ void Stage::stagefile_loader(const char * filepath)
 			}
 		}
 	}
-	
-
-	// 背景の登録
-	background = push_polygon_back(BACKGROUND, new Background(textures["BACKGROUND"], &camera));
-	background->on();
 
 	/*
-
+	 
 	// 拡縮できるオブジェクトを登録
 	polygons[SCALABLE_OBJECT].push_back(REGISTER_BLOCK(25, 25, textures["SAMPLE1"], &camera));
 	polygons[SCALABLE_OBJECT].back()->on();
@@ -286,8 +284,10 @@ void Stage::update()
 	camera.y = polygons[PLAYER][0]->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
 	
 	// 画面外は見せないようにする
-	if (camera.x < BACKGROUND_X) camera.x = BACKGROUND_X;
-	if (camera.y < BACKGROUND_X) camera.y = BACKGROUND_X;
+	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
+	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
+	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 
 	// ポリゴンの全更新
 	for (const auto& _polygons : polygons)

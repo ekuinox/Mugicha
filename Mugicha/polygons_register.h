@@ -11,6 +11,7 @@
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 
+#define REGISTER_BACKGROUND(x, y, tex, camera, polygons) new Background(x, y, w, h, tex, camera)
 #define REGISTER_PLAYER(x, y, tex, camera, polygons) new Player(tex, camera, polygons, 0, x, y, CELL_WIDTH, CELL_HEIGHT)
 #define REGISTER_BLOCK(x, y, tex, camera) new ScalableObject(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera)
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)

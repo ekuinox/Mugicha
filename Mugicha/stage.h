@@ -52,6 +52,7 @@ private:
 	enum Sign zoom_sign; // Šg‘åó‘Ô‚©k¬ó‘Ô‚©‚Á‚ÄƒAƒŒ‚Å‚·
 	POLSIZE zoom_level_target; // ‚Ç‚±‚Ü‚ÅŠgk‚·‚é‚©‚Æ‚¢‚¤ƒAƒŒ
 	POLSIZE zoom_level;
+	POLSIZE map_size; // ”wŒi‚ÌƒfƒJ‚³‚É‚È‚è‚Ü‚·
 
 	// funcs
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
