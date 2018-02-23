@@ -93,7 +93,7 @@ void Stage::multi_texture_loader(const char * filepath)
 void Stage::stagefile_loader(const char * filepath)
 {
 	// TODO: ステージファイルからのローダを作る
-	/*
+	
 	std::vector<std::vector<std::string>> table;
 
 	if (!(csv_loader(filepath, table))) return; // csvの読み込みに失敗
@@ -105,29 +105,37 @@ void Stage::stagefile_loader(const char * filepath)
 	// マップのサイズを入れたい
 	auto map_size = POLSIZE(std::atoi(table[0][0].c_str()) * CELL_WIDTH, std::atoi(table[0][1].c_str()) * CELL_HEIGHT);
 	
-	for (auto i = 1; i < table.size(); ++i)
+	// NOTES: プレイヤはゴールよりも左下にある必要があります．．．
+
+	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
-		for (auto j = 0; j < table[i].size(); ++j)
+		for (auto j = 0; j < map_size.w / CELL_WIDTH; ++j) // 余計な要素まで読み込まないように
 		{
 			// ここで登録をキメていく
 			auto num = std::atoi(table[i][j].c_str());
 			
 			// やること
 			// x, yを計算して出し，マクロ呼出しでポリゴンを登録する．
-
 			switch (num)
 			{
 			case 0: // 空白である
 				break;
 			case 1: // 地面
+				push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK"], &camera))->on();
 				break;
 			case 2: // 落ちる床
+				push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
 				break;
 			case 3: // スタート位置 プレイヤの初期位置である
+				// プレイヤの登録
+				player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons));
+				player->on();
 				break;
 			case 4: // ゴール位置
+				(goal = push_polygon_back(GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
 				break;
 			case 5: // トゲの配置
+			//	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
 				break;
 			case 6: // 落下する種のトゲ
 				break;
@@ -136,15 +144,13 @@ void Stage::stagefile_loader(const char * filepath)
 			}
 		}
 	}
-	*/
+	
 
 	// 背景の登録
 	background = push_polygon_back(BACKGROUND, new Background(textures["BACKGROUND"], &camera));
 	background->on();
 
-	// プレイヤの登録
-	player = push_polygon_back(PLAYER, REGISTER_PLAYER(300, 50, textures["PLAYER"], &camera, polygons));
-	player->on();
+	/*
 
 	// 拡縮できるオブジェクトを登録
 	polygons[SCALABLE_OBJECT].push_back(REGISTER_BLOCK(25, 25, textures["SAMPLE1"], &camera));
@@ -163,8 +169,8 @@ void Stage::stagefile_loader(const char * filepath)
 
 	// ゴール
 	(goal = push_polygon_back(GOAL, REGISTER_GOAL(700, 25, textures["ORIGIN"], &camera, player)))->on();
-
-#ifdef _DEBUG
+	*/
+#ifdef __DEBUG
 
 	// 原点
 	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
