@@ -285,7 +285,7 @@ void Stage::update()
 	
 	// ‰æ–ÊŠO‚ÍŒ©‚¹‚È‚¢‚æ‚¤‚É‚·‚é
 	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
-	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 

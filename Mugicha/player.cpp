@@ -1,6 +1,22 @@
 #include "player.h"
 #include "collision_checker.h"
 
+void Player::generate_vertexes()
+{
+	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
+	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+
+	for (auto i = 0; i < 4; ++i)
+	{
+		vertexes[i] = VERTEX_2D(
+			drawing_coord.x + this->w / (i % 3 == 0 ? -2 : 2),
+			drawing_coord.y + this->h / (i < 2 ? -2 : 2),
+			this->u + (i % 3 == 0 ? 0 : this->uw),
+			this->v + (i < 2 ? 0 : this->vh)
+		);
+	}
+}
+
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh)
@@ -19,6 +35,11 @@ void Player::init()
 	speed = 0.5f;
 	ground = false;
 	controll_lock = false;
+}
+
+void Player::zoom(POLSIZE _zoom_level)
+{
+	zoom_level = _zoom_level;
 }
 
 void Player::update()
@@ -82,6 +103,7 @@ void Player::update()
 		for (const auto& polygon : to_check_polygons)
 		{
 			char result = where_collision(this, polygon);
+			
 			if (result & LEFT)
 			{
 				auto square = polygon->get_square();
@@ -92,6 +114,7 @@ void Player::update()
 				auto square = polygon->get_square();
 				x = square.x - square.w / 2 - w / 2;
 			}
+			
 			if (result == BOTTOM)
 			{
 				ground = true;
