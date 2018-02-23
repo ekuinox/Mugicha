@@ -23,7 +23,7 @@ void Thorns::update()
 	// ‚‚³‚ðÝ’è‚µ‚È‚¨‚·
 	y = floor->get_coords().y + (floor->get_size().h + h) / (up ? 2 : - 2); // ãŒü‚«‚©‰ºŒü‚«‚Å”»’f‚·‚é
 
-	if (is_collisionA(player, this) && zoom_level.w >= 1)
+	if (is_collisionA(player, this) && zoom_level.w <= 1)
 	{
 		// “–‚½‚è”»’è
 		player->kill();
