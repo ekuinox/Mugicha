@@ -29,6 +29,10 @@ using SQUARE = struct _SQUARE
 	float x, y, w, h;
 	_SQUARE() {};
 	_SQUARE(float _x, float _y, float _w, float _h) : x(_x), y(_y), w(_w), h(_h) {};
+	float top() { return y + h / 2; }
+	float bottom() { return y - h / 2; }
+	float left() { return x - w / 2; }
+	float right() { return x + w / 2; }
 };
 
 using POLSIZE = struct _POLSIZE

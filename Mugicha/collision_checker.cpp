@@ -50,6 +50,7 @@ HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
 	char result = 0x00;
 	if (is_collisionA(_self, _another))
 	{
+		/*
 		auto self = _self->get_vertexes();
 		auto another = _another->get_vertexes();
 
@@ -58,17 +59,36 @@ HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
 
 		if (self[0].y > another[2].y) result |= TOP;
 		if (self[0].y < another[2].y) result |= BOTTOM;
+		*/
 		
-		/*
 		auto self = _self->get_square();
 		auto another = _another->get_square();
 
-		if (self.x + self.w / 2 <= another.x - another.w / 2) result |= RIGHT;
-		if (self.x - self.w / 2 >= another.x + another.w / 2) result |= LEFT;
+		if (
+			another.left() < self.left()
+			&& another.right() > self.left()
+			&& another.top() > self.bottom()
+			&& another.bottom() < self.top()
+			) result |= LEFT;
 
-		if (self.y - self.h / 2 >= another.y + another.h / 2) result |= TOP;
-		if (self.y - self.h / 2 <= another.y + another.h / 2) result |= BOTTOM;
-		*/
+
+		if (another.left() < self.right()
+			&& another.right() > self.right()
+			&& another.top() > self.bottom()
+			&& another.bottom() < self.top()
+			) result |= RIGHT;
+
+		if (another.top() > self.top()
+			&& another.bottom() < self.top()
+			&& another.left() < self.right()
+			&& another.right() > self.left()
+			) result |= TOP;
+
+		if (another.top() > self.bottom()
+			&& another.bottom() < self.bottom()
+			&& another.left() < self.right()
+			&& another.right() > self.left()
+			) result |= BOTTOM;
 		
 		/*
 		if (self.x + self.w / 2 > another.x - another.w / 2) result |= RIGHT; // SELF‚Ì‰E‚ÆANOTHER‚Ì¶‚ð”äŠr‚·‚é >=

@@ -108,20 +108,32 @@ void Player::update()
 			{
 				auto square = polygon->get_square();
 				x = square.x + square.w / 2 + w / 2;
+				x = old_pos.x;
+#ifdef _DEBUG
+		//		printf("LEFT");
+#endif
 			}
 			if (result & RIGHT)
 			{
 				auto square = polygon->get_square();
 				x = square.x - square.w / 2 - w / 2;
+				x = old_pos.x;
+#ifdef _DEBUG
+		//		printf("RIGHT");
+#endif
 			}
 			
-			if (result == BOTTOM)
+			if (result & BOTTOM)
 			{
 				ground = true;
 				auto square = polygon->get_square();
 				y = square.y + square.h / 2 + h / 2;
+		//		y = old_pos.y;
+#ifdef _DEBUG
+		//		printf("BOTTOM");
+#endif
 			}
-			if (result == TOP)
+			if (result & TOP)
 			{
 				if (jumping) // ジャンプして頭ぶつけた場合はいいけど
 				{
@@ -133,12 +145,20 @@ void Player::update()
 				{
 					// ここで死亡処理作らないといけない
 #ifdef _DEBUG
-					std::cout << "グエー挟まれたンゴ\n";
+		//			std::cout << "グエー挟まれたンゴ\n";
 #endif
-					kill();
+		//			kill();
 				}
+				y = old_pos.y;
+#ifdef _DEBUG
+			//	printf("TOP");
+#endif
 			}
 		}
+
+#ifdef _DEBUG
+	//	printf(" %f, %f\n", x, y);
+#endif
 
 
 		latest_update = current;
