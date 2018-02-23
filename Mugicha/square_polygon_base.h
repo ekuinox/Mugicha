@@ -24,6 +24,14 @@ using VERTEX_2D = struct _VERTEX_2D
 	_VERTEX_2D(float _x, float _y, float _u, float _v) : x(_x), y(_y), z(0.0f), u(_u), v(_v), rhw(1.0f), diffuse(D3DCOLOR_RGBA(255, 255, 255, 200)){};
 };
 
+using POLSIZE = struct _POLSIZE
+{
+	float w;
+	float h;
+	_POLSIZE() {};
+	_POLSIZE(float _w, float _h) : w(_w), h(_h) {};
+};
+
 using SQUARE = struct _SQUARE
 {
 	float x, y, w, h;
@@ -33,14 +41,8 @@ using SQUARE = struct _SQUARE
 	float bottom() { return y - h / 2; }
 	float left() { return x - w / 2; }
 	float right() { return x + w / 2; }
-};
-
-using POLSIZE = struct _POLSIZE
-{
-	float w;
-	float h;
-	_POLSIZE() {};
-	_POLSIZE(float _w, float _h) : w(_w), h(_h) {};
+	_SQUARE operator*(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
+	_SQUARE operator*=(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
 };
 
 // ƒ|ƒŠƒSƒ“‚Ìí•Ê‚ğ”»’è‚³‚¹‚éƒAƒŒC”h¶‚ğ‘‚â‚¹‚Î‚±‚±‚É‘‚¢‚Ä‚â‚ç‚È‚¢‚Æ‚µ‚ñ‚Ç‚¢
