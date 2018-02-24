@@ -47,3 +47,16 @@ WIDTH = 50, HEIGHT = 50
 31. GIMMICK(持てるやつ)
 32. SWITCH
 33. MAGMA
+
+## キー操作
+
+### Title
+- Enterで次の画面へ
+
+### Stage Select
+- A,Dで左右選択
+- Enterで決定，次の画面へ
+
+### Game
+- A,Dまたは左右矢印で左右移動
+- Spaceでジャンプ
