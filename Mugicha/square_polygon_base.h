@@ -56,6 +56,7 @@ enum PolygonTypes
 	RAGGED_FLOOR,
 	SCALABLE_OBJECT,
 	PLAIN,
+	DEBUG_GUIDE,
 };
 
 /*

@@ -168,19 +168,19 @@ void Stage::stagefile_loader(const char * filepath)
 	// ゴール
 	(goal = push_polygon_back(GOAL, REGISTER_GOAL(700, 25, textures["ORIGIN"], &camera, player)))->on();
 	*/
-#ifdef __DEBUG
+#ifdef _DEBUG
 
 	// 原点
-	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
-	polygons[PLAIN].back()->on();
+	polygons[DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
+	polygons[DEBUG_GUIDE].back()->on();
 
 	// x軸ガイドライン
-	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
-	polygons[PLAIN].back()->on();
+	polygons[DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
+	polygons[DEBUG_GUIDE].back()->on();
 
 	// y軸ガイドライン
-	polygons[PLAIN].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
-	polygons[PLAIN].back()->on();
+	polygons[DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
+	polygons[DEBUG_GUIDE].back()->on();
 
 #endif
 }

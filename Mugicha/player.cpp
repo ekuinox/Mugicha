@@ -100,6 +100,7 @@ void Player::update()
 		// TODO: 挟まれた際，無に行ってしまうバグがある
 
 		ground = false;
+		std::vector<SquarePolygonBase*> grounds;
 		for (const auto& polygon : to_check_polygons)
 		{
 			char result = where_collision(this, polygon);
@@ -107,7 +108,7 @@ void Player::update()
 			if (result & LEFT)
 			{
 				auto square = polygon->get_square();
-				x = square.x + square.w / 2 + w / 2;
+		//		x = square.x + square.w / 2 + w / 2;
 				x = old_pos.x;
 #ifdef _DEBUG
 		//		printf("LEFT");
@@ -116,7 +117,7 @@ void Player::update()
 			if (result & RIGHT)
 			{
 				auto square = polygon->get_square();
-				x = square.x - square.w / 2 - w / 2;
+		//		x = square.x - square.w / 2 - w / 2;
 				x = old_pos.x;
 #ifdef _DEBUG
 		//		printf("RIGHT");
@@ -129,6 +130,7 @@ void Player::update()
 				auto square = polygon->get_square();
 				y = square.y + square.h / 2 + h / 2;
 		//		y = old_pos.y;
+				grounds.push_back(polygon);
 #ifdef _DEBUG
 		//		printf("BOTTOM");
 #endif
@@ -155,6 +157,16 @@ void Player::update()
 #endif
 			}
 		}
+		
+		COORD coords = { 0, 0 };
+		for (const auto& g : grounds)
+		{
+			coords.X += g->get_coords().x;
+			coords.Y += g->get_coords().y;
+		}
+	//	x /= grounds.size();
+	//	y /= grounds.size();
+		if(grounds.size() >= 1) printf("%d, %f, %f\n", grounds.size(), grounds.front()->get_coords().x, grounds.front()->get_coords().y);
 
 #ifdef _DEBUG
 	//	printf(" %f, %f\n", x, y);
