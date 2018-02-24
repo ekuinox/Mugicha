@@ -65,7 +65,7 @@ void Player::update()
 		char result = 0x00;
 		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon);
 		
-#ifdef _DEBUG
+#ifdef _PLAYER_DEBUG
 		if (result & LEFT) printf("LEFT ");
 		if (result & RIGHT)	printf("RIGHT ");
 		if (result & BOTTOM) printf("BOTTOM ");
@@ -107,7 +107,7 @@ void Player::update()
 			vector.y -= 0.5f;
 		}
 
-#ifdef _DEBUG
+#ifdef _PLAYER_DEBUG
 		if (!(result & TOP) && GetKeyboardPress(DIK_W))
 		{
 			vector.y += 1;
@@ -122,12 +122,12 @@ void Player::update()
 		x += vector.x;
 		y += vector.y;
 
-#ifdef _DEBUG
+#ifdef _PLAYER_DEBUG
 		printf("%f, %f", x, y);
 #endif
 		latest_update = current;
 
-#ifdef _DEBUG
+#ifdef _PLAYER_DEBUG
 		printf("\n");
 #endif
 	}
@@ -137,7 +137,7 @@ bool Player::jump()
 {
 	unless(ground)
 	{
-#ifdef _DEBUG
+#ifdef _PLAYER_DEBUG
 		printf("飛べねえ！！！\n");
 #endif
 		return false;
@@ -162,7 +162,7 @@ void Player::unlock()
 void Player::kill()
 {
 	alive = false;
-#ifdef _DEBUG
+#ifdef _PLAYER_DEBUG
 	std::cout << "今の本番やったら死んどったからな～～！" << std::endl;
 #endif
 }

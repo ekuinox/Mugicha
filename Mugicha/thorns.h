@@ -13,14 +13,18 @@
 
 class Thorns : public ScalableObject
 {
+public:
+	enum Vec { UP, DOWN, LEFT, RIGHT };
 private:
 	SquarePolygonBase *floor; // RaggedFloorである必要はない（？）
 	Player *player;
-	bool up; // 向き，TRUEで上向き，FALSEで下向き
-
+	enum Vec vec;
+	
 public:
 	Thorns();
-	Thorns(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, SquarePolygonBase *_floor, Player *_player, bool _up, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	Thorns(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, Player *_player, enum Vec _vec, SquarePolygonBase *_floor = nullptr, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	void set_floor(std::vector<SquarePolygonBase*> _floors); // floorがnullptrのままの場合ここで設定しなおします．
+	void set_floor(SquarePolygonBase *_floor); // floorがnullptrのままの場合ここで設定しなおします．
 	void init();
 	void update();
 };

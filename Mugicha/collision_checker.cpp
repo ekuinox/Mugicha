@@ -34,48 +34,6 @@ bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 	return is_collision(_self->get_square(), _another->get_square());
 }
 
-HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
-{
-	char result = 0x00;
-	if (is_collisionA(_self, _another))
-	{
-		auto self = _self->get_square();
-		auto another = _another->get_square();
-
-		// 自身の当たり判定を少し小さくしています．
-		// 同じ高さのブロックが並んでいて，次のブロックに滑っていけないからです
-		// 伝わって
-
-		if (
-			another.left() < self.left()
-			&& another.right() > self.left()
-			&& another.top() > self.bottom()
-			&& another.bottom() < self.top()
-			) result |= LEFT;
-
-
-		if (another.left() < self.right()
-			&& another.right() > self.right()
-			&& another.top() > self.bottom()
-			&& another.bottom() < self.top()
-			) result |= RIGHT;
-
-		if (another.top() > self.top()
-			&& another.bottom() < self.top()
-			&& another.left() < self.right()
-			&& another.right() > self.left()
-			) result |= TOP;
-
-		if (another.top() > self.bottom()
-			&& another.bottom() < self.bottom()
-			&& another.left() < self.right()
-			&& another.right() > self.left()
-			) result |= BOTTOM;
-	}
-
-	return static_cast<HitLine>(result);
-}
-
 HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar)
 {
 	char result = 0x00;
@@ -112,6 +70,11 @@ HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another,
 	}
 
 	return static_cast<HitLine>(result);
+}
+
+HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
+{
+	return where_collision(_self, _another, 0.0f);
 }
 
 HitLine where_collision(Player * _self, SquarePolygonBase * _another)

@@ -29,11 +29,11 @@ bool is_collision(SQUARE _self, SQUARE _another);
 // coords‚Æsize‚©‚çæ‚é
 bool is_collisionA(SquarePolygonBase *_self, SquarePolygonBase *_another);
 
+// self‚ÉŠÃ‚³‚ğ’Ç‰Á‚·‚é
+enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another, float sugar = 0.0f);
+
 // ‚Ç‚±‚É“–‚½‚Á‚½‚©‚ğE‚¢‚Ü‚· _a‚Ì‚Ç‚Ì•Ó‚É‘Î‚µ‚Ä‚©
 enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another);
-
-// self‚ÉŠÃ‚³‚ğ’Ç‰Á‚·‚é
-enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another, float sugar = 1.0f);
 
 // ƒvƒŒƒCƒ„‚ÆSPB‚Å
 enum HitLine where_collision(Player *_self, SquarePolygonBase *_another);

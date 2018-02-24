@@ -127,7 +127,7 @@ void Stage::stagefile_loader(const char * filepath)
 				push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
 				break;
 			case 2: // 落ちる床
-				push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
+				push_polygon_back(RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
 				break;
 			case 3: // スタート位置 プレイヤの初期位置である
 				// プレイヤの登録
@@ -138,15 +138,21 @@ void Stage::stagefile_loader(const char * filepath)
 				(goal = push_polygon_back(GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
 				break;
 			case 5: // トゲの配置
-			//	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(THORNS, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2 - 1, textures["ORIGIN"], &camera, player, Thorns::Vec::UP))->on();
 				break;
 			case 6: // 落下する種のトゲ
+				push_polygon_back(THORNS, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2 + 1, textures["ORIGIN"], &camera, player, Thorns::Vec::DOWN))->on();
 				break;
 			case 7: // 空気砲
 				break;
 			}
 		}
 	}
+
+	// トゲの床をセットしていきます
+	std::vector<SquarePolygonBase*> floors;
+	for (const auto& type : { SCALABLE_OBJECT, ENEMY, RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
+	for (const auto& thorns : polygons[THORNS]) static_cast<Thorns*>(thorns)->set_floor(floors);
 
 	/*
 	 

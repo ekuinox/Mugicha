@@ -16,7 +16,8 @@
 #define REGISTER_BLOCK(x, y, tex, camera) new ScalableObject(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera)
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 #define REGISTER_GOAL(x, y, tex, camera, player) new Goal(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
-#define REGISTER_THORNS(x, y, tex, camera, floor, player, up) new Thorns(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, floor, player, up)
+#define REGISTER_THORNS(x, y, tex, camera, player, vec) new Thorns(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, vec)
+#define REGISTER_THORNS_WITH_FLOOR(x, y, tex, camera, player, vec, floor) new Thorns(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, vec, floor)
 #define REGISTER_CANNON(x, y, tex, camera, floor, player) REGISTER_BLOCK(x, y, tex, camera) // ãÛãCñCÇÕÇ‹ÇæçÏÇÍÇƒÇ®ÇÁÇ∏
 
 // â°í∑Ç»ÉÇÉm

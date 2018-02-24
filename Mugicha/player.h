@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _DEBUG_
+#define _PLAYER_DEBUG
+#endif
+
 #include "plain_square_polygon.h"
 #include "conf.h"
 #include <map>
