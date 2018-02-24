@@ -103,7 +103,7 @@ void Stage::stagefile_loader(const char * filepath)
 	std::vector<std::vector<std::string>> table;
 
 	if (!(csv_loader(filepath, table))) return; // csvの読み込みに失敗
-	if (table[0].size() != 2) return; // 一行目にはw,hにしておいて欲しいので
+	if (table[0].size() != 4) return; // 一行目にはw,hにしておいて欲しいので
 
 	// すべて無にする　後のことは考えてない　すみません
 	std::map<enum PolygonTypes, polygon_vec>().swap(polygons);
@@ -114,7 +114,9 @@ void Stage::stagefile_loader(const char * filepath)
 	// 背景の登録
 	(background = push_polygon_back(BACKGROUND, new Background(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
 
-	// NOTES: プレイヤはゴールよりも左下にある必要があります．．．
+	// プレイヤの登録
+	// プレイヤは先に登録しておかないと後々だるいです
+	(player = push_polygon_back(PLAYER, REGISTER_PLAYER(std::atoi(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atoi(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 
 	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
@@ -131,7 +133,8 @@ void Stage::stagefile_loader(const char * filepath)
 			case 0:
 				break;
 			case 1:
-				(player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
+				// ここでプレイヤを初期化するのはやめます．
+			//	(player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 				break;
 			case 2:
 				break;
@@ -157,8 +160,10 @@ void Stage::stagefile_loader(const char * filepath)
 				push_polygon_back(THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
 				break;
 			case 13:
+				push_polygon_back(THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
 				break;
 			case 14:
+				push_polygon_back(THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
 				break;
 			case 15:
 				break;
@@ -187,26 +192,6 @@ void Stage::stagefile_loader(const char * filepath)
 	for (const auto& type : { SCALABLE_OBJECT, ENEMY, RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
 	for (const auto& thorns : polygons[THORNS]) static_cast<Thorns*>(thorns)->set_floor(floors);
 
-	/*
-	 
-	// 拡縮できるオブジェクトを登録
-	polygons[SCALABLE_OBJECT].push_back(REGISTER_BLOCK(25, 25, textures["SAMPLE1"], &camera));
-	polygons[SCALABLE_OBJECT].back()->on();
-
-	polygons[SCALABLE_OBJECT].push_back(REGISTER_BLOCK(100, 100, textures["SAMPLE1"], &camera));
-	polygons[SCALABLE_OBJECT].back()->on();
-
-	// 落ちる床を追加します
-	auto floor = push_polygon_back(SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR_1(200, 200, textures["BLOCK2"], &camera, player));
-	floor->on();
-
-	// トゲ
-	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(200, 0, textures["ORIGIN"], &camera, floor, player, true))->on();
-	push_polygon_back(SCALABLE_OBJECT, REGISTER_THORNS(200, 0, textures["ORIGIN"], &camera, floor, player, false))->on();
-
-	// ゴール
-	(goal = push_polygon_back(GOAL, REGISTER_GOAL(700, 25, textures["ORIGIN"], &camera, player)))->on();
-	*/
 #ifdef _DEBUG
 
 	// 原点

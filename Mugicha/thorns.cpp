@@ -19,29 +19,29 @@ void Thorns::set_floor(std::vector<SquarePolygonBase*> _floors)
 	for (const auto& _floor : _floors)
 	{
 		char result = where_collision(this, _floor, 0);
-		printf("%d ", result);
-		if (vec == Vec::UP && result == BOTTOM)
+
+		if (vec == Vec::UP && result == HitLine::BOTTOM)
 		{
 			set_floor(_floor);
 			break;
 		}
-		else if (vec == Vec::DOWN && result == TOP)
+		if (vec == Vec::DOWN && result == HitLine::TOP)
 		{
 			set_floor(_floor);
 			break;
 		}
-		else if (vec == Vec::LEFT && result == RIGHT)
+		if (vec == Vec::LEFT && result == HitLine::RIGHT)
 		{
 			set_floor(_floor);
 			break;
 		}
-		else if (vec == Vec::RIGHT && result == LEFT)
+		if (vec == Vec::RIGHT && result == HitLine::LEFT)
 		{
 			set_floor(_floor);
 			break;
 		}
 	}
-	printf("\n");
+	if (floor != nullptr) puts("aaaa");
 }
 void Thorns::set_floor(SquarePolygonBase *_floor)
 {
