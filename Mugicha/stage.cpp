@@ -48,12 +48,18 @@ GameInfo Stage::exec()
 	if (player->dead())
 	{
 		info.status = failed;
+#ifdef _DEBUG
+		printf("アカンしんでもた！\n");
+#endif
 	}
 
 	// プレイヤがゴールしているか
 	if (goal->is_completed())
 	{
 		info.status = clear;
+#ifdef _DEBUG
+		printf("ゲームクリアー！\n");
+#endif
 	}
 
 	return info;
@@ -119,31 +125,58 @@ void Stage::stagefile_loader(const char * filepath)
 			
 			// やること
 			// x, yを計算して出し，マクロ呼出しでポリゴンを登録する．
+
 			switch (num)
 			{
-			case 0: // 空白である
+			case 0:
 				break;
-			case 1: // 地面
-				push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
+			case 1:
+				(player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 				break;
-			case 2: // 落ちる床
-				push_polygon_back(RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
+			case 2:
 				break;
-			case 3: // スタート位置 プレイヤの初期位置である
-				// プレイヤの登録
-				player = push_polygon_back(PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons));
-				player->on();
-				break;
-			case 4: // ゴール位置
+			case 3:
 				(goal = push_polygon_back(GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
 				break;
-			case 5: // トゲの配置
-				push_polygon_back(THORNS, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2 - 1, textures["ORIGIN"], &camera, player, Thorns::Vec::UP))->on();
+			case 4:
+				push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
+			//	push_polygon_back(RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
 				break;
-			case 6: // 落下する種のトゲ
-				push_polygon_back(THORNS, REGISTER_THORNS(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2 + 1, textures["ORIGIN"], &camera, player, Thorns::Vec::DOWN))->on();
+			case 5:
+			//	push_polygon_back(SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
+				push_polygon_back(RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
 				break;
-			case 7: // 空気砲
+			case 6:
+				break;
+			case 7:
+				break;
+			case 11:
+				push_polygon_back(THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				break;
+			case 12:
+				push_polygon_back(THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				break;
+			case 13:
+				break;
+			case 14:
+				break;
+			case 15:
+				break;
+			case 16:
+				break;
+			case 21:
+				break;
+			case 22:
+				break;
+			case 23:
+				break;
+			case 24:
+				break;
+			case 31:
+				break;
+			case 32:
+				break;
+			case 33:
 				break;
 			}
 		}
@@ -342,7 +375,7 @@ void Stage::draw()
 template<typename _T>
 _T Stage::push_polygon_back(PolygonTypes type, _T polygon)
 {
-	polygons[type].push_back(polygon);
+	polygons[type].emplace_back(polygon);
 
 	return polygon;
 }

@@ -84,5 +84,8 @@ void Thorns::update()
 	{
 		// “–‚½‚è”»’è
 		player->kill();
+#ifdef _DEBUG
+		printf("ƒgƒQ“–‚½‚Á‚Æ‚ñ‚¼I");
+#endif
 	}
 }
