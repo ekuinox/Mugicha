@@ -31,17 +31,6 @@ bool is_collision(SQUARE _self, SQUARE _another)
 
 bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 {
-	/*
-	auto self = _self->get_square();
-	auto another = _another->get_square();
-	return is_collision(
-		self.x - self.w / 2, self.x + self.w / 2,
-		another.x - another.w / 2, another.x + another.w / 2,
-		self.y - self.h / 2, self.y + self.h / 2,
-		another.y - another.h / 2, another.y + another.h / 2
-	);
-
-	*/
 	return is_collision(_self->get_square(), _another->get_square());
 }
 
@@ -50,19 +39,12 @@ HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
 	char result = 0x00;
 	if (is_collisionA(_self, _another))
 	{
-		/*
-		auto self = _self->get_vertexes();
-		auto another = _another->get_vertexes();
-
-		if (self[1].x <= another[0].x) result |= RIGHT;
-		if (self[0].x >= another[1].x) result |= LEFT;
-
-		if (self[0].y > another[2].y) result |= TOP;
-		if (self[0].y < another[2].y) result |= BOTTOM;
-		*/
-		
 		auto self = _self->get_square();
 		auto another = _another->get_square();
+
+		// 自身の当たり判定を少し小さくしています．
+		// 同じ高さのブロックが並んでいて，次のブロックに滑っていけないからです
+		// 伝わって
 
 		if (
 			another.left() < self.left()
@@ -89,15 +71,51 @@ HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
 			&& another.left() < self.right()
 			&& another.right() > self.left()
 			) result |= BOTTOM;
-		
-		/*
-		if (self.x + self.w / 2 > another.x - another.w / 2) result |= RIGHT; // SELFの右とANOTHERの左を比較する >=
-		if (self.x - self.w / 2 < another.x + another.w / 2) result |= LEFT; // SELFの左とANOTHERの右を比較する <=
-		if (self.y + self.h / 2 > another.y - another.h / 2) result |= TOP; // SELFの上とANOTHERの下を比較する >=
-		if (self.y - self.h / 2 < another.y + another.h / 2) result |= BOTTOM; // SELFの下とANOTHERの上を比較する <=
-		*/
 	}
 
 	return static_cast<HitLine>(result);
+}
+
+HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar)
+{
+	char result = 0x00;
+	if (is_collisionA(_self, _another))
+	{
+		auto self = _self->get_square();
+		auto another = _another->get_square();
+
+		if (
+			another.left() < self.left()
+			&& another.right() > self.left()
+			&& another.top() > self.bottom() + sugar
+			&& another.bottom() < self.top() - sugar
+			) result |= LEFT;
+
+
+		if (another.left() < self.right()
+			&& another.right() > self.right()
+			&& another.top() > self.bottom() + sugar
+			&& another.bottom() < self.top() - sugar
+			) result |= RIGHT;
+
+		if (another.top() > self.top()
+			&& another.bottom() < self.top()
+			&& another.left() < self.right() - sugar
+			&& another.right() > self.left() + sugar
+			) result |= TOP;
+
+		if (another.top() > self.bottom()
+			&& another.bottom() < self.bottom()
+			&& another.left() < self.right() - sugar
+			&& another.right() > self.left() + sugar
+			) result |= BOTTOM;
+	}
+
+	return static_cast<HitLine>(result);
+}
+
+HitLine where_collision(Player * _self, SquarePolygonBase * _another)
+{
+	return where_collision(_self, _another, 1.0f);
 }
 

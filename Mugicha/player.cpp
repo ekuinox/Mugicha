@@ -52,126 +52,78 @@ void Player::update()
 	for (const auto& type : { PLAIN, SCALABLE_OBJECT }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
 	auto old_pos = D3DXVECTOR2(x, y);
+	auto vector = D3DXVECTOR2(0, 0);
 
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
-		unless(controll_lock)
-		{
-			if (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW)) // 左方向への移動
-			{
-				x -= speed;
-			}
-			if (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW)) // 右方向への移動
-			{
-				x += speed;
-			}
-		}
-
-
-		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
-		if (jumping)
-		{
-			if (timeGetTime() - jumped_at > 500) jumping = false;
-			y += 1.0f;
-		}
-
-		// TODO: 同様に落下速度も調整する必要がある
-		unless(ground)
-		{
-			y -= 0.5f;
-		}
-
-#ifdef _DEBUG
-		if (GetKeyboardPress(DIK_W))
-		{
-			y += 1;
-		}
-		if (GetKeyboardPress(DIK_S))
-		{
-			y -= 1;
-		}
-#endif
-
 		// 当たり精査
 
 		// TODO: 当たると登りやがる
 		// TODO: 連続したポリゴンの上で滑れないというかなんというかアレ
 		// TODO: 挟まれた際，無に行ってしまうバグがある
 
-		ground = false;
-		std::vector<SquarePolygonBase*> grounds;
-		for (const auto& polygon : to_check_polygons)
-		{
-			char result = where_collision(this, polygon);
-			
-			if (result & LEFT)
-			{
-				auto square = polygon->get_square();
-		//		x = square.x + square.w / 2 + w / 2;
-				x = old_pos.x;
-#ifdef _DEBUG
-		//		printf("LEFT");
-#endif
-			}
-			if (result & RIGHT)
-			{
-				auto square = polygon->get_square();
-		//		x = square.x - square.w / 2 - w / 2;
-				x = old_pos.x;
-#ifdef _DEBUG
-		//		printf("RIGHT");
-#endif
-			}
-			
-			if (result & BOTTOM)
-			{
-				ground = true;
-				auto square = polygon->get_square();
-				y = square.y + square.h / 2 + h / 2;
-		//		y = old_pos.y;
-				grounds.push_back(polygon);
-#ifdef _DEBUG
-		//		printf("BOTTOM");
-#endif
-			}
-			if (result & TOP)
-			{
-				if (jumping) // ジャンプして頭ぶつけた場合はいいけど
-				{
-					jumping = false; // 頭ぶつけた時点でジャンプ解除
-					auto square = polygon->get_square();
-					y = square.y - square.h / 2 - h / 2;
-				}
-				else if (ground) // この場合は拡縮で縮んだポリゴンに押し潰さているので，
-				{
-					// ここで死亡処理作らないといけない
-#ifdef _DEBUG
-		//			std::cout << "グエー挟まれたンゴ\n";
-#endif
-		//			kill();
-				}
-		//		y = old_pos.y;
-#ifdef _DEBUG
-			//	printf("TOP");
-#endif
-			}
-		}
+		char result = 0x00;
+		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon);
 		
-		COORD coords = { 0, 0 };
-		for (const auto& g : grounds)
+#ifdef _DEBUG
+		if (result & LEFT) printf("LEFT ");
+		if (result & RIGHT)	printf("RIGHT ");
+		if (result & BOTTOM) printf("BOTTOM ");
+		if (result & TOP) printf("TOP ");
+		printf("\n");
+#endif
+		
+		// 
+		if (result & BOTTOM)
 		{
-			coords.X += g->get_coords().x;
-			coords.Y += g->get_coords().y;
+			ground = true;
 		}
-	//	x /= grounds.size();
-	//	y /= grounds.size();
-		if(grounds.size() >= 1) printf("%d, %f, %f\n", grounds.size(), grounds.front()->get_coords().x, grounds.front()->get_coords().y);
+		else
+		{
+			ground = false;
+		}
+
+		unless(controll_lock)
+		{
+			if (!(result & LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
+			{
+				vector.x -= speed;
+			}
+			if (!(result & RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
+			{
+				vector.x += speed;
+			}
+		}
+
+
+		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
+		if (!(result & TOP) && jumping)
+		{
+			if (timeGetTime() - jumped_at > 500) jumping = false;
+			vector.y += 1.0f;
+		}
+
+		// TODO: 同様に落下速度も調整する必要がある
+		unless(ground)
+		{
+			vector.y -= 0.5f;
+		}
 
 #ifdef _DEBUG
-	//	printf(" %f, %f\n", x, y);
+		if (!(result & TOP) && GetKeyboardPress(DIK_W))
+		{
+			vector.y += 1;
+		}
+		if (!(result & BOTTOM) && GetKeyboardPress(DIK_S))
+		{
+			vector.y -= 1;
+		}
 #endif
 
+		// 変更を加算して終了
+		x += vector.x;
+		y += vector.y;
 
 		latest_update = current;
 	}
