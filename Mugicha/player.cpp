@@ -49,7 +49,7 @@ void Player::update()
 	DWORD current = timeGetTime();
 
 	std::vector<SquarePolygonBase*> to_check_polygons;
-	for (const auto& type : { PLAIN, SCALABLE_OBJECT }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+	for (const auto& type : { SCALABLE_OBJECT, ENEMY, RAGGED_FLOOR, THORNS,}) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
 	auto old_pos = D3DXVECTOR2(x, y);
 	auto vector = D3DXVECTOR2(0, 0);
@@ -57,12 +57,11 @@ void Player::update()
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
+		// TODO: zoom_levelからx,y座標を再調整したい．
+		// ぶつかったらどかしてもやりたい
+		// 挟まれたら死というのもいる
+
 		// 当たり精査
-
-		// TODO: 当たると登りやがる
-		// TODO: 連続したポリゴンの上で滑れないというかなんというかアレ
-		// TODO: 挟まれた際，無に行ってしまうバグがある
-
 		char result = 0x00;
 		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon);
 		
@@ -71,10 +70,9 @@ void Player::update()
 		if (result & RIGHT)	printf("RIGHT ");
 		if (result & BOTTOM) printf("BOTTOM ");
 		if (result & TOP) printf("TOP ");
-		printf("\n");
 #endif
 		
-		// 
+		// 接地判定
 		if (result & BOTTOM)
 		{
 			ground = true;
@@ -95,7 +93,6 @@ void Player::update()
 				vector.x += speed;
 			}
 		}
-
 
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (!(result & TOP) && jumping)
@@ -125,7 +122,14 @@ void Player::update()
 		x += vector.x;
 		y += vector.y;
 
+#ifdef _DEBUG
+		printf("%f, %f", x, y);
+#endif
 		latest_update = current;
+
+#ifdef _DEBUG
+		printf("\n");
+#endif
 	}
 }
 

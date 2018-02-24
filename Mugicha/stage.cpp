@@ -280,8 +280,8 @@ void Stage::update()
 	}
 
 	// ここから更新処理
-	camera.x = polygons[PLAYER][0]->get_coords().x;
-	camera.y = polygons[PLAYER][0]->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
+	camera.x = player->get_coords().x;
+	camera.y = player->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
 	
 	// 画面外は見せないようにする
 	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
