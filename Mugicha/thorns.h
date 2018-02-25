@@ -14,7 +14,7 @@
 class Thorns : public ScalableObject
 {
 public:
-	enum Vec { UP, DOWN, LEFT, RIGHT };
+	enum class Vec { UP, DOWN, LEFT, RIGHT };
 private:
 	SquarePolygonBase *floor; // RaggedFloorである必要はない（？）
 	Player *player;

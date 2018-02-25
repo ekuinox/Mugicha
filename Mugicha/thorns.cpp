@@ -41,7 +41,6 @@ void Thorns::set_floor(std::vector<SquarePolygonBase*> _floors)
 			break;
 		}
 	}
-	if (floor != nullptr) puts("aaaa");
 }
 void Thorns::set_floor(SquarePolygonBase *_floor)
 {
