@@ -1,22 +1,6 @@
 #include "player.h"
 #include "collision_checker.h"
 
-void Player::generate_vertexes()
-{
-	drawing_coord.x = x - (camera->x - SCREEN_WIDTH / 2);
-	drawing_coord.y = (y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
-
-	for (auto i = 0; i < 4; ++i)
-	{
-		vertexes[i] = VERTEX_2D(
-			drawing_coord.x + this->w / (i % 3 == 0 ? -2 : 2),
-			drawing_coord.y + this->h / (i < 2 ? -2 : 2),
-			this->u + (i % 3 == 0 ? 0 : this->uw),
-			this->v + (i < 2 ? 0 : this->vh)
-		);
-	}
-}
-
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1)
