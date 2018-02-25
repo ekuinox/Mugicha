@@ -279,9 +279,6 @@ void Stage::update()
 			zoom_level = zoom_level_target;
 			zoom_sign = Stage::Sign::ZERO;
 			player->unlock();
-#ifdef _DEBUG
-			printf("Zoom Level: %f, %f\n", zoom_level.w, zoom_level.h);
-#endif
 		}
 	}
 
@@ -297,9 +294,6 @@ void Stage::update()
 			zoom_level = zoom_level_target;
 			zoom_sign = Stage::Sign::ZERO;
 			player->unlock();
-#ifdef _DEBUG
-			printf("Zoom Level: %f, %f\n", zoom_level.w, zoom_level.h);
-#endif
 		}
 	}
 

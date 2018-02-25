@@ -51,8 +51,6 @@ void Player::update()
 	std::vector<SquarePolygonBase*> to_check_polygons;
 	for (const auto& type : { SCALABLE_OBJECT, ENEMY, RAGGED_FLOOR, THORNS,}) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
-	auto vector = D3DXVECTOR2(0, 0);
-
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
@@ -64,16 +62,14 @@ void Player::update()
 		}
 		else
 		{
-			// TODO: zoom_levelからx,y座標を再調整したい．
-			// ぶつかったらどかしてもやりたい
-			// 挟まれたら死というのもいる
+			auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 
 			// 当たり精査
 			char result = 0x00;
 			for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon);
 
 			// 挟まれ判定
-			if ((result & BOTTOM && result & TOP) || (result & LEFT && result & RIGHT))
+			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
 			{
 				// 挟まれとんやが！！！！
 			}
@@ -85,7 +81,7 @@ void Player::update()
 			}
 
 			// 接地判定
-			if (result & BOTTOM)
+			if (result & HitLine::BOTTOM)
 			{
 				ground = true;
 			}
@@ -94,17 +90,17 @@ void Player::update()
 				ground = false;
 			}
 
-			if (!(result & LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
+			if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
 			{
 				vector.x -= speed;
 			}
-			if (!(result & RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
+			if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
 			{
 				vector.x += speed;
 			}
 
 			// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
-			if (!(result & TOP) && jumping)
+			if (!(result & HitLine::TOP) && jumping)
 			{
 				if (timeGetTime() - jumped_at > 500) jumping = false;
 				vector.y += 1.0f;
