@@ -151,13 +151,13 @@ void Controller::update()
 		auto result = stage->exec();
 		switch (result.status)
 		{
-		case clear: // ゲームクリア時
+		case Stage::Status::Clear: // ゲームクリア時
 			switch_scene(Title); // リザルトを見せてやるべきだけどとりあえず
 			break;
-		case failed:  // こちらもリザルト画面を見せてやるべきだけどとりあえず
+		case Stage::Status::Failed:  // こちらもリザルト画面を見せてやるべきだけどとりあえず
 			switch_scene(Title);
 			break;
-		case retire:
+		case Stage::Status::Retire:
 			switch_scene(Title);
 			break;
 		default:

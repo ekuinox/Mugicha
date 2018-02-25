@@ -12,13 +12,13 @@ Stage::Stage()
 {
 	latest_update = timeGetTime();
 	latest_draw = timeGetTime();
-	info.status = prep;
+	info.status = Stage::Status::Prep;
 
 	init();
 }
 
 Stage::Stage(char _stage_select)
-	: latest_update(timeGetTime()), latest_draw(timeGetTime()), info(0, prep, _stage_select)
+	: latest_update(timeGetTime()), latest_draw(timeGetTime()), info(0, Stage::Status::Prep, _stage_select)
 {
 	init();
 }
@@ -37,7 +37,7 @@ Stage::~Stage()
 }
 
 // ここを叩いてステージを更新したり描画したりする
-GameInfo Stage::exec()
+Stage::GameInfo Stage::exec()
 {
 	update();
 	draw();
@@ -47,7 +47,7 @@ GameInfo Stage::exec()
 	// プレイヤが生きているかでゲームの続行を判定
 	if (player->dead())
 	{
-		info.status = failed;
+		info.status = Stage::Status::Failed;
 #ifdef _DEBUG
 		printf("アカンしんでもた！\n");
 #endif
@@ -56,7 +56,7 @@ GameInfo Stage::exec()
 	// プレイヤがゴールしているか
 	if (goal->is_completed())
 	{
-		info.status = clear;
+		info.status = Stage::Status::Clear;
 #ifdef _DEBUG
 		printf("ゲームクリアー！\n");
 #endif
@@ -221,7 +221,7 @@ void Stage::init()
 	stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
 	zoom_level = { 1, 1 };
-	zoom_sign = ZERO;
+	zoom_sign = Stage::Sign::ZERO;
 }
 
 // 更新処理
@@ -232,23 +232,23 @@ void Stage::update()
 	// タイトルに戻る（無確認）
 	if (GetKeyboardTrigger(DIK_1))
 	{
-		info.status = retire;
+		info.status = Stage::Status::Retire;
 		return;
 	}
 
 	// 拡縮
-	if (zoom_sign == ZERO)
+	if (zoom_sign == Stage::Sign::ZERO)
 	{
 		if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // 拡大
 		{
-			zoom_sign = PLUS;
+			zoom_sign = Stage::Sign::PLUS;
 			zoom_level_target.w = zoom_level.w * 2;
 			zoom_level_target.h = zoom_level.h * 2;
 			player->lock();
 		}
 		if (GetKeyboardTrigger(DIK_L) && zoom_level.w > 0.5f) // 縮小
 		{
-			zoom_sign = MINUS;
+			zoom_sign = Stage::Sign::MINUS;
 			zoom_level_target.w = zoom_level.w / 2;
 			zoom_level_target.h = zoom_level.h / 2;
 			player->lock();
@@ -267,7 +267,7 @@ void Stage::update()
 	if (current - latest_update < 1) return;
 	latest_update = current;
 
-	if (zoom_sign == PLUS)
+	if (zoom_sign == Stage::Sign::PLUS)
 	{
 		if (zoom_level.w < zoom_level_target.w)
 		{
@@ -277,12 +277,12 @@ void Stage::update()
 		else
 		{
 			zoom_level = zoom_level_target;
-			zoom_sign = ZERO;
+			zoom_sign = Stage::Sign::ZERO;
 			player->unlock();
 		}
 	}
 
-	if (zoom_sign == MINUS)
+	if (zoom_sign == Stage::Sign::MINUS)
 	{
 		if (zoom_level.w > zoom_level_target.w)
 		{
@@ -292,7 +292,7 @@ void Stage::update()
 		else
 		{
 			zoom_level = zoom_level_target;
-			zoom_sign = ZERO;
+			zoom_sign = Stage::Sign::ZERO;
 			player->unlock();
 		}
 	}

@@ -8,7 +8,7 @@
 
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
-
+/*
 enum status {
 	prep, // 準備中
 	ready, // 準備完了
@@ -28,14 +28,28 @@ using GameInfo = struct _GameInfo
 	_GameInfo() {}
 	_GameInfo(int _score, enum status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number) {}
 };
-
-enum Sign {
-	ZERO,
-	PLUS,
-	MINUS,
-};
+*/
 
 class Stage {
+public:
+	enum class Status {
+		Prep,
+		Ready,
+		Playing,
+		Pause,
+		Clear,
+		Failed,
+		Retire,
+		End
+	};
+	using GameInfo = struct _GameInfo
+	{
+		int score;
+		int stage_number;
+		enum Stage::Status status;
+		_GameInfo() {}
+		_GameInfo(int _score, enum Stage::Status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number) {}
+	};
 private:
 	// vars
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
@@ -44,12 +58,12 @@ private:
 	Goal *goal;
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
-	GameInfo info; // 続行管理と結果
+	Stage::GameInfo info; // 続行管理と結果
 	DWORD latest_update; // 最終更新
 	DWORD latest_draw; // 最終描画
 	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
 	D3DXVECTOR2 camera;
-	enum Sign zoom_sign; // 拡大状態か縮小状態かってアレです
+	enum class Sign { ZERO,	PLUS, MINUS} zoom_sign; // 拡大状態か縮小状態かってアレです
 	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
 	POLSIZE zoom_level;
 	POLSIZE map_size; // 背景のデカさになります
