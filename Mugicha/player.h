@@ -19,7 +19,9 @@ private:
 	bool moving; // 動いている(x軸)
 	DWORD jumped_at;
 	bool controll_lock; // 操作を受け付けなくする
+	D3DXVECTOR2 when_locked_coords; // ロックされたときの座標値
 	POLSIZE zoom_level; // ズームサイズ
+	POLSIZE before_zoom_level; // 前のヤツ
 	std::map<enum PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // 当たり見るように持っときます
 	void generate_vertexes();
 public:
