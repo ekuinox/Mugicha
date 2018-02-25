@@ -45,20 +45,6 @@ using SQUARE = struct _SQUARE
 	_SQUARE operator*=(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
 };
 
-// ポリゴンの種別を判定させるアレ，派生を増やせばここに書いてやらないとしんどい
-enum PolygonTypes
-{
-	BACKGROUND,
-	PLAYER,
-	ENEMY,
-	GOAL,
-	THORNS,
-	RAGGED_FLOOR,
-	SCALABLE_OBJECT,
-	PLAIN,
-	DEBUG_GUIDE,
-};
-
 /*
 * SquarePolygonBase
 * 四角形のPolygonを管理描画する抽象クラス
@@ -84,6 +70,21 @@ protected:
 	virtual void generate_vertexes() = 0; // vertexesを生成するのに使う．draw()より呼ばれるべきで，publicにはしてません
 
 public:
+	// 列挙子
+	// ポリゴンの種別を判定させるアレ，派生を増やせばここに書いてやらないとしんどい
+	enum class PolygonTypes
+	{
+		BACKGROUND,
+		PLAYER,
+		ENEMY,
+		GOAL,
+		THORNS,
+		RAGGED_FLOOR,
+		SCALABLE_OBJECT,
+		PLAIN,
+		DEBUG_GUIDE,
+	};
+
 	// === 変数 ===
 	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
 

@@ -8,27 +8,6 @@
 
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
-/*
-enum status {
-	prep, // 準備中
-	ready, // 準備完了
-	playing, // プレイ中
-	pause, // ポーズ
-	clear, // クリア
-	failed, // 失敗
-	retire, // 諦めた場合
-	end, // 終了
-};
-
-using GameInfo = struct _GameInfo
-{
-	int score;
-	int stage_number;
-	enum status status;
-	_GameInfo() {}
-	_GameInfo(int _score, enum status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number) {}
-};
-*/
 
 class Stage {
 public:
@@ -53,7 +32,7 @@ public:
 private:
 	// vars
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
-	std::map<enum PolygonTypes, polygon_vec> polygons;
+	std::map<SquarePolygonBase::PolygonTypes, polygon_vec> polygons;
 	Background *background;
 	Goal *goal;
 	Player *player; // プレイヤの変数
@@ -77,7 +56,7 @@ private:
 	void draw();
 
 	template<typename _T>
-	_T push_polygon_back(enum PolygonTypes type, _T polygon);
+	_T push_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
 public:
 	Stage();
 	Stage(char _stage_select);
