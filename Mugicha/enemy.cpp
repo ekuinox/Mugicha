@@ -12,21 +12,18 @@ void Enemy::update()
 	
 	auto current = timeGetTime();
 
-	// プレイヤとの距離をみて移動を開始する 敵のプライベートなエリアに入ったらキレてくる感じで
-	moving = is_collision(SQUARE(x, y, w * 10 * zoom_level.w, h * 10 * zoom_level.h), player->get_square()) ? true : false;
+	// 画面外かどうかでmovingを切り分ける
+	moving = (vertexes[0].x <= SCREEN_WIDTH * 1.25 && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT * 1.25 && vertexes[2].y >= 0) ? true : false;
 
 	if (current - latest_update > 1 && moving) // 1ms間隔で
 	{
 		// 当たり判定をみるポリゴンのベクタを作る
 		std::vector<SquarePolygonBase*> to_check_polygons;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
 		// 当たり精査
 		char result = 0x00;
-		for (const auto& polygon : to_check_polygons)
-		{
-			result |= where_collision(this, polygon, 0);
-		}
+		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon, 1.0f);
 
 		auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 
@@ -45,13 +42,13 @@ void Enemy::update()
 		vector.x += vec == Vec::RIGHT ? 1 : -1;
 
 		// ジャンプ開始から時間が経過
-		if (timeGetTime() - jumped_at > 500) jumping = false;
+		if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
 		
 		// ジャンプなう
-		if (jumping) vector.y += 2.0f;
+		if (jumping) vector.y += PLAYER_JUMP_POWER;
 		
 		// 空中に居る間は落下し続ける
-		if (!on_ground) vector.y -= 1.0f;
+		if (!on_ground) vector.y -= PLAYER_FALLING;
 
 		// 次々ジャンプしていけ
 		if (on_ground && !jumping)
