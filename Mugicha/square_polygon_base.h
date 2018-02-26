@@ -2,7 +2,6 @@
 
 #define FVF_VERTEX_2D (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #include "d3dx9.h"
-#include "input.h"
 #include <cmath>
 #include <vector>
 #include <time.h>

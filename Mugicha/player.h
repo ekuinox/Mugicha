@@ -7,6 +7,7 @@
 #include "plain_square_polygon.h"
 #include "conf.h"
 #include <map>
+#include "input.h"
 
 // プレイヤークラス
 
