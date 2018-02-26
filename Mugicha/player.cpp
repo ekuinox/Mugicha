@@ -37,7 +37,7 @@ void Player::update()
 	{
 		// 当たり判定をみるポリゴンのベクタを作る
 		std::vector<SquarePolygonBase*> to_check_polygons;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
 		// 当たり精査
 		char result = 0x00;

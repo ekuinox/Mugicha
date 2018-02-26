@@ -34,10 +34,10 @@ bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 	return is_collision(_self->get_square(), _another->get_square());
 }
 
-HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar)
+HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar, bool without_precheck)
 {
 	char result = 0x00;
-	if (is_collisionA(_self, _another))
+	if (without_precheck || is_collisionA(_self, _another))
 	{
 		auto self = _self->get_square();
 		auto another = _another->get_square();

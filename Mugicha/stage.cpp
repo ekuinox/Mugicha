@@ -215,6 +215,9 @@ void Stage::stagefile_loader(const char * filepath)
 // 初期化, コンストラクタから呼ぶ
 void Stage::init()
 {
+#ifdef _DEBUG
+	const auto exec_start = std::chrono::system_clock::now();
+#endif
 	char filepath[256]; // ファイルパス格納
 
 	sprintf(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
@@ -225,6 +228,11 @@ void Stage::init()
 
 	zoom_level = { 1, 1 };
 	zoom_sign = Stage::Sign::ZERO;
+
+#ifdef _DEBUG
+	std::cout << "Stage Load Time: ";
+	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - exec_start).count() << std::endl;
+#endif
 }
 
 // 更新処理
@@ -233,7 +241,7 @@ void Stage::update()
 	// 時間を気にしないもの
 
 	// タイトルに戻る（無確認）
-	if (GetKeyboardTrigger(DIK_1))
+	if (GetKeyboardTrigger(DIK_F5))
 	{
 		info.status = Stage::Status::Retire;
 		return;

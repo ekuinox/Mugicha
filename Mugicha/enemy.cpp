@@ -13,7 +13,7 @@ void Enemy::update()
 	auto current = timeGetTime();
 
 	// プレイヤとの距離をみて移動を開始する 敵のプライベートなエリアに入ったらキレてくる感じで
-	moving = is_collision(SQUARE(x, y, w * 10, h * 10), player->get_square()) ? true : false;
+	moving = is_collision(SQUARE(x, y, w * 10 * zoom_level.w, h * 10 * zoom_level.h), player->get_square()) ? true : false;
 
 	if (current - latest_update > 1 && moving) // 1ms間隔で
 	{
@@ -23,8 +23,10 @@ void Enemy::update()
 
 		// 当たり精査
 		char result = 0x00;
-		float ground_height = y;
-		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon, 0);
+		for (const auto& polygon : to_check_polygons)
+		{
+			result |= where_collision(this, polygon, 0);
+		}
 
 		auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 

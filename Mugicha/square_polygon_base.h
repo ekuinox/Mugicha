@@ -7,6 +7,7 @@
 #include <vector>
 #include <time.h>
 #include "conf.h"
+#include <chrono>
 
 #ifdef _DEBUG
 #include <iostream>

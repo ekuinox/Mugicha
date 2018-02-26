@@ -30,7 +30,7 @@ bool is_collision(SQUARE _self, SQUARE _another);
 bool is_collisionA(SquarePolygonBase *_self, SquarePolygonBase *_another);
 
 // self‚ÉŠÃ‚³‚ğ’Ç‰Á‚·‚é
-enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another, float sugar = 0.0f);
+enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another, float sugar = 0.0f, bool without_precheck = true);
 
 // ‚Ç‚±‚É“–‚½‚Á‚½‚©‚ğE‚¢‚Ü‚· _a‚Ì‚Ç‚Ì•Ó‚É‘Î‚µ‚Ä‚©
 enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another);
