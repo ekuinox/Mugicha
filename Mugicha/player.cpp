@@ -30,30 +30,31 @@ void Player::update()
 {
 	if (!status) return; // statusみて切る
 
-	DWORD current = timeGetTime();
-
-	std::vector<SquarePolygonBase*> to_check_polygons;
-	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS,}) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
-
-	// 当たり精査
-	char result = 0x00;
-	float ground_height = y;
-	for (const auto& polygon : to_check_polygons)
-	{
-		auto _result = where_collision(this, polygon);
-		if (_result & BOTTOM)
-		{
-			if (ground_height < polygon->get_square().top())
-			{
-				ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
-			}
-		}
-		result |= _result;
-	}
+	auto current = timeGetTime();
 
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
+		// 当たり判定をみるポリゴンのベクタを作る
+		std::vector<SquarePolygonBase*> to_check_polygons;
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+
+		// 当たり精査
+		char result = 0x00;
+		float ground_height = y;
+		for (const auto& polygon : to_check_polygons)
+		{
+			auto _result = where_collision(this, polygon);
+			if (_result & BOTTOM)
+			{
+				if (ground_height < polygon->get_square().top())
+				{
+					ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
+				}
+			}
+			result |= _result;
+		}
+
 		if (controll_lock)
 		{
 			// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．

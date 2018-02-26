@@ -138,9 +138,11 @@ void Stage::stagefile_loader(const char * filepath)
 			//	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 				break;
 			case 2:
+				enemies.emplace_back(push_polygon_back(SquarePolygonBase::PolygonTypes::ENEMY, REGISTER_ENEMY_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], &camera, polygons)));
+				enemies.back()->on();
 				break;
 			case 3:
-				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
+				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["GOAL_01"], &camera, player)))->on();
 				break;
 			case 4:
 				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
@@ -148,23 +150,23 @@ void Stage::stagefile_loader(const char * filepath)
 				break;
 			case 5:
 			//	push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["FLOOR_01"], &camera, player))->on();
 				break;
 			case 6:
 				break;
 			case 7:
 				break;
 			case 11:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
 				break;
 			case 12:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
 				break;
 			case 13:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
 				break;
 			case 14:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
 				break;
 			case 15:
 				break;

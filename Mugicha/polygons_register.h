@@ -13,15 +13,17 @@
 
 #define REGISTER_BACKGROUND(x, y, tex, camera, polygons) new Background(x, y, w, h, tex, camera)
 #define REGISTER_PLAYER(x, y, tex, camera, polygons) new Player(tex, camera, polygons, 0, x, y, CELL_WIDTH, CELL_HEIGHT)
-#define REGISTER_ENEMY REGISTER_BLOCK
+#define REGISTER_ENEMY(x, y, tex, camera, polygons, vec) new Enemy(tex, camera, 1, x, y, CELL_WIDTH, CELL_HEIGHT, vec, polygons)
+#define REGISTER_ENEMY_LEFT(x, y, tex, camera, polygons) REGISTER_ENEMY(x, y, tex, camera, polygons, Enemy::Vec::LEFT)
+#define REGISTER_ENEMY_RIGHT(x, y, tex, camera, polygons) REGISTER_RIGHT(x, y, tex, camera, polygons, Enemy::Vec::RIGHT)
 #define REGISTER_BLOCK(x, y, tex, camera) new ScalableObject(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera)
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 #define REGISTER_GOAL(x, y, tex, camera, player) new Goal(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 #define REGISTER_THORNS(x, y, tex, camera, player, vec) new Thorns(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, vec)
-#define REGISTER_THORNS_UP(x, y, tex, camera, player) new Thorns(x, y - 1, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, Thorns::Vec::UP)
-#define REGISTER_THORNS_DOWN(x, y, tex, camera, player) new Thorns(x, y + 1, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, Thorns::Vec::DOWN)
-#define REGISTER_THORNS_LEFT(x, y, tex, camera, player) new Thorns(x + 1, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, Thorns::Vec::LEFT)
-#define REGISTER_THORNS_RIGHT(x, y, tex, camera, player) new Thorns(x - 1, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, Thorns::Vec::RIGHT)
+#define REGISTER_THORNS_UP(x, y, tex, camera, player) REGISTER_THORNS(x, y - 1, tex, camera, player, Thorns::Vec::UP)
+#define REGISTER_THORNS_DOWN(x, y, tex, camera, player) REGISTER_THORNS(x, y + 1, tex, camera, player, Thorns::Vec::DOWN)
+#define REGISTER_THORNS_LEFT(x, y, tex, camera, player) REGISTER_THORNS(x + 1, y, tex, camera, player, Thorns::Vec::LEFT)
+#define REGISTER_THORNS_RIGHT(x, y, tex, camera, player) REGISTER_THORNS(x - 1, y, tex, camera, player, Thorns::Vec::RIGHT)
 #define REGISTER_THORNS_WITH_FLOOR(x, y, tex, camera, player, vec, floor) new Thorns(x, y, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, vec, floor)
 #define REGISTER_AIRCANNON(x, y, tex, camera, floor, player) REGISTER_BLOCK(x, y, tex, camera) // ãÛãCñCÇÕÇ‹ÇæçÏÇÍÇƒÇ®ÇÁÇ∏
 #define REGISTER_GIMMICK REGISTER_BLOCK
