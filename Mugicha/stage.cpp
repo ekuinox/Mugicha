@@ -67,6 +67,7 @@ Stage::GameInfo Stage::exec()
 
 void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
 {
+	std::map<std::string, LPDIRECT3DTEXTURE9>().swap(textures); // clear
 	for (auto _texture : _textures)
 	{
 		D3DXCreateTextureFromFile(d3d_device, _texture.second, &textures[_texture.first]); // ˆêÄ“Ç‚İ‚İ
