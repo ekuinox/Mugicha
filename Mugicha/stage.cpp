@@ -157,16 +157,16 @@ void Stage::stagefile_loader(const char * filepath)
 			case 7:
 				break;
 			case 11:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_DOWN"], &camera, player))->on();
 				break;
 			case 12:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_UP"], &camera, player))->on();
 				break;
 			case 13:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_LEFT"], &camera, player))->on();
 				break;
 			case 14:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_01"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_RIGHT"], &camera, player))->on();
 				break;
 			case 15:
 				break;
