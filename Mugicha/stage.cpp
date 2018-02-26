@@ -85,7 +85,7 @@ void Stage::multi_texture_loader(const char * filepath)
 		if (record.size() == 2)
 		{
 			char texture_file[256];
-			sprintf(texture_file, "%s%s", TEXTURES_DIR, record[1].c_str());
+			sprintf_s(texture_file, "%s%s", TEXTURES_DIR, record[1].c_str());
 			if (FAILED(D3DXCreateTextureFromFile(d3d_device, texture_file, &textures[record[0]])))
 			{
 #ifdef _DEBUG
@@ -110,14 +110,14 @@ void Stage::stagefile_loader(const char * filepath)
 	std::map<SquarePolygonBase::PolygonTypes, polygon_vec>().swap(polygons);
 	
 	// マップのサイズを入れたい
-	map_size = POLSIZE(std::atoi(table[0][0].c_str()) * CELL_WIDTH, std::atoi(table[0][1].c_str()) * CELL_HEIGHT);
+	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
 	
 	// 背景の登録
-	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, new Background(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
+	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
 
 	// プレイヤの登録
 	// プレイヤは先に登録しておかないと後々だるいです
-	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atoi(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atoi(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
+	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 
 	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
@@ -220,10 +220,10 @@ void Stage::init()
 #endif
 	char filepath[256]; // ファイルパス格納
 
-	sprintf(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
+	sprintf_s(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
 	multi_texture_loader(filepath); // テクスチャのリストを読み込む => こっち先
 
-	sprintf(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
+	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
 	zoom_level = { 1, 1 };

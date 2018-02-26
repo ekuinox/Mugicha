@@ -1,8 +1,12 @@
 #pragma once
 
+// ‚¾‚Ü‚êƒoƒJ
+#define _CRT_SECURE_NO_WARNINGS
+
+// ‚È‚ñ‚¿‚á‚Á‚Äunless‚È‚Ç
 #define unless(expression) if(!(expression))
 
-/* Constant */
+// window‚ÌƒAƒŒ
 #define CLASS_NAME "AppClass"
 #define WINDOW_NAME "Zooming"
 

@@ -23,7 +23,7 @@ void Goal::update()
 	if (is_collision(player, this))
 	{
 		// 触れただけでゴールってのもアレなので，アレする
-		auto core = SQUARE(x * zoom_level.w, y * zoom_level.w, w * zoom_level.w / 2, h * zoom_level.h * 0.8);
+		auto core = SQUARE(static_cast<float>(x * zoom_level.w), static_cast<float>(y * zoom_level.w), static_cast<float>(w * zoom_level.w / 2), static_cast<float>(h * zoom_level.h * 0.8));
 
 		if (is_collision(player->get_square(), core)) // コアに当たり申した
 		{
