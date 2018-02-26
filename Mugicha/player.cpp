@@ -35,6 +35,22 @@ void Player::update()
 	std::vector<SquarePolygonBase*> to_check_polygons;
 	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS,}) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
 
+	// 当たり精査
+	char result = 0x00;
+	float ground_height = y;
+	for (const auto& polygon : to_check_polygons)
+	{
+		auto _result = where_collision(this, polygon);
+		if (_result & BOTTOM)
+		{
+			if (ground_height < polygon->get_square().top())
+			{
+				ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
+			}
+		}
+		result |= _result;
+	}
+
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
@@ -43,14 +59,20 @@ void Player::update()
 			// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
 			x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
 			y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
+
+			// 挟まれ判定
+			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
+			{
+				// 挟まれとんやが！！！！
+			}
+			if (result & HitLine::BOTTOM)
+			{
+				y = ground_height;
+			}
 		}
 		else
 		{
 			auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
-
-			// 当たり精査
-			char result = 0x00;
-			for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon);
 
 			// 挟まれ判定
 			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
