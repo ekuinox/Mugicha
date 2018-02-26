@@ -324,7 +324,7 @@ void Stage::update()
 void Stage::draw()
 {
 	auto current = timeGetTime();
-	if (current - latest_draw < 1000 / 60) return;
+	if (current - latest_draw < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	// ‚±‚±‚©‚ç•`‰æˆ—
