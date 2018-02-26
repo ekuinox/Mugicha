@@ -29,6 +29,18 @@ bool is_collision(SQUARE _self, SQUARE _another);
 // coords‚Æsize‚©‚çæ‚é
 bool is_collisionA(SquarePolygonBase *_self, SquarePolygonBase *_another);
 
+// ã‚ª“–‚½‚Á‚½‚©‚¾‚¯‚ğ
+bool hit_top(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
+
+// ‰º‚ª“–‚½‚Á‚½‚©‚¾‚¯‚ğ
+bool hit_bottom(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
+
+// ‰E‚ª“–‚½‚Á‚½‚©‚¾‚¯‚ğ
+bool hit_right(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
+
+// ¶‚ª“–‚½‚Á‚½‚©‚¾‚¯‚ğ
+bool hit_left(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
+
 // self‚ÉŠÃ‚³‚ğ’Ç‰Á‚·‚é
 enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another, float sugar = 0.0f, bool without_precheck = true);
 
