@@ -16,7 +16,7 @@ Player::~Player()
 
 void Player::init()
 {
-	speed = 0.5f;
+	speed = PLAYER_SPEED;
 	ground = false;
 	controll_lock = false;
 }
@@ -86,14 +86,19 @@ void Player::update()
 			// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 			if (!(result & HitLine::TOP) && jumping)
 			{
-				if (timeGetTime() - jumped_at > 500) jumping = false;
-				vector.y += 1.0f;
+				if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
+				vector.y += PLAYER_JUMP_POWER;
+			}
+
+			if(result & HitLine::TOP)
+			{
+				jumping = false;
 			}
 
 			// TODO: 同様に落下速度も調整する必要がある
 			unless(ground)
 			{
-				vector.y -= 0.5f;
+				vector.y -= PLAYER_FALLING;
 			}
 
 			// 変更を加算して終了

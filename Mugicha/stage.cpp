@@ -271,8 +271,8 @@ void Stage::update()
 	{
 		if (zoom_level.w < zoom_level_target.w)
 		{
-			zoom_level.w *= 1.001f;
-			zoom_level.h *= 1.001f;
+			zoom_level.w *= 1.01f;
+			zoom_level.h *= 1.01f;
 		}
 		else
 		{
@@ -286,8 +286,8 @@ void Stage::update()
 	{
 		if (zoom_level.w > zoom_level_target.w)
 		{
-			zoom_level.w /= 1.001f;
-			zoom_level.h /= 1.001f;
+			zoom_level.w /= 1.01f;
+			zoom_level.h /= 1.01f;
 		}
 		else
 		{
