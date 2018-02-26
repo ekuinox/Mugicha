@@ -16,7 +16,7 @@ Player::~Player()
 
 void Player::init()
 {
-	speed = 0.5f;
+	speed = PLAYER_SPEED;
 	ground = false;
 	controll_lock = false;
 }
@@ -30,27 +30,50 @@ void Player::update()
 {
 	if (!status) return; // statusみて切る
 
-	DWORD current = timeGetTime();
-
-	std::vector<SquarePolygonBase*> to_check_polygons;
-	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS,}) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+	auto current = timeGetTime();
 
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
+		// 当たり判定をみるポリゴンのベクタを作る
+		std::vector<SquarePolygonBase*> to_check_polygons;
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
+
+		// 当たり精査
+		char result = 0x00;
+		float ground_height = y;
+		for (const auto& polygon : to_check_polygons)
+		{
+			auto _result = where_collision(this, polygon);
+			if (_result & BOTTOM)
+			{
+				if (ground_height < polygon->get_square().top())
+				{
+					ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
+				}
+			}
+			result |= _result;
+		}
+
 		if (controll_lock)
 		{
 			// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
 			x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
 			y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
+
+			// 挟まれ判定
+			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
+			{
+				// 挟まれとんやが！！！！
+			}
+			if (result & HitLine::BOTTOM)
+			{
+				y = ground_height;
+			}
 		}
 		else
 		{
 			auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
-
-			// 当たり精査
-			char result = 0x00;
-			for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon);
 
 			// 挟まれ判定
 			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
@@ -86,14 +109,19 @@ void Player::update()
 			// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 			if (!(result & HitLine::TOP) && jumping)
 			{
-				if (timeGetTime() - jumped_at > 500) jumping = false;
-				vector.y += 1.0f;
+				if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
+				vector.y += PLAYER_JUMP_POWER;
+			}
+
+			if(result & HitLine::TOP)
+			{
+				jumping = false;
 			}
 
 			// TODO: 同様に落下速度も調整する必要がある
 			unless(ground)
 			{
-				vector.y -= 0.5f;
+				vector.y -= PLAYER_FALLING;
 			}
 
 			// 変更を加算して終了

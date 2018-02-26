@@ -34,39 +34,55 @@ bool is_collisionA(SquarePolygonBase * _self, SquarePolygonBase * _another)
 	return is_collision(_self->get_square(), _another->get_square());
 }
 
-HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar)
+bool hit_top(SQUARE &_self, SQUARE &_another, float sugar)
+{
+	return (_another.top() > _self.top()
+		&& _another.bottom() < _self.top()
+		&& _another.left() < _self.right() - sugar
+		&& _another.right() > _self.left() + sugar
+		) ? true : false;
+}
+
+bool hit_bottom(SQUARE &_self, SQUARE &_another, float sugar)
+{
+	return (_another.top() > _self.bottom()
+		&& _another.bottom() < _self.bottom()
+		&& _another.left() < _self.right() - sugar
+		&& _another.right() > _self.left() + sugar
+		) ? true : false;
+}
+
+bool hit_right(SQUARE &_self, SQUARE &_another, float sugar)
+{
+	return (_another.left() < _self.right()
+		&& _another.right() > _self.right()
+		&& _another.top() > _self.bottom() + sugar
+		&& _another.bottom() < _self.top() - sugar
+		) ? true : false;
+}
+
+bool hit_left(SQUARE &_self, SQUARE &_another, float sugar)
+{
+	return (
+		_another.left() < _self.left()
+		&& _another.right() > _self.left()
+		&& _another.top() > _self.bottom() + sugar
+		&& _another.bottom() < _self.top() - sugar
+		) ? true : false;
+}
+
+HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar, bool without_precheck)
 {
 	char result = 0x00;
-	if (is_collisionA(_self, _another))
+	if (without_precheck || is_collisionA(_self, _another))
 	{
 		auto self = _self->get_square();
 		auto another = _another->get_square();
 
-		if (
-			another.left() < self.left()
-			&& another.right() > self.left()
-			&& another.top() > self.bottom() + sugar
-			&& another.bottom() < self.top() - sugar
-			) result |= LEFT;
-
-
-		if (another.left() < self.right()
-			&& another.right() > self.right()
-			&& another.top() > self.bottom() + sugar
-			&& another.bottom() < self.top() - sugar
-			) result |= RIGHT;
-
-		if (another.top() > self.top()
-			&& another.bottom() < self.top()
-			&& another.left() < self.right() - sugar
-			&& another.right() > self.left() + sugar
-			) result |= TOP;
-
-		if (another.top() > self.bottom()
-			&& another.bottom() < self.bottom()
-			&& another.left() < self.right() - sugar
-			&& another.right() > self.left() + sugar
-			) result |= BOTTOM;
+		if (hit_top(self, another, sugar)) result |= TOP;
+		if (hit_bottom(self, another, sugar)) result |= BOTTOM;
+		if (hit_right(self, another, sugar)) result |= RIGHT;
+		if (hit_left(self, another, sugar)) result |= LEFT;
 	}
 
 	return static_cast<HitLine>(result);

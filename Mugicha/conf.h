@@ -1,8 +1,12 @@
 #pragma once
 
+// だまれバカ
+#define _CRT_SECURE_NO_WARNINGS
+
+// なんちゃってunlessなど
 #define unless(expression) if(!(expression))
 
-/* Constant */
+// windowのアレ
 #define CLASS_NAME "AppClass"
 #define WINDOW_NAME "Zooming"
 
@@ -13,18 +17,20 @@
 #define TEXTURES_DIR RESOURCES_DIR "textures/"
 #define STAGEFILES_DIR RESOURCES_DIR "stages/"
 
-// スクリーンのデカさ
-#define SCREEN_WIDTH (800)
-#define SCREEN_HEIGHT (800)
+#define FRAME_RATES (50)
 
-#define CELL_WIDTH (50)
-#define CELL_HEIGHT (50)
+// スクリーンのデカさ
+#define SCREEN_WIDTH (1000)
+#define SCREEN_HEIGHT (1000)
+
+#define CELL_WIDTH (100)
+#define CELL_HEIGHT (100)
 
 // プレイヤのデカさ
-#define PLAYER_WIDTH (50)
-#define PLAYER_HEIGHT (50)
-#define PLAYER_X (300)
-#define PLAYER_Y (50)
+#define PLAYER_SPEED (0.675f) // プレイや移動速度
+#define PLAYER_JUMP_POWER (2.0f) // ジャンプ力，1msにどんだけ飛ぶか
+#define PLAYER_JUMP_TIME (500) // ジャンプ時間(ms)
+#define PLAYER_FALLING (1.0f) // 落下速度
 
 // 背景のデカさ
 #define BACKGROUND_WIDTH (SCREEN_WIDTH)

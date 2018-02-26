@@ -77,14 +77,15 @@ void Thorns::update()
 		}
 	}
 	
-	
-
-	if (is_collisionA(player, this) && zoom_level.w <= 1)
+	if (zoom_level.w <= 1)
 	{
-		// 当たり判定
-		player->kill();
+		char result = where_collision(this, player, 1.0f);
+		if ((result & HitLine::BOTTOM && vec == Vec::DOWN) || (result & HitLine::TOP && vec == Vec::UP) || (result & HitLine::LEFT && vec == Vec::LEFT) || (result & HitLine::RIGHT && vec == Vec::RIGHT))
+		{
+			player->kill();
 #ifdef _DEBUG
-		printf("トゲ当たっとんぞ！");
+			printf("トゲ当たっとんぞ！");
 #endif
+		}
 	}
 }

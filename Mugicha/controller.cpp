@@ -173,7 +173,7 @@ void Controller::draw()
 	if (scene == Gaming) return; // ƒQ[ƒ€’†‚ÍStage->exec();‚É‚Ü‚©‚¹‚Ä
 
 	auto current = timeGetTime();
-	if (current - latest_draw < 1000 / 60) return;
+	if (current - latest_draw < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	polygon_vec drawing_polygons;

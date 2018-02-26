@@ -67,6 +67,7 @@ Stage::GameInfo Stage::exec()
 
 void Stage::multi_texture_loader(std::map<std::string, const char *> _textures)
 {
+	std::map<std::string, LPDIRECT3DTEXTURE9>().swap(textures); // clear
 	for (auto _texture : _textures)
 	{
 		D3DXCreateTextureFromFile(d3d_device, _texture.second, &textures[_texture.first]); // 一斉読み込み
@@ -84,7 +85,7 @@ void Stage::multi_texture_loader(const char * filepath)
 		if (record.size() == 2)
 		{
 			char texture_file[256];
-			sprintf(texture_file, "%s%s", TEXTURES_DIR, record[1].c_str());
+			sprintf_s(texture_file, "%s%s", TEXTURES_DIR, record[1].c_str());
 			if (FAILED(D3DXCreateTextureFromFile(d3d_device, texture_file, &textures[record[0]])))
 			{
 #ifdef _DEBUG
@@ -109,14 +110,14 @@ void Stage::stagefile_loader(const char * filepath)
 	std::map<SquarePolygonBase::PolygonTypes, polygon_vec>().swap(polygons);
 	
 	// マップのサイズを入れたい
-	map_size = POLSIZE(std::atoi(table[0][0].c_str()) * CELL_WIDTH, std::atoi(table[0][1].c_str()) * CELL_HEIGHT);
+	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
 	
 	// 背景の登録
-	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, new Background(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
+	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
 
 	// プレイヤの登録
 	// プレイヤは先に登録しておかないと後々だるいです
-	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atoi(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atoi(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
+	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 
 	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
@@ -137,9 +138,11 @@ void Stage::stagefile_loader(const char * filepath)
 			//	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
 				break;
 			case 2:
+				enemies.emplace_back(push_polygon_back(SquarePolygonBase::PolygonTypes::ENEMY, REGISTER_ENEMY_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], &camera, polygons)));
+				enemies.back()->on();
 				break;
 			case 3:
-				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player)))->on();
+				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["GOAL_01"], &camera, player)))->on();
 				break;
 			case 4:
 				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
@@ -147,23 +150,23 @@ void Stage::stagefile_loader(const char * filepath)
 				break;
 			case 5:
 			//	push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["FLOOR_01"], &camera, player))->on();
 				break;
 			case 6:
 				break;
 			case 7:
 				break;
 			case 11:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_DOWN"], &camera, player))->on();
 				break;
 			case 12:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_UP"], &camera, player))->on();
 				break;
 			case 13:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_LEFT"], &camera, player))->on();
 				break;
 			case 14:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ORIGIN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_RIGHT"], &camera, player))->on();
 				break;
 			case 15:
 				break;
@@ -212,16 +215,24 @@ void Stage::stagefile_loader(const char * filepath)
 // 初期化, コンストラクタから呼ぶ
 void Stage::init()
 {
+#ifdef _DEBUG
+	const auto exec_start = std::chrono::system_clock::now();
+#endif
 	char filepath[256]; // ファイルパス格納
 
-	sprintf(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
+	sprintf_s(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
 	multi_texture_loader(filepath); // テクスチャのリストを読み込む => こっち先
 
-	sprintf(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
+	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
 	zoom_level = { 1, 1 };
 	zoom_sign = Stage::Sign::ZERO;
+
+#ifdef _DEBUG
+	std::cout << "Stage Load Time: ";
+	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - exec_start).count() << std::endl;
+#endif
 }
 
 // 更新処理
@@ -230,7 +241,7 @@ void Stage::update()
 	// 時間を気にしないもの
 
 	// タイトルに戻る（無確認）
-	if (GetKeyboardTrigger(DIK_1))
+	if (GetKeyboardTrigger(DIK_F5))
 	{
 		info.status = Stage::Status::Retire;
 		return;
@@ -271,8 +282,8 @@ void Stage::update()
 	{
 		if (zoom_level.w < zoom_level_target.w)
 		{
-			zoom_level.w *= 1.001f;
-			zoom_level.h *= 1.001f;
+			zoom_level.w *= 1.01f;
+			zoom_level.h *= 1.01f;
 		}
 		else
 		{
@@ -286,8 +297,8 @@ void Stage::update()
 	{
 		if (zoom_level.w > zoom_level_target.w)
 		{
-			zoom_level.w /= 1.001f;
-			zoom_level.h /= 1.001f;
+			zoom_level.w /= 1.01f;
+			zoom_level.h /= 1.01f;
 		}
 		else
 		{
@@ -324,7 +335,7 @@ void Stage::update()
 void Stage::draw()
 {
 	auto current = timeGetTime();
-	if (current - latest_draw < 1000 / 60) return;
+	if (current - latest_draw < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	// ここから描画処理
