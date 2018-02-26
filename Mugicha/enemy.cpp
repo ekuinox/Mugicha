@@ -4,6 +4,7 @@
 Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, int _layer, float _x, float _y, float _w, float _h, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, float _u, float _v, float _uw, float _vh)
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), alive(true), polygons(_polygons), player(static_cast<Player*>(_polygons[SquarePolygonBase::PolygonTypes::PLAYER].front())), moving(false)
 {
+	speed = 0.3f;
 }
 
 void Enemy::update()
@@ -17,6 +18,22 @@ void Enemy::update()
 
 	if (current - latest_update > 1 && moving) // 1ms間隔で
 	{
+		// まずプレイヤとの当たりを見ます
+		if (is_collision(player, this))
+		{
+			if (zoom_level.w < 2.0f)
+			{
+				// 敵の負け
+				off();
+			}
+			else
+			{
+				// プレイヤの負け
+				player->kill();
+			}
+			return;
+		}
+
 		// 当たり判定をみるポリゴンのベクタを作る
 		std::vector<SquarePolygonBase*> to_check_polygons;
 		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
@@ -39,13 +56,13 @@ void Enemy::update()
 		// 右がぶつかっている
 		if (result & RIGHT) vec = Vec::LEFT;
 		
-		vector.x += vec == Vec::RIGHT ? 1 : -1;
+		vector.x += speed * (vec == Vec::RIGHT ? 1 : -1);
 
 		// ジャンプ開始から時間が経過
 		if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
 		
 		// ジャンプなう
-		if (jumping) vector.y += PLAYER_JUMP_POWER;
+		if (jumping) vector.y += 1.01f;
 		
 		// 空中に居る間は落下し続ける
 		if (!on_ground) vector.y -= PLAYER_FALLING;
