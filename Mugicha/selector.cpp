@@ -1,7 +1,7 @@
 #include "selector.h"
 
 // ƒ\ƒŒ‚É‚µ‚©Žg‚í‚È‚¢‚Ì‚Å
-Selector::Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera)
+Selector::Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera)
 	: PlainSquarePolygon(0, 0, 100, 100, _tex, 0, _camera)
 {
 	init();
@@ -15,13 +15,13 @@ void Selector::update()
 {
 	unless(status) return;
 	// selection‚©‚çx‚ð“±‚­
-	x = selection * 200;
+	x = selection * SCREEN_WIDTH / 4;
 }
 
 void Selector::init()
 {
-	x = 200;
-	y = 600;
+	x = SCREEN_WIDTH / 4;
+	y = SCREEN_HEIGHT * 0.8f;
 	drawing = false;
 	status = false;
 	selection = 1;

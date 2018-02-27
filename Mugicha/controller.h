@@ -5,26 +5,26 @@
 #include "stage.h"
 #include "selector.h"
 
-// シーン管理用の列挙型
-enum scene
-{
-	Ready,
-	Title,
-	Select,
-	Gaming,
-	GameOver,
-	GameClear,
-	End,
-};
-
 // ゲーム管理用のクラス
 class Controller
 {
+public:
+	// シーン管理用の列挙型
+	enum class Scene
+	{
+		Ready,
+		Title,
+		Select,
+		Gaming,
+		GameOver,
+		GameClear,
+		End,
+	};
 private:
-	enum scene scene;
-	int loops;
-	DWORD latest_draw;
-	DWORD latest_update;
+	Scene scene;
+	Stage::GameInfo game_info;
+	std::chrono::system_clock::time_point latest_draw;
+	std::chrono::system_clock::time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
 	polygon_vec polygons;
 	Background *background; // 背景ポリゴン
@@ -33,10 +33,10 @@ private:
 	D3DXVECTOR2 camera;
 	void update();
 	void draw();
+	void switch_scene(Scene _scene);
+	void init();
 public:
 	Controller();
-	~Controller();
-	void init();
 	void exec();
-	void switch_scene(enum scene _scene);
+	Controller::Scene get_scene();
 };

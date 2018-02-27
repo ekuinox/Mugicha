@@ -1,5 +1,4 @@
 #pragma once
-#ifdef _DEBUG
 
 #include <cstdio>
 
@@ -15,5 +14,3 @@ public:
 	static void create_console_window();
 	static void message(const char* str);
 };
-
-#endif

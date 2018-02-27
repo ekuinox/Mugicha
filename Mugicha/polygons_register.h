@@ -6,7 +6,7 @@
 #include "scalable_object.h"
 #include "enemy.h"
 #include "ragged_floor.h"
-#include "thorns.h"
+#include "thorn.h"
 #include "goal.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
@@ -19,12 +19,12 @@
 #define REGISTER_BLOCK(x, y, tex, camera) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera)
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 #define REGISTER_GOAL(x, y, tex, camera, player) new Goal(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
-#define REGISTER_THORNS(x, y, tex, camera, player, vec) new Thorns(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, vec)
-#define REGISTER_THORNS_UP(x, y, tex, camera, player) REGISTER_THORNS(static_cast<float>(x), static_cast<float>(y) - 1, tex, camera, player, Thorns::Vec::UP)
-#define REGISTER_THORNS_DOWN(x, y, tex, camera, player) REGISTER_THORNS(static_cast<float>(x), static_cast<float>(y) + 1, tex, camera, player, Thorns::Vec::DOWN)
-#define REGISTER_THORNS_LEFT(x, y, tex, camera, player) REGISTER_THORNS(static_cast<float>(x) + 1, static_cast<float>(y), tex, camera, player, Thorns::Vec::LEFT)
-#define REGISTER_THORNS_RIGHT(x, y, tex, camera, player) REGISTER_THORNS(static_cast<float>(x) - 1, static_cast<float>(y), tex, camera, player, Thorns::Vec::RIGHT)
-#define REGISTER_THORNS_WITH_FLOOR(x, y, tex, camera, player, vec, floor) new Thorns(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player, vec, floor)
+#define REGISTER_THORN(x, y, tex, camera, vec) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, vec)
+#define REGISTER_THORN_UP(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x), static_cast<float>(y) - 1, tex, camera, Thorn::Vec::UP)
+#define REGISTER_THORN_DOWN(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x), static_cast<float>(y) + 1, tex, camera, Thorn::Vec::DOWN)
+#define REGISTER_THORN_LEFT(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x) + 1, static_cast<float>(y), tex, camera, Thorn::Vec::LEFT)
+#define REGISTER_THORN_RIGHT(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x) - 1, static_cast<float>(y), tex, camera, Thorn::Vec::RIGHT)
+#define REGISTER_THORN_WITH_FLOOR(x, y, tex, camera, vec, floor) new Thorns(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, vec, floor)
 #define REGISTER_AIRCANNON(x, y, tex, camera, floor, player) REGISTER_BLOCK(x, y, tex, camera) // 空気砲はまだ作れておらず
 #define REGISTER_GIMMICK REGISTER_BLOCK
 #define REGISTER_SWITCH REGISTER_BLOCK
@@ -44,12 +44,12 @@
 #define REGISTER_BLOCK_NUMBER_6 REGISTER_BLOCK
 #define REGISTER_BLOCK_NUMBER_7 REGISTER_BLOCK
 
-#define REGISTER_BLOCK_NUMBER_11 REGISTER_THORNS
-#define REGISTER_BLOCK_NUMBER_12 REGISTER_THORNS
-#define REGISTER_BLOCK_NUMBER_13 REGISTER_THORNS
-#define REGISTER_BLOCK_NUMBER_14 REGISTER_THORNS
-#define REGISTER_BLOCK_NUMBER_15 REGISTER_THORNS
-#define REGISTER_BLOCK_NUMBER_16 REGISTER_THORNS
+#define REGISTER_BLOCK_NUMBER_11 REGISTER_THORN
+#define REGISTER_BLOCK_NUMBER_12 REGISTER_THORN
+#define REGISTER_BLOCK_NUMBER_13 REGISTER_THORN
+#define REGISTER_BLOCK_NUMBER_14 REGISTER_THORN
+#define REGISTER_BLOCK_NUMBER_15 REGISTER_THORN
+#define REGISTER_BLOCK_NUMBER_16 REGISTER_THORN
 
 #define REGISTER_BLOCK_NUMBER_21 REGISTER_AIRCANNON
 #define REGISTER_BLOCK_NUMBER_22 REGISTER_AIRCANNON
