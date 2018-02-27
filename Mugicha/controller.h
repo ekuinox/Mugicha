@@ -22,6 +22,7 @@ public:
 	};
 private:
 	Scene scene;
+	Stage::GameInfo game_info;
 	std::chrono::system_clock::time_point latest_draw;
 	std::chrono::system_clock::time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;

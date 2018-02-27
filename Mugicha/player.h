@@ -16,6 +16,7 @@ class Player : public PlainSquarePolygon
 public:
 	enum class DeadReason
 	{
+		ALIVE, // 生きとるわい
 		Sandwiched, // 挟まれて死ぬ
 		HitEnemy, // 敵に接触
 		HitThorn, // トゲに接触
@@ -23,7 +24,7 @@ public:
 		HitMagma, // マグマでアチチ
 	};
 private:
-	bool alive; // 生死
+	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
 	bool jumping; // ジャンプしている
 	bool ground; // 着地状態
 	bool moving; // 動いている(x軸)
@@ -49,8 +50,6 @@ public:
 	bool jump();
 	void lock();
 	void unlock();
-	void kill();
-	void kill(const std::string &reason);
-	void kill(const DeadReason &reason);
-	bool dead();
+	void kill(const DeadReason &_dead_reason);
+	Player::DeadReason dead();
 };

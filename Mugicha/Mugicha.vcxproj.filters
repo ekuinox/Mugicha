@@ -72,9 +72,6 @@
     <ClCompile Include="player.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
-    <ClCompile Include="plain_square_polygon.cpp">
-      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClCompile>
     <ClCompile Include="scalable_object.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="thorn.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="plain_square_polygon.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

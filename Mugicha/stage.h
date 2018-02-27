@@ -26,8 +26,9 @@ public:
 		int score;
 		int stage_number;
 		enum Stage::Status status;
+		Player::DeadReason dead_reason;
 		_GameInfo() {}
-		_GameInfo(int _score, enum Stage::Status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number) {}
+		_GameInfo(int _score, enum Stage::Status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number), dead_reason(Player::DeadReason::ALIVE){}
 	};
 private:
 	// vars

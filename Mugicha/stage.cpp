@@ -36,21 +36,16 @@ Stage::GameInfo Stage::exec()
 	// いろいろな続行判定をする
 
 	// プレイヤが生きているかでゲームの続行を判定
-	if (player->dead())
+	if (player->dead() != Player::DeadReason::ALIVE)
 	{
 		info.status = Stage::Status::Failed;
-		printf("アカンしんでもた！\n");
-#ifdef _DEBUG
-#endif
+		info.dead_reason = player->dead();
 	}
 
 	// プレイヤがゴールしているか
 	if (goal->is_completed())
 	{
 		info.status = Stage::Status::Clear;
-		printf("ゲームクリアー！\n");
-#ifdef _DEBUG
-#endif
 	}
 
 	return info;

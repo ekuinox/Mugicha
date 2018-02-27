@@ -65,7 +65,7 @@ bool Player::collision_for_magmas()
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), alive(true)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE)
 {
 	init();
 }
@@ -211,25 +211,14 @@ void Player::unlock()
 	controll_lock = false;
 }
 
-void Player::kill()
+void Player::kill(const DeadReason & _dead_reason)
 {
-	alive = false;
+	dead_reason = _dead_reason;
 }
 
-void Player::kill(const std::string & reason)
+Player::DeadReason Player::dead()
 {
-	kill();
-	std::cout << reason.c_str() << std::endl;
-}
-
-void Player::kill(const DeadReason & reason)
-{
-	kill();
-}
-
-bool Player::dead()
-{
-	return !alive;
+	return dead_reason;
 }
 
 // === Player END ===

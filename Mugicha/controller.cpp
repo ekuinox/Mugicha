@@ -76,6 +76,12 @@ void Controller::switch_scene(Scene _scene)
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
 		break;
+	case Scene::GameOver:
+		break;
+	case Scene::GameClear:
+		break;
+	case Scene::End:
+		break;
 	}
 	
 	// 変更後のシーンの初期化
@@ -98,7 +104,17 @@ void Controller::switch_scene(Scene _scene)
 	case Scene::Gaming:
 		stage = new Stage(selector->get_selection());
 		break;
-	default:
+	case Scene::GameOver:
+		// 背景
+		background->change_texture(textures["GAMEOVER_BG"]);
+		background->on();
+		break;
+	case Scene::GameClear:
+		// 背景
+		background->change_texture(textures["GAMECLEAR_BG"]);
+		background->on();
+		break;
+	case Scene::End:
 		break;
 	}
 
@@ -114,56 +130,70 @@ void Controller::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < 1) return;
 
-	if (scene != Scene::Gaming)
+	if (scene == Scene::Gaming)
 	{
-		for (const auto& polygon : polygons)
-		{
-			polygon->update();
-		}
-	}
-
-	switch (scene)
-	{
-	case Scene::Title:
-		if (GetKeyboardTrigger(DIK_RETURN))
-		{
-			switch_scene(Scene::Select);
-		}
-		break;
-	case Scene::Select:
-		if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW)) // 選択左
-		{
-			selector->left();
-		}
-
-		if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW)) // 選択右
-		{
-			selector->right();
-		}
-
-		if (GetKeyboardTrigger(DIK_RETURN))
-		{
-			switch_scene(Scene::Gaming);
-		}
-		break;
-	case Scene::Gaming:
-		auto result = stage->exec();
-		switch (result.status)
+		game_info = stage->exec();
+		switch (game_info.status)
 		{
 		case Stage::Status::Clear: // ゲームクリア時
-			switch_scene(Scene::Title); // リザルトを見せてやるべきだけどとりあえず
+			switch_scene(Scene::GameClear); // リザルトを見せてやるべきだけどとりあえず
 			break;
 		case Stage::Status::Failed:  // こちらもリザルト画面を見せてやるべきだけどとりあえず
-			switch_scene(Scene::Title);
+			switch_scene(Scene::GameOver);
 			break;
 		case Stage::Status::Retire:
-			switch_scene(Scene::Title);
+			switch_scene(Scene::GameOver);
 			break;
 		default:
 			break;
 		}
-		break;
+
 	}
+	else
+	{
+		for (const auto& polygon : polygons) polygon->update();
+
+		switch (scene)
+		{
+		case Scene::Title:
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				switch_scene(Scene::Select);
+			}
+			break;
+		case Scene::Select:
+			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW)) // 選択左
+			{
+				selector->left();
+			}
+
+			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW)) // 選択右
+			{
+				selector->right();
+			}
+
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				switch_scene(Scene::Gaming);
+			}
+			break;
+		case Scene::GameOver:
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				switch_scene(Scene::Title);
+			}
+			break;
+		case Scene::GameClear:
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				switch_scene(Scene::Title);
+			}
+			break;
+		case Scene::End:
+			break;
+		}
+	}
+	
 }
 
 // ポリゴンをまとめてドロー
