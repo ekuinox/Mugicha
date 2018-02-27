@@ -5,6 +5,7 @@
 
 // ‚È‚ñ‚¿‚á‚Á‚Äunless‚È‚Ç
 #define unless(expression) if(!(expression))
+#define until(expression) while(!(expression))
 
 // window‚ÌƒAƒŒ
 #define CLASS_NAME "AppClass"

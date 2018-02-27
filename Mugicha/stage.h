@@ -57,7 +57,6 @@ private:
 	template<typename _T>
 	_T push_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
 public:
-	Stage();
 	Stage(char _stage_select);
 	~Stage();
 

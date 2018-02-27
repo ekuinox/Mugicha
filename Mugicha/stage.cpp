@@ -8,15 +8,6 @@
 #include <typeinfo>
 
 // コンストラクタ
-Stage::Stage()
-{
-	latest_update = std::chrono::system_clock::now();
-	latest_draw = std::chrono::system_clock::now();
-	info.status = Stage::Status::Prep;
-
-	init();
-}
-
 Stage::Stage(char _stage_select)
 	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select)
 {

@@ -2,26 +2,19 @@
 
 /* ゲーム本体 */
 Controller::Controller()
+	: scene(Scene::Ready), latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now())
 {
-	scene = Ready;
-	loops = 0;
-	latest_update = std::chrono::system_clock::now();
-	latest_draw = std::chrono::system_clock::now();
 	init();
-	timeBeginPeriod(1);
-}
-
-Controller::~Controller()
-{
-	timeEndPeriod(1);
 }
 
 void Controller::init()
 {
 	std::map<const char*, const char*> texture_files = {
-		{"TITLE_BG", TEXTURES_DIR "title_bg.png"},
-		{"STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
-		{"SELECTOR", TEXTURES_DIR "selector.png"}
+		{ "TITLE_BG", TEXTURES_DIR "title_bg.png"},
+		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
+		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.png" },
+		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
+		{ "SELECTOR", TEXTURES_DIR "selector.png"},
 	};
 
 	for (const auto& texture_file : texture_files)
@@ -46,7 +39,7 @@ void Controller::init()
 	polygons.push_back(selector);
 
 	// シーン切り替え
-	switch_scene(Title);
+	switch_scene(Scene::Title);
 }
 
 // メインのループ用の処理，60fpsで画面描画をする
@@ -56,8 +49,13 @@ void Controller::exec()
 	draw();
 }
 
+Controller::Scene Controller::get_scene()
+{
+	return scene;
+}
+
 // シーンの切り替え
-void Controller::switch_scene(enum scene _scene)
+void Controller::switch_scene(Scene _scene)
 {
 	if (scene == _scene) return; // 変化なしで切る
 
@@ -70,12 +68,12 @@ void Controller::switch_scene(enum scene _scene)
 	// 変更前のシーンの終了処理
 	switch (scene)
 	{
-	case Title:
+	case Scene::Title:
 		break;
-	case Select:
+	case Scene::Select:
 		background->off();
 		break;
-	case Gaming: // ステージから抜けて来たときの処理
+	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
 		break;
 	}
@@ -83,11 +81,11 @@ void Controller::switch_scene(enum scene _scene)
 	// 変更後のシーンの初期化
 	switch (_scene)
 	{
-	case Title:
+	case Scene::Title:
 		background->change_texture(textures["TITLE_BG"]);
 		background->on();
 		break;
-	case Select:
+	case Scene::Select:
 		// 背景
 		background->change_texture(textures["STAGE_SELECT_BG"]);
 		background->on();
@@ -97,7 +95,7 @@ void Controller::switch_scene(enum scene _scene)
 		selector->on();
 
 		break;
-	case Gaming:
+	case Scene::Gaming:
 		stage = new Stage(selector->get_selection());
 		break;
 	default:
@@ -116,7 +114,7 @@ void Controller::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < 1) return;
 
-	if (scene != Gaming)
+	if (scene != Scene::Gaming)
 	{
 		for (const auto& polygon : polygons)
 		{
@@ -126,13 +124,13 @@ void Controller::update()
 
 	switch (scene)
 	{
-	case Title:
+	case Scene::Title:
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{
-			switch_scene(Select);
+			switch_scene(Scene::Select);
 		}
 		break;
-	case Select:
+	case Scene::Select:
 		if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW)) // 選択左
 		{
 			selector->left();
@@ -145,21 +143,21 @@ void Controller::update()
 
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{
-			switch_scene(Gaming);
+			switch_scene(Scene::Gaming);
 		}
 		break;
-	case Gaming:
+	case Scene::Gaming:
 		auto result = stage->exec();
 		switch (result.status)
 		{
 		case Stage::Status::Clear: // ゲームクリア時
-			switch_scene(Title); // リザルトを見せてやるべきだけどとりあえず
+			switch_scene(Scene::Title); // リザルトを見せてやるべきだけどとりあえず
 			break;
 		case Stage::Status::Failed:  // こちらもリザルト画面を見せてやるべきだけどとりあえず
-			switch_scene(Title);
+			switch_scene(Scene::Title);
 			break;
 		case Stage::Status::Retire:
-			switch_scene(Title);
+			switch_scene(Scene::Title);
 			break;
 		default:
 			break;
@@ -171,7 +169,7 @@ void Controller::update()
 // ポリゴンをまとめてドロー
 void Controller::draw()
 {
-	if (scene == Gaming) return; // ゲーム中はStage->exec();にまかせて
+	if (scene == Scene::Gaming) return; // ゲーム中はStage->exec();にまかせて
 
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
