@@ -28,16 +28,17 @@ bool Player::collision_for_enemies()
 bool Player::collision_for_thorns()
 {
 	// ƒgƒQ‚Æ‚Ì“–‚½‚è”»’è
-	if (zoom_level.w < 1.0f) return false; // ’Êíó‘Ô‚æ‚è©•ª‚ªƒfƒJ‚¢ó‘Ô‚ÅÚG€‚Ì”»’è‚ğæ‚é
+	// ’Êíó‘Ô‚æ‚è©•ª‚ªƒfƒJ‚¢ó‘Ô‚ÅÚG€‚Ì”»’è‚ğæ‚é
+	if (zoom_level.w > 1.0f) return false;
 	for (const auto& _thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
 	{
 		auto thorn = static_cast<Thorn*>(_thorn);
-		char result = where_collision(this, thorn);
+		char result = where_collision(this, thorn, 1.0f);		
 		if (
 			(result & HitLine::BOTTOM && thorn->get_vec() == Thorn::Vec::UP)
-			&& (result & HitLine::TOP && thorn->get_vec() == Thorn::Vec::DOWN)
-			&& (result & HitLine::LEFT && thorn->get_vec() == Thorn::Vec::RIGHT)
-			&& (result &  HitLine::RIGHT && thorn->get_vec() == Thorn::Vec::LEFT)
+			|| (result & HitLine::TOP && thorn->get_vec() == Thorn::Vec::DOWN)
+			|| (result & HitLine::LEFT && thorn->get_vec() == Thorn::Vec::RIGHT)
+			|| (result &  HitLine::RIGHT && thorn->get_vec() == Thorn::Vec::LEFT)
 			)
 		{
 			kill(DeadReason::HitThorn);
@@ -116,9 +117,7 @@ void Player::update()
 		
 		// “–‚½‚è¸¸
 		char result = 0x00;
-		std::vector<SquarePolygonBase::PolygonTypes> types = { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR };
-		if (zoom_level.w > 1.0f) types.emplace_back(SquarePolygonBase::PolygonTypes::THORN); // k¬‚ÉTHORN‚Æ‚Ì“–‚½‚è”»’è‚ğæ‚é
-		for (const auto& type : types)
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN })
 			for (const auto& polygon : polygons[type])
 				result |= where_collision(this, polygon);
 
