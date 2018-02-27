@@ -72,9 +72,6 @@
     <ClCompile Include="player.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
-    <ClCompile Include="scalable_object.cpp">
-      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClCompile>
     <ClCompile Include="magma.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
@@ -82,7 +79,13 @@
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
     <ClCompile Include="plain_square_polygon.cpp">
-      <Filter>ソース ファイル\SquarePolygonBase</Filter>
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="scalable_object.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="stage_background.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="thorn.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="stage_background.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
