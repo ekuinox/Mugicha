@@ -51,38 +51,31 @@ void Thorn::init()
 void Thorn::update()
 {
 	// ‚Æ‚­‚ÉŠÔŠÇ—‚·‚é‚±‚Æ‚È‚¢H
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1)
+	{
+		// ‚‚³‚ğİ’è‚µ‚È‚¨‚·
+		if (floor != nullptr)
+		{
+			switch (vec)
+			{
+			case Vec::UP:
+				y = floor->get_coords().y + (floor->get_size().h + h) / 2;
+				break;
+			case Vec::DOWN:
+				y = floor->get_coords().y + (floor->get_size().h + h) / -2;
+				break;
+			case Vec::LEFT:
+				y = floor->get_coords().y;
+				break;
+			case Vec::RIGHT:
+				y = floor->get_coords().y;
+				break;
+			}
+		}
+		latest_update = current;
+	}
 	
-	// ‚‚³‚ğİ’è‚µ‚È‚¨‚·
-	if (floor != nullptr)
-	{
-		switch (vec)
-		{
-		case Vec::UP:
-			y = floor->get_coords().y + (floor->get_size().h + h) / 2;
-			break;
-		case Vec::DOWN:
-			y = floor->get_coords().y + (floor->get_size().h + h) / -2;
-			break;
-		case Vec::LEFT:
-			y = floor->get_coords().y;
-			break;
-		case Vec::RIGHT:
-			y = floor->get_coords().y;
-			break;
-		}
-	}
-
-	/*
-	if (zoom_level.w <= 1)
-	{
-		char result = where_collision(this, player, 1.0f);
-		if ((result & HitLine::BOTTOM && vec == Vec::DOWN) || (result & HitLine::TOP && vec == Vec::UP) || (result & HitLine::LEFT && vec == Vec::LEFT) || (result & HitLine::RIGHT && vec == Vec::RIGHT))
-		{
-			player->kill("ƒgƒQ‚É“–‚½‚Á‚Ä€");
-		}
-	}
-	*/
-
 }
 
 Thorn::Vec Thorn::get_vec()

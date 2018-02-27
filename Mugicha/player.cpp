@@ -92,10 +92,10 @@ void Player::update()
 {
 	if (!status) return; // status‚İ‚ÄØ‚é
 
-	auto current = timeGetTime();
+	auto current = std::chrono::system_clock::now();
 
 	// ‘€ì
-	if (current - latest_update > 1) // 1msŠÔŠu‚Å
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1) // 1msŠÔŠu‚Å
 	{
 		if (collision_for_enemies())
 		{

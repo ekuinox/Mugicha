@@ -19,8 +19,8 @@ void ScalableObject::update()
 	if (!status) return;
 
 	// 前回の更新から1ms経っていなければ行わない
-	DWORD current = timeGetTime();
-	if (current - latest_update > 1)
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1)
 	{		
 		latest_update = current;
 	}
