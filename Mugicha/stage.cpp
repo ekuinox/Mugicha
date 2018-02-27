@@ -48,8 +48,8 @@ Stage::GameInfo Stage::exec()
 	if (player->dead())
 	{
 		info.status = Stage::Status::Failed;
-#ifdef _DEBUG
 		printf("アカンしんでもた！\n");
+#ifdef _DEBUG
 #endif
 	}
 
@@ -57,8 +57,8 @@ Stage::GameInfo Stage::exec()
 	if (goal->is_completed())
 	{
 		info.status = Stage::Status::Clear;
-#ifdef _DEBUG
 		printf("ゲームクリアー！\n");
+#ifdef _DEBUG
 #endif
 	}
 
@@ -157,16 +157,16 @@ void Stage::stagefile_loader(const char * filepath)
 			case 7:
 				break;
 			case 11:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_DOWN"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera, player))->on();
 				break;
 			case 12:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_UP"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera, player))->on();
 				break;
 			case 13:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_LEFT"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera, player))->on();
 				break;
 			case 14:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_RIGHT"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera, player))->on();
 				break;
 			case 15:
 				break;
@@ -193,7 +193,7 @@ void Stage::stagefile_loader(const char * filepath)
 	// トゲの床をセットしていきます
 	std::vector<SquarePolygonBase*> floors;
 	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
-	for (const auto& thorns : polygons[SquarePolygonBase::PolygonTypes::THORNS]) static_cast<Thorns*>(thorns)->set_floor(floors);
+	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor(floors);
 
 #ifdef _DEBUG
 
@@ -343,12 +343,9 @@ void Stage::draw()
 	// ソート
 	polygon_vec drawing_polygons;
 	for (const auto& pol_vec : polygons)
-	{
 		for (const auto& polygon : pol_vec.second)
-		{
-			drawing_polygons.push_back(polygon);
-		}
-	}
+			if(polygon->is_drawing())
+				drawing_polygons.emplace_back(polygon);
 
 	// 大きいものが前に来るように
 	sort(drawing_polygons.begin(), drawing_polygons.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });

@@ -1,12 +1,12 @@
-#include "thorns.h"
+#include "thorn.h"
 #include "collision_checker.h"
 
-Thorns::Thorns(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, Player * _player, Vec _vec, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
+Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, Player * _player, Vec _vec, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec), player(_player)
 {
 	init();
 }
-void Thorns::set_floor(std::vector<SquarePolygonBase*> _floors)
+void Thorn::set_floor(std::vector<SquarePolygonBase*> _floors)
 {
 	if (floor != nullptr) return;
 
@@ -37,18 +37,18 @@ void Thorns::set_floor(std::vector<SquarePolygonBase*> _floors)
 		}
 	}
 }
-void Thorns::set_floor(SquarePolygonBase *_floor)
+void Thorn::set_floor(SquarePolygonBase *_floor)
 {
 	if (floor != nullptr) return;
 
 	floor = _floor;
 }
 
-void Thorns::init()
+void Thorn::init()
 {
 }
 
-void Thorns::update()
+void Thorn::update()
 {
 	// とくに時間管理することない？
 	
@@ -71,16 +71,21 @@ void Thorns::update()
 			break;
 		}
 	}
-	
+
+	/*
 	if (zoom_level.w <= 1)
 	{
 		char result = where_collision(this, player, 1.0f);
 		if ((result & HitLine::BOTTOM && vec == Vec::DOWN) || (result & HitLine::TOP && vec == Vec::UP) || (result & HitLine::LEFT && vec == Vec::LEFT) || (result & HitLine::RIGHT && vec == Vec::RIGHT))
 		{
-			player->kill();
-#ifdef _DEBUG
-			printf("トゲ当たっとんぞ！");
-#endif
+			player->kill("トゲに当たって死");
 		}
 	}
+	*/
+
+}
+
+Thorn::Vec Thorn::get_vec()
+{
+	return vec;
 }

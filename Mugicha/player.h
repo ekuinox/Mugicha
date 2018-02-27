@@ -13,6 +13,15 @@
 
 class Player : public PlainSquarePolygon
 {
+public:
+	enum class DeadReason
+	{
+		Sandwiched, // 挟まれて死ぬ
+		HitEnemy, // 敵に接触
+		HitThorn, // トゲに接触
+		Falling, // 無に落下
+		HitMagma, // マグマでアチチ
+	};
 private:
 	bool alive; // 生死
 	bool jumping; // ジャンプしている
@@ -24,6 +33,10 @@ private:
 	POLSIZE zoom_level; // ズームサイズ
 	POLSIZE before_zoom_level; // 前のヤツ
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // 当たり見るように持っときます
+
+	bool collision_for_enemies();
+	bool collision_for_thorns();
+	bool collision_for_magmas();
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, int _layer, float _x, float _y, float _w, float _h, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~Player();
@@ -37,5 +50,7 @@ public:
 	void lock();
 	void unlock();
 	void kill();
+	void kill(const std::string &reason);
+	void kill(const DeadReason &reason);
 	bool dead();
 };

@@ -1,6 +1,13 @@
 BACKGROUND,background.jpg
-PLAYER,player.jpg
+PLAYER,player_01.png
 BLOCK,block.png
+FLOOR_01,floor_01.png
 ORIGIN,origin.png
 BLOCK2,block2.png
 SAMPLE1,sample1.png
+ENEMY_01,enemy_01.png
+THORN_UP,thorns_01.png
+THORN_RIGHT,thorns_02.png
+THORN_LEFT,thorns_03.png
+THORN_DOWN,thorns_04.png
+GOAL_01,goal_01.png

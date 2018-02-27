@@ -162,7 +162,7 @@
     <ClCompile Include="scalable_object.cpp" />
     <ClCompile Include="selector.cpp" />
     <ClCompile Include="stage.cpp" />
-    <ClCompile Include="thorns.cpp" />
+    <ClCompile Include="thorn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
@@ -184,7 +184,7 @@
     <ClInclude Include="selector.h" />
     <ClInclude Include="square_polygon_base.h" />
     <ClInclude Include="stage.h" />
-    <ClInclude Include="thorns.h" />
+    <ClInclude Include="thorn.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\stages\sample.csv" />

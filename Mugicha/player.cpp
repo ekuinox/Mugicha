@@ -1,9 +1,70 @@
 #include "player.h"
 #include "collision_checker.h"
+#include "thorn.h"
+
+bool Player::collision_for_enemies()
+{
+	// 敵との当たり判定
+	for (const auto& enemy : polygons[SquarePolygonBase::PolygonTypes::ENEMY])
+	{
+		if (is_collision(enemy->get_square(), get_square()))
+		{
+			if (zoom_level.w <= 1.0f)
+			{
+				// プレイヤの負け
+				kill(DeadReason::HitEnemy);
+				return true;
+			}
+			else
+			{
+				// 敵の負け
+				enemy->off();
+			}
+		}
+	}
+	return false;
+}
+
+bool Player::collision_for_thorns()
+{
+	// トゲとの当たり判定
+	if (zoom_level.w < 1.0f) return false; // 通常状態より自分がデカい状態で接触死の判定を取る
+	for (const auto& _thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
+	{
+		auto thorn = static_cast<Thorn*>(_thorn);
+		char result = where_collision(this, thorn);
+		if (
+			(result & HitLine::BOTTOM && thorn->get_vec() == Thorn::Vec::UP)
+			&& (result & HitLine::TOP && thorn->get_vec() == Thorn::Vec::DOWN)
+			&& (result & HitLine::LEFT && thorn->get_vec() == Thorn::Vec::RIGHT)
+			&& (result &  HitLine::RIGHT && thorn->get_vec() == Thorn::Vec::LEFT)
+			)
+		{
+			kill(DeadReason::HitThorn);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Player::collision_for_magmas()
+{
+	// マグマとの当たり判定
+	for (const auto& magma : polygons[SquarePolygonBase::PolygonTypes::MAGMA])
+	{
+		if (is_collision(this, magma))
+		{
+			kill(DeadReason::HitMagma);
+			return true;
+		}
+	}
+	return false;
+}
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), alive(true)
 {
 	init();
 }
@@ -35,64 +96,37 @@ void Player::update()
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
-		// 敵との当たり判定
-		for (const auto& enemy : polygons[SquarePolygonBase::PolygonTypes::ENEMY])
+		if (collision_for_enemies())
 		{
-			if (is_collision(enemy->get_square(), get_square()))
-			{				
-				if (zoom_level.w < 2.0f)
-				{
-					// 敵の負け
-					enemy->off();
-				}
-				else
-				{
-					// プレイヤの負け
-					kill();
-					return;
-				}
-				
-			}
-			
+			// 死
+			return;
+		}
+
+		if (collision_for_thorns())
+		{
+			// 死
+			return;
+		}
+
+		if (collision_for_magmas())
+		{
+			// 死
+			return;
 		}
 		
-
-
-
 		// 当たり精査
 		char result = 0x00;
-		float ground_height = y;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, })
-		{
+		std::vector<SquarePolygonBase::PolygonTypes> types = { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR };
+		if (zoom_level.w > 1.0f) types.emplace_back(SquarePolygonBase::PolygonTypes::THORN); // 縮小時にTHORNとの当たり判定を取る
+		for (const auto& type : types)
 			for (const auto& polygon : polygons[type])
-			{
-				auto _result = where_collision(this, polygon);
-				if (_result & BOTTOM)
-				{
-					if (ground_height < polygon->get_square().top())
-					{
-						ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
-					}
-				}
-				result |= _result;
-			}
-		}
+				result |= where_collision(this, polygon);
 
 		if (controll_lock)
 		{
 			// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
 			x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
 			y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
-
-			// 挟まれ判定
-			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
-			{
-				// 挟まれとんやが！！！！
-			}
-			if (result & HitLine::BOTTOM)
-			{
-				y = ground_height;
-			}
 		}
 		else
 		{
@@ -101,13 +135,13 @@ void Player::update()
 			// 挟まれ判定
 			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
 			{
-				// 挟まれとんやが！！！！
+				kill(DeadReason::Sandwiched);
 			}
 
 			// 枠外落下判定
 			if (y < -50)
 			{
-				// 死ぬ～～
+				kill(DeadReason::Falling);
 			}
 
 			// 接地判定
@@ -181,9 +215,17 @@ void Player::unlock()
 void Player::kill()
 {
 	alive = false;
-#ifdef _PLAYER_DEBUG
-	std::cout << "今の本番やったら死んどったからな～～！" << std::endl;
-#endif
+}
+
+void Player::kill(const std::string & reason)
+{
+	kill();
+	std::cout << reason.c_str() << std::endl;
+}
+
+void Player::kill(const DeadReason & reason)
+{
+	kill();
 }
 
 bool Player::dead()

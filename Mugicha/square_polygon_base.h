@@ -8,10 +8,9 @@
 #include "conf.h"
 #include <chrono>
 
-#ifdef _DEBUG
 #include <iostream>
 #include "debug_console.h"
-#endif
+#
 
 // ÉhÉçÅ[Ç∑ÇÈñ{ëÃ
 using VERTEX_2D = struct _VERTEX_2D
@@ -78,7 +77,8 @@ public:
 		PLAYER,
 		ENEMY,
 		GOAL,
-		THORNS,
+		THORN,
+		MAGMA,
 		RAGGED_FLOOR,
 		SCALABLE_OBJECT,
 		PLAIN,

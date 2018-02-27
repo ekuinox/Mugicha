@@ -21,7 +21,7 @@
 
 // スクリーンのデカさ
 #define SCREEN_WIDTH (1280)
-#define SCREEN_HEIGHT (760)
+#define SCREEN_HEIGHT (720)
 
 #define CELL_WIDTH (100)
 #define CELL_HEIGHT (100)
