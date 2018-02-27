@@ -128,7 +128,7 @@ void Controller::update()
 	UpdateInput();
 
 	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < 1) return;
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < UPDATE_INTERVAL) return;
 
 	if (scene == Scene::Gaming)
 	{

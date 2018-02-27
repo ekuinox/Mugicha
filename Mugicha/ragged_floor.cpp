@@ -31,7 +31,7 @@ void RaggedFloor::update()
 		burdened = false;
 	}
 
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1)
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
 		if (burdened) // “¥‚Ü‚ê‚Ä‚¢‚éŠÔ‚Ì‚Ý‰ÁŽZ‚·‚é
 		{

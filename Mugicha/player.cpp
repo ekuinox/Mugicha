@@ -97,7 +97,7 @@ void Player::update()
 	auto current = std::chrono::system_clock::now();
 
 	// ëÄçÏ
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1) // 1msä‘äuÇ≈
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1msä‘äuÇ≈
 	{
 #ifndef _WITHOUT_DEATH
 		if (collision_for_enemies())

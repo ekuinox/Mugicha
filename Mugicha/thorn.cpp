@@ -52,7 +52,7 @@ void Thorn::update()
 {
 	// ‚Æ‚­‚ÉŠÔŠÇ—‚·‚é‚±‚Æ‚È‚¢H
 	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1)
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
 		// ‚‚³‚ğİ’è‚µ‚È‚¨‚·
 		if (floor != nullptr)

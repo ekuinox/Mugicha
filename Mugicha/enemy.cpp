@@ -16,7 +16,7 @@ void Enemy::update()
 	// ‰æ–ÊŠO‚©‚Ç‚¤‚©‚Åmoving‚ğØ‚è•ª‚¯‚é
 	moving = (vertexes[0].x <= SCREEN_WIDTH * 1.25 && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT * 1.25 && vertexes[2].y >= 0) ? true : false;
 
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1 && moving) // 1msŠÔŠu‚Å
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL && moving) // 1msŠÔŠu‚Å
 	{
 		// “–‚½‚è¸¸
 		char result = 0x00;

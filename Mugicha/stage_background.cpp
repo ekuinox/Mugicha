@@ -36,7 +36,7 @@ void StageBackground::update()
 	auto current = std::chrono::system_clock::now();
 
 	// ‘€ì
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1) // 1msŠÔŠu‚Å
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1msŠÔŠu‚Å
 	{
 		// camera‚ğ—p‚¢‚ÄCUVÀ•W‚ğ‹‚ß‚é
 

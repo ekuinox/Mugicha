@@ -18,7 +18,8 @@
 #define TEXTURES_DIR RESOURCES_DIR "textures/"
 #define STAGEFILES_DIR RESOURCES_DIR "stages/"
 
-#define FRAME_RATES (50)
+#define FRAME_RATES (60)
+#define UPDATE_INTERVAL (1)
 
 // スクリーンのデカさ
 #define SCREEN_WIDTH (1280)

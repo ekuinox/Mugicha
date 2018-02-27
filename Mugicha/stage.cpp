@@ -268,7 +268,7 @@ void Stage::update()
 
 	// ŽžŠÔ‚ð‹C‚É‚·‚é‚à‚Ì
 	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < 1) return;
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < UPDATE_INTERVAL) return;
 	latest_update = current;
 
 	if (zoom_sign == Stage::Sign::PLUS)
