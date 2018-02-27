@@ -1,5 +1,5 @@
-#include "player.h"
 #include "collision_checker.h"
+#include "player.h"
 #include "thorn.h"
 
 bool Player::collision_for_enemies()
@@ -7,7 +7,7 @@ bool Player::collision_for_enemies()
 	// “G‚Æ‚Ì“–‚½‚è”»’è
 	for (const auto& enemy : polygons[SquarePolygonBase::PolygonTypes::ENEMY])
 	{
-		if (is_collision(enemy->get_square(), get_square()))
+		if (enemy->is_active() && is_collision(enemy->get_square(), get_square()))
 		{
 			if (zoom_level.w >= 1.0f)
 			{

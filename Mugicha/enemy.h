@@ -1,6 +1,8 @@
 #pragma once
 
 #include "scalable_object.h"
+#include <map>
+#include <vector>
 
 // Šgk‚µ‚¿‚á‚¤“G‚³‚ñ—p‚ÌƒNƒ‰ƒX‚Å‚·
 // ‚¢‚Ü‚Í‚Ü‚¾‰½‚à‚È‚¢
