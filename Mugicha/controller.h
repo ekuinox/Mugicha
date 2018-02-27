@@ -23,8 +23,8 @@ class Controller
 private:
 	enum scene scene;
 	int loops;
-	DWORD latest_draw;
-	DWORD latest_update;
+	std::chrono::system_clock::time_point latest_draw;
+	std::chrono::system_clock::time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
 	polygon_vec polygons;
 	Background *background; // ”wŒiƒ|ƒŠƒSƒ“

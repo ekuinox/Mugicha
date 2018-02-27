@@ -10,15 +10,15 @@
 // コンストラクタ
 Stage::Stage()
 {
-	latest_update = timeGetTime();
-	latest_draw = timeGetTime();
+	latest_update = std::chrono::system_clock::now();
+	latest_draw = std::chrono::system_clock::now();
 	info.status = Stage::Status::Prep;
 
 	init();
 }
 
 Stage::Stage(char _stage_select)
-	: latest_update(timeGetTime()), latest_draw(timeGetTime()), info(0, Stage::Status::Prep, _stage_select)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select)
 {
 	init();
 }
@@ -274,8 +274,8 @@ void Stage::update()
 
 
 	// 時間を気にするもの
-	auto current = timeGetTime();
-	if (current - latest_update < 1) return;
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < 1) return;
 	latest_update = current;
 
 	if (zoom_sign == Stage::Sign::PLUS)
@@ -334,8 +334,8 @@ void Stage::update()
 // 描画処理
 void Stage::draw()
 {
-	auto current = timeGetTime();
-	if (current - latest_draw < 1000 / FRAME_RATES) return;
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	// ここから描画処理

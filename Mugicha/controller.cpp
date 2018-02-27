@@ -5,8 +5,8 @@ Controller::Controller()
 {
 	scene = Ready;
 	loops = 0;
-	latest_update = timeGetTime();
-	latest_draw = timeGetTime();
+	latest_update = std::chrono::system_clock::now();
+	latest_draw = std::chrono::system_clock::now();
 	init();
 	timeBeginPeriod(1);
 }
@@ -73,6 +73,7 @@ void Controller::switch_scene(enum scene _scene)
 	case Title:
 		break;
 	case Select:
+		background->off();
 		break;
 	case Gaming: // ステージから抜けて来たときの処理
 		delete stage;
@@ -112,8 +113,8 @@ void Controller::update()
 {
 	UpdateInput();
 
-	auto current = timeGetTime();
-	if (current - latest_update < 1) return;
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < 1) return;
 
 	if (scene != Gaming)
 	{
@@ -172,8 +173,8 @@ void Controller::draw()
 {
 	if (scene == Gaming) return; // ゲーム中はStage->exec();にまかせて
 
-	auto current = timeGetTime();
-	if (current - latest_draw < 1000 / FRAME_RATES) return;
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	polygon_vec drawing_polygons;

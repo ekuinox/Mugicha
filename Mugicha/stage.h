@@ -38,9 +38,8 @@ private:
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
 	Stage::GameInfo info; // 続行管理と結果
-	DWORD latest_update; // 最終更新
-	DWORD latest_draw; // 最終描画
-	DWORD elapsed_time; // ゲーム内の時間，残り時間の表示などに用意
+	std::chrono::system_clock::time_point latest_update; // 最終更新
+	std::chrono::system_clock::time_point latest_draw; // 最終描画
 	D3DXVECTOR2 camera;
 	enum class Sign { ZERO,	PLUS, MINUS} zoom_sign; // 拡大状態か縮小状態かってアレです
 	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
