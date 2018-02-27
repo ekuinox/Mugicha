@@ -9,7 +9,7 @@ bool Player::collision_for_enemies()
 	{
 		if (is_collision(enemy->get_square(), get_square()))
 		{
-			if (zoom_level.w <= 1.0f)
+			if (zoom_level.w >= 1.0f)
 			{
 				// ƒvƒŒƒCƒ„‚Ì•‰‚¯
 				kill(DeadReason::HitEnemy);
