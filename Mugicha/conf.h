@@ -5,6 +5,7 @@
 
 // なんちゃってunlessなど
 #define unless(expression) if(!(expression))
+#define until(expression) while(!(expression))
 
 // windowのアレ
 #define CLASS_NAME "AppClass"
@@ -17,11 +18,12 @@
 #define TEXTURES_DIR RESOURCES_DIR "textures/"
 #define STAGEFILES_DIR RESOURCES_DIR "stages/"
 
-#define FRAME_RATES (50)
+#define FRAME_RATES (60)
+#define UPDATE_INTERVAL (1)
 
 // スクリーンのデカさ
-#define SCREEN_WIDTH (1000)
-#define SCREEN_HEIGHT (1000)
+#define SCREEN_WIDTH (1280)
+#define SCREEN_HEIGHT (720)
 
 #define CELL_WIDTH (100)
 #define CELL_HEIGHT (100)

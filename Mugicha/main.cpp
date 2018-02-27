@@ -41,10 +41,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		hInstance,
 		NULL
 	);
-#ifdef _DEBUG
+
 	DebugConsole::create_console_window();
 	std::cout << "ハロー　ハロー" << std::endl;
-#endif
+
 	if (FAILED(Init(hInstance, hWnd, TRUE))) return -1;
 
 	ShowWindow(hWnd, nCmdShow);
@@ -52,7 +52,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	/* message loop */
 	auto controller = new Controller();
-	while (true)
+	do
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
 		{
@@ -71,7 +71,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			controller->exec();
 		}
-	}
+	} until (controller->get_scene() == Controller::Scene::End);
 	delete controller;
 
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
@@ -190,7 +190,4 @@ void Uninit(void)
 	}
 
 	UninitKeyboard();
-
-	/* XAUDIO */
-	//	UninitSound();
 }

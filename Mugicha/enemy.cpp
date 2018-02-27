@@ -1,8 +1,8 @@
 #include "enemy.h"
 #include "collision_checker.h"
 
-Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 * _camera, int _layer, float _x, float _y, float _w, float _h, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), alive(true), polygons(_polygons), player(static_cast<Player*>(_polygons[SquarePolygonBase::PolygonTypes::PLAYER].front())), moving(false)
+Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, float _w, float _h, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), alive(true), polygons(_polygons), moving(false)
 {
 	speed = 0.3f;
 }
@@ -11,36 +11,18 @@ void Enemy::update()
 {
 	if (!status) return;
 	
-	auto current = timeGetTime();
+	auto current = std::chrono::system_clock::now();
 
 	// 画面外かどうかでmovingを切り分ける
 	moving = (vertexes[0].x <= SCREEN_WIDTH * 1.25 && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT * 1.25 && vertexes[2].y >= 0) ? true : false;
 
-	if (current - latest_update > 1 && moving) // 1ms間隔で
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL && moving) // 1ms間隔で
 	{
-		// まずプレイヤとの当たりを見ます
-		if (is_collision(player, this))
-		{
-			if (zoom_level.w < 2.0f)
-			{
-				// 敵の負け
-				off();
-			}
-			else
-			{
-				// プレイヤの負け
-				player->kill();
-			}
-			return;
-		}
-
-		// 当たり判定をみるポリゴンのベクタを作る
-		std::vector<SquarePolygonBase*> to_check_polygons;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
-
 		// 当たり精査
 		char result = 0x00;
-		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon, 1.0f);
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN })
+			for (const auto& polygon : polygons[type])
+				result |= where_collision(this, polygon, 1.0f);
 
 		auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 

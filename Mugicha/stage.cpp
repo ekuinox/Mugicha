@@ -8,17 +8,8 @@
 #include <typeinfo>
 
 // コンストラクタ
-Stage::Stage()
-{
-	latest_update = timeGetTime();
-	latest_draw = timeGetTime();
-	info.status = Stage::Status::Prep;
-
-	init();
-}
-
 Stage::Stage(char _stage_select)
-	: latest_update(timeGetTime()), latest_draw(timeGetTime()), info(0, Stage::Status::Prep, _stage_select)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select)
 {
 	init();
 }
@@ -45,21 +36,16 @@ Stage::GameInfo Stage::exec()
 	// いろいろな続行判定をする
 
 	// プレイヤが生きているかでゲームの続行を判定
-	if (player->dead())
+	if (player->dead() != Player::DeadReason::ALIVE)
 	{
 		info.status = Stage::Status::Failed;
-#ifdef _DEBUG
-		printf("アカンしんでもた！\n");
-#endif
+		info.dead_reason = player->dead();
 	}
 
 	// プレイヤがゴールしているか
 	if (goal->is_completed())
 	{
 		info.status = Stage::Status::Clear;
-#ifdef _DEBUG
-		printf("ゲームクリアー！\n");
-#endif
 	}
 
 	return info;
@@ -113,11 +99,12 @@ void Stage::stagefile_loader(const char * filepath)
 	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
 	
 	// 背景の登録
-	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], &camera)))->on();
+//	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], camera)))->on();
+	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, new StageBackground(textures["BACKGROUND"], camera)))->on();
 
 	// プレイヤの登録
 	// プレイヤは先に登録しておかないと後々だるいです
-	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
+	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], camera, polygons)))->on();
 
 	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
@@ -135,38 +122,38 @@ void Stage::stagefile_loader(const char * filepath)
 				break;
 			case 1:
 				// ここでプレイヤを初期化するのはやめます．
-			//	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], &camera, polygons)))->on();
+			//	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], camera, polygons)))->on();
 				break;
 			case 2:
-				enemies.emplace_back(push_polygon_back(SquarePolygonBase::PolygonTypes::ENEMY, REGISTER_ENEMY_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], &camera, polygons)));
+				enemies.emplace_back(push_polygon_back(SquarePolygonBase::PolygonTypes::ENEMY, REGISTER_ENEMY_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], camera, polygons)));
 				enemies.back()->on();
 				break;
 			case 3:
-				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["GOAL_01"], &camera, player)))->on();
+				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["GOAL_01"], camera, player)))->on();
 				break;
 			case 4:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
-			//	push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], camera))->on();
+			//	push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], camera, player))->on();
 				break;
 			case 5:
-			//	push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], &camera))->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["FLOOR_01"], &camera, player))->on();
+			//	push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], camera))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 6:
 				break;
 			case 7:
 				break;
 			case 11:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_DOWN"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
 				break;
 			case 12:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_UP"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera))->on();
 				break;
 			case 13:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_LEFT"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera))->on();
 				break;
 			case 14:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORNS, REGISTER_THORNS_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORNS_RIGHT"], &camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera))->on();
 				break;
 			case 15:
 				break;
@@ -193,20 +180,20 @@ void Stage::stagefile_loader(const char * filepath)
 	// トゲの床をセットしていきます
 	std::vector<SquarePolygonBase*> floors;
 	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
-	for (const auto& thorns : polygons[SquarePolygonBase::PolygonTypes::THORNS]) static_cast<Thorns*>(thorns)->set_floor(floors);
+	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor(floors);
 
 #ifdef _DEBUG
 
 	// 原点
-	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, &camera));
+	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, camera));
 	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].back()->on();
 
 	// x軸ガイドライン
-	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, &camera));
+	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 100000, 10, textures["BLOCK2"], 3, camera));
 	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].back()->on();
 
 	// y軸ガイドライン
-	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, &camera));
+	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].push_back(new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, camera));
 	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].back()->on();
 
 #endif
@@ -247,6 +234,12 @@ void Stage::update()
 		return;
 	}
 
+	// タイトルに戻る（無確認）
+	if (GetKeyboardTrigger(DIK_F2))
+	{
+		printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);
+	}
+
 	// 拡縮
 	if (zoom_sign == Stage::Sign::ZERO)
 	{
@@ -274,8 +267,8 @@ void Stage::update()
 
 
 	// 時間を気にするもの
-	auto current = timeGetTime();
-	if (current - latest_update < 1) return;
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < UPDATE_INTERVAL) return;
 	latest_update = current;
 
 	if (zoom_sign == Stage::Sign::PLUS)
@@ -320,7 +313,7 @@ void Stage::update()
 	
 	// 画面外は見せないようにする
 	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
-	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+//	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 
@@ -334,8 +327,8 @@ void Stage::update()
 // 描画処理
 void Stage::draw()
 {
-	auto current = timeGetTime();
-	if (current - latest_draw < 1000 / FRAME_RATES) return;
+	auto current = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	// ここから描画処理
@@ -343,12 +336,9 @@ void Stage::draw()
 	// ソート
 	polygon_vec drawing_polygons;
 	for (const auto& pol_vec : polygons)
-	{
 		for (const auto& polygon : pol_vec.second)
-		{
-			drawing_polygons.push_back(polygon);
-		}
-	}
+			if(polygon->is_drawing())
+				drawing_polygons.emplace_back(polygon);
 
 	// 大きいものが前に来るように
 	sort(drawing_polygons.begin(), drawing_polygons.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });
