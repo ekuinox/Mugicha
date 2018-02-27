@@ -52,4 +52,5 @@ public:
 	void unlock();
 	void kill(const DeadReason &_dead_reason);
 	Player::DeadReason dead();
+	Player* operator*() { return this; }
 };
