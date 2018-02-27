@@ -38,11 +38,11 @@ void Controller::init()
 	camera = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
 	
 	// ”wŒi‚Ì“o˜^
-	background = new Background(textures["TITLE_BG"], &camera);
+	background = new Background(textures["TITLE_BG"], camera);
 	polygons.push_back(background);
 
 	// ƒZƒŒƒNƒ^‚Ì“o˜^
-	selector = new Selector(textures["SELECTOR"], &camera);
+	selector = new Selector(textures["SELECTOR"], camera);
 	polygons.push_back(selector);
 
 	// ƒV[ƒ“Ø‚è‘Ö‚¦

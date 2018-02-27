@@ -81,6 +81,9 @@
     <ClCompile Include="scalable_object.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
+    <ClCompile Include="magma.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="polygons_register.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="magma.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

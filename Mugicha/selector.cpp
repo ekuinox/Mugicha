@@ -1,7 +1,7 @@
 #include "selector.h"
 
 // ƒ\ƒŒ‚É‚µ‚©Žg‚í‚È‚¢‚Ì‚Å
-Selector::Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera)
+Selector::Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera)
 	: PlainSquarePolygon(0, 0, 100, 100, _tex, 0, _camera)
 {
 	init();

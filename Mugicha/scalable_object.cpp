@@ -1,12 +1,7 @@
 #include "scalable_object.h"
 
-ScalableObject::ScalableObject()
-{
-	// 既定のコンストラクタってやつ
-}
-
 // コンストラクタ 座標とかをセットしていく
-ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, float _u, float _v, float _uw, float _vh)
+ScalableObject::ScalableObject(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), zoom_level(1, 1)
 {
 }
@@ -44,8 +39,8 @@ void ScalableObject::generate_vertexes()
 	auto zoomed_coords = D3DXVECTOR2(x * zoom_level.w, y * zoom_level.h);
 	POLSIZE zoomed_size = { w * zoom_level.w, h * zoom_level.h };
 
-	drawing_coord.x = zoomed_coords.x - (camera->x - SCREEN_WIDTH / 2);
-	drawing_coord.y = (zoomed_coords.y - (camera->y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
+	drawing_coord.x = zoomed_coords.x - (camera.x - SCREEN_WIDTH / 2);
+	drawing_coord.y = (zoomed_coords.y - (camera.y - SCREEN_HEIGHT / 2)) * -1 + SCREEN_HEIGHT;
 
 	for (auto i = 0; i < 4; ++i)
 	{

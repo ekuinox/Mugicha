@@ -11,7 +11,7 @@ class Selector : public PlainSquarePolygon
 private:
 	char selection;
 public:
-	Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 *_camera);
+	Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera);
 	~Selector();
 	void update();
 	// “ÆŽ©

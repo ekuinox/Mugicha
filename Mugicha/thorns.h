@@ -21,8 +21,7 @@ private:
 	enum Vec vec;
 	
 public:
-	Thorns();
-	Thorns(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 *_camera, Player *_player, enum Vec _vec, SquarePolygonBase *_floor = nullptr, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	Thorns(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, Player *_player, enum Vec _vec, SquarePolygonBase *_floor = nullptr, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	void set_floor(std::vector<SquarePolygonBase*> _floors); // floor‚ªnullptr‚Ì‚Ü‚Ü‚Ìê‡‚±‚±‚Åİ’è‚µ‚È‚¨‚µ‚Ü‚·D
 	void set_floor(SquarePolygonBase *_floor); // floor‚ªnullptr‚Ì‚Ü‚Ü‚Ìê‡‚±‚±‚Åİ’è‚µ‚È‚¨‚µ‚Ü‚·D
 	void init();
