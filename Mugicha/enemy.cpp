@@ -18,22 +18,6 @@ void Enemy::update()
 
 	if (current - latest_update > 1 && moving) // 1ms間隔で
 	{
-		// まずプレイヤとの当たりを見ます
-		if (is_collision(player, this))
-		{
-			if (zoom_level.w < 2.0f)
-			{
-				// 敵の負け
-				off();
-			}
-			else
-			{
-				// プレイヤの負け
-				player->kill();
-			}
-			return;
-		}
-
 		// 当たり精査
 		char result = 0x00;
 		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS })

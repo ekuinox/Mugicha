@@ -35,6 +35,30 @@ void Player::update()
 	// ‘€ì
 	if (current - latest_update > 1) // 1msŠÔŠu‚Å
 	{
+		// “G‚Æ‚Ì“–‚½‚è”»’è
+		for (const auto& enemy : polygons[SquarePolygonBase::PolygonTypes::ENEMY])
+		{
+			if (is_collision(enemy->get_square(), get_square()))
+			{				
+				if (zoom_level.w < 2.0f)
+				{
+					// “G‚Ì•‰‚¯
+					enemy->off();
+				}
+				else
+				{
+					// ƒvƒŒƒCƒ„‚Ì•‰‚¯
+					kill();
+					return;
+				}
+				
+			}
+			
+		}
+		
+
+
+
 		// “–‚½‚è¸¸
 		char result = 0x00;
 		float ground_height = y;
