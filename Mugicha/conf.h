@@ -20,8 +20,8 @@
 #define FRAME_RATES (50)
 
 // スクリーンのデカさ
-#define SCREEN_WIDTH (1000)
-#define SCREEN_HEIGHT (1000)
+#define SCREEN_WIDTH (1280)
+#define SCREEN_HEIGHT (760)
 
 #define CELL_WIDTH (100)
 #define CELL_HEIGHT (100)
