@@ -15,13 +15,13 @@ void Selector::update()
 {
 	unless(status) return;
 	// selection‚©‚çx‚ð“±‚­
-	x = selection * 200;
+	x = selection * SCREEN_WIDTH / 4;
 }
 
 void Selector::init()
 {
-	x = 200;
-	y = 600;
+	x = SCREEN_WIDTH / 4;
+	y = SCREEN_HEIGHT * 0.8f;
 	drawing = false;
 	status = false;
 	selection = 1;
