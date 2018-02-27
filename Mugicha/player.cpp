@@ -2,6 +2,8 @@
 #include "player.h"
 #include "thorn.h"
 
+//#define _WITHOUT_DEATH
+
 bool Player::collision_for_enemies()
 {
 	// 敵との当たり判定
@@ -97,6 +99,7 @@ void Player::update()
 	// 操作
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1) // 1ms間隔で
 	{
+#ifndef _WITHOUT_DEATH
 		if (collision_for_enemies())
 		{
 			// 死
@@ -114,6 +117,7 @@ void Player::update()
 			// 死
 			return;
 		}
+#endif
 		
 		// 当たり精査
 		char result = 0x00;
@@ -161,6 +165,17 @@ void Player::update()
 			{
 				vector.x += speed;
 			}
+
+#ifdef _DEBUG
+			if (GetKeyboardPress(DIK_W))
+			{
+				vector.y += 5;
+			}
+			if (GetKeyboardPress(DIK_S))
+			{
+				vector.y -= 5;
+			}
+#endif
 
 			// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 			if (!(result & HitLine::TOP) && jumping)
@@ -213,7 +228,9 @@ void Player::unlock()
 
 void Player::kill(const DeadReason & _dead_reason)
 {
+#ifndef _WITHOUT_DEATH
 	dead_reason = _dead_reason;
+#endif
 }
 
 Player::DeadReason Player::dead()

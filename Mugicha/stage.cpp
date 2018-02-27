@@ -99,7 +99,8 @@ void Stage::stagefile_loader(const char * filepath)
 	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
 	
 	// îwåiÇÃìoò^
-	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], camera)))->on();
+//	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], camera)))->on();
+	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, new StageBackground(textures["BACKGROUND"], camera)))->on();
 
 	// ÉvÉåÉCÉÑÇÃìoò^
 	// ÉvÉåÉCÉÑÇÕêÊÇ…ìoò^ÇµÇƒÇ®Ç©Ç»Ç¢Ç∆å„ÅXÇæÇÈÇ¢Ç≈Ç∑
@@ -233,6 +234,12 @@ void Stage::update()
 		return;
 	}
 
+	// É^ÉCÉgÉãÇ…ñﬂÇÈÅiñ≥ämîFÅj
+	if (GetKeyboardTrigger(DIK_F2))
+	{
+		printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);
+	}
+
 	// ägèk
 	if (zoom_sign == Stage::Sign::ZERO)
 	{
@@ -306,7 +313,7 @@ void Stage::update()
 	
 	// âÊñ äOÇÕå©ÇπÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
 	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
-	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+//	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 

@@ -34,7 +34,7 @@ private:
 	// vars
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
 	std::map<SquarePolygonBase::PolygonTypes, polygon_vec> polygons;
-	Background *background;
+	StageBackground *background;
 	Goal *goal;
 	Player *player; // ƒvƒŒƒCƒ„‚Ì•Ï”
 	std::vector<Enemy*> enemies; // “G‚Ì‰Â•Ï’·”z—ñ

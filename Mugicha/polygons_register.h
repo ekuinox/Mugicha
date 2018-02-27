@@ -8,6 +8,7 @@
 #include "ragged_floor.h"
 #include "thorn.h"
 #include "goal.h"
+#include "stage_background.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 

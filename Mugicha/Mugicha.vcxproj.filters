@@ -85,7 +85,7 @@
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
     <ClCompile Include="stage_background.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +150,7 @@
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
     <ClInclude Include="stage_background.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
