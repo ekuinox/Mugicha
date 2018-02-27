@@ -34,13 +34,11 @@ void Enemy::update()
 			return;
 		}
 
-		// 当たり判定をみるポリゴンのベクタを作る
-		std::vector<SquarePolygonBase*> to_check_polygons;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
-
 		// 当たり精査
 		char result = 0x00;
-		for (const auto& polygon : to_check_polygons) result |= where_collision(this, polygon, 1.0f);
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS })
+			for (const auto& polygon : polygons[type])
+				result |= where_collision(this, polygon, 1.0f);
 
 		auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 

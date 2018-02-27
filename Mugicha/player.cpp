@@ -35,24 +35,23 @@ void Player::update()
 	// 操作
 	if (current - latest_update > 1) // 1ms間隔で
 	{
-		// 当たり判定をみるポリゴンのベクタを作る
-		std::vector<SquarePolygonBase*> to_check_polygons;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, }) to_check_polygons.insert(to_check_polygons.end(), polygons[type].begin(), polygons[type].end());
-
 		// 当たり精査
 		char result = 0x00;
 		float ground_height = y;
-		for (const auto& polygon : to_check_polygons)
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORNS, })
 		{
-			auto _result = where_collision(this, polygon);
-			if (_result & BOTTOM)
+			for (const auto& polygon : polygons[type])
 			{
-				if (ground_height < polygon->get_square().top())
+				auto _result = where_collision(this, polygon);
+				if (_result & BOTTOM)
 				{
-					ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
+					if (ground_height < polygon->get_square().top())
+					{
+						ground_height = (polygon->get_square().top() + h / 2) * (zoom_level.h / before_zoom_level.h);
+					}
 				}
+				result |= _result;
 			}
-			result |= _result;
 		}
 
 		if (controll_lock)
