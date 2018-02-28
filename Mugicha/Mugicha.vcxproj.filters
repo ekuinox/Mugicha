@@ -93,6 +93,9 @@
     <ClCompile Include="bullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="bullet.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

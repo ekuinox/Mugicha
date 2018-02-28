@@ -29,7 +29,6 @@ void ScalableObject::update()
 
 SQUARE ScalableObject::get_square()
 {
-//	return SQUARE(x * zoom_level.w, y * zoom_level.w, w * zoom_level.w, h * zoom_level.h);
 	return SQUARE(x, y, w, h) * zoom_level;
 }
 

@@ -305,4 +305,9 @@ Player::DeadReason Player::dead()
 	return dead_reason;
 }
 
+Player::Vec Player::get_vec()
+{
+	return vec;
+}
+
 // === Player END ===

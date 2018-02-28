@@ -216,6 +216,7 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="magma.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
