@@ -2,8 +2,6 @@
 #include "player.h"
 #include "thorn.h"
 
-//#define _WITHOUT_DEATH
-
 bool Player::collision_for_enemies()
 {
 	// 敵との当たり判定
@@ -13,9 +11,11 @@ bool Player::collision_for_enemies()
 		{
 			if (zoom_level.w >= 1.0f)
 			{
+#ifndef _WITHOUT_DEATH
 				// プレイヤの負け
 				kill(DeadReason::HitEnemy);
 				return true;
+#endif
 			}
 			else
 			{
@@ -55,29 +55,37 @@ bool Player::collision_for_thorns()
 		case Thorn::Vec::UP:
 			if (hit_bottom(self, another))
 			{
+#ifndef _WITHOUT_DEATH
 				kill(DeadReason::HitThorn);
 				return true;
+#endif
 			}
 			break;
 		case Thorn::Vec::DOWN:
 			if (hit_top(self, another))
 			{
+#ifndef _WITHOUT_DEATH
 				kill(DeadReason::HitThorn);
 				return true;
+#endif
 			}
 			break;
 		case Thorn::Vec::RIGHT:
 			if (hit_left(self, another))
 			{
+#ifndef _WITHOUT_DEATH
 				kill(DeadReason::HitThorn);
 				return true;
+#endif
 			}
 			break;
 		case Thorn::Vec::LEFT:
 			if (hit_right(self, another))
 			{
+#ifndef _WITHOUT_DEATH
 				kill(DeadReason::HitThorn);
 				return true;
+#endif
 			}
 			break;
 		}
@@ -93,8 +101,10 @@ bool Player::collision_for_magmas()
 	{
 		if (is_collision(this, magma))
 		{
+#ifndef _WITHOUT_DEATH
 			kill(DeadReason::HitMagma);
 			return true;
+#endif
 		}
 	}
 	return false;
@@ -134,7 +144,6 @@ void Player::update()
 	// 操作
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1ms間隔で
 	{
-#ifndef _WITHOUT_DEATH
 		if (collision_for_enemies())
 		{
 			// 死
@@ -152,7 +161,6 @@ void Player::update()
 			// 死
 			return;
 		}
-#endif
 		
 		// 当たり精査
 		char result = 0x00;
@@ -195,10 +203,12 @@ void Player::update()
 			if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
 			{
 				vector.x -= speed;
+				vec = Player::Vec::LEFT;
 			}
 			if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
 			{
 				vector.x += speed;
+				vec = Player::Vec::RIGHT;
 			}
 
 #ifdef _DEBUG
@@ -229,9 +239,6 @@ void Player::update()
 			{
 				vector.y -= PLAYER_FALLING;
 			}
-
-			// 向き判定
-			vec = (vector.x < 0 ? Player::Vec::LEFT : Player::Vec::RIGHT);
 
 			// 変更を加算して終了
 			x += vector.x;
