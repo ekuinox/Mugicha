@@ -83,14 +83,14 @@ void Stage::multi_texture_loader(const char * filepath)
 
 }
 
-void Stage::stagefile_loader(const char * filepath)
+bool Stage::stagefile_loader(const char * filepath)
 {
 	// TODO: ステージファイルからのローダを作る
 	
 	std::vector<std::vector<std::string>> table;
 
-	if (!(csv_loader(filepath, table))) return; // csvの読み込みに失敗
-	if (table[0].size() != 4) return; // 一行目にはw,hにしておいて欲しいので
+	if (!(csv_loader(filepath, table))) return false; // csvの読み込みに失敗
+	if (table[0].size() != 4) return false; // 一行目にはw,hにしておいて欲しいので
 
 	// すべて無にする　後のことは考えてない　すみません
 	std::map<SquarePolygonBase::PolygonTypes, polygon_vec>().swap(polygons);
@@ -114,7 +114,6 @@ void Stage::stagefile_loader(const char * filepath)
 			
 			// やること
 			// x, yを計算して出し，マクロ呼出しでポリゴンを登録する．
-
 			switch (num)
 			{
 			case 0:
@@ -123,52 +122,91 @@ void Stage::stagefile_loader(const char * filepath)
 				// ここでプレイヤを初期化するのはやめます．
 				break;
 			case 2:
+				// 敵
 				enemies.emplace_back(push_polygon_back(SquarePolygonBase::PolygonTypes::ENEMY, REGISTER_ENEMY_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], camera, polygons)));
 				enemies.back()->on();
 				break;
 			case 3:
+				// ゴール
 				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["GOAL_01"], camera, player)))->on();
 				break;
 			case 4:
+				// 壁床
 				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["SAMPLE1"], camera))->on();
 				break;
 			case 5:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_HALF_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
+				// ハーフ床（上）
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 6:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_HALF_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
+				// ハーフ床（下）
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 7:
+				// switchで出現するなにか
+				break;
+			case 8:
+				// 落ちる床
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
+				break;
+			case 9:
+				// ハーフ壁（右）
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH / 0.75, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
+				break;
+			case 10:
+				// ハーフ壁（左）
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH / 0.25, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 11:
+				// トゲ（下）
 				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
 				break;
 			case 12:
+				// トゲ（上）
 				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera))->on();
 				break;
 			case 13:
+				// トゲ（右）
 				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera))->on();
 				break;
 			case 14:
+				// トゲ（左）
 				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera))->on();
 				break;
 			case 15:
+				// トゲ（下）壁（上）
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["THORN_DOWN"], camera))->on();
 				break;
 			case 16:
+				// トゲ（上）壁（下）
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["THORN_UP"], camera))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
+				break;
+			case 17:
+				// トゲ（落ちる）プレイヤに向かって
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
 				break;
 			case 21:
+				// 空気砲（上）
 				break;
 			case 22:
+				// 空気砲（下）
 				break;
 			case 23:
+				// 空気砲（右）
 				break;
 			case 24:
+				// 空気砲（左）
 				break;
 			case 31:
+				// 持てるオブジェクト
 				break;
 			case 32:
+				// スイッチ
 				break;
 			case 33:
+				// マグマ
 				break;
 			}
 		}
@@ -194,6 +232,7 @@ void Stage::stagefile_loader(const char * filepath)
 	polygons[SquarePolygonBase::PolygonTypes::DEBUG_GUIDE].back()->on();
 
 #endif
+	return true;
 }
 
 // 初期化, コンストラクタから呼ぶ
@@ -208,7 +247,7 @@ void Stage::init()
 	multi_texture_loader(filepath); // テクスチャのリストを読み込む => こっち先
 
 	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
-	stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
+	auto exec_result = stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
 	zoom_level = { 1, 1 };
 	zoom_sign = Stage::Sign::ZERO;
@@ -217,6 +256,8 @@ void Stage::init()
 	std::cout << "Stage Load Time: ";
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - exec_start).count() << std::endl;
 #endif
+	if (exec_result) info.status = Stage::Status::Ready;
+	else info.status = Stage::Status::LoadError;
 }
 
 // 更新処理
@@ -310,7 +351,7 @@ void Stage::update()
 	
 	// 画面外は見せないようにする
 	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
-//	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 

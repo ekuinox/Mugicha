@@ -1,5 +1,7 @@
 #pragma once
 
+#define _WITHOUT_DEATH
+
 // ‚¾‚Ü‚êƒoƒJ
 #define _CRT_SECURE_NO_WARNINGS
 

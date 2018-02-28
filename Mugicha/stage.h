@@ -13,6 +13,7 @@ class Stage {
 public:
 	enum class Status {
 		Prep,
+		LoadError,
 		Ready,
 		Playing,
 		Pause,
@@ -50,7 +51,7 @@ private:
 	// funcs
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void multi_texture_loader(const char *filepath);
-	void stagefile_loader(const char* filepath);
+	bool stagefile_loader(const char* filepath);
 	void init();
 	void update();
 	void draw();

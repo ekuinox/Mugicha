@@ -135,6 +135,8 @@ void Controller::update()
 		game_info = stage->exec();
 		switch (game_info.status)
 		{
+		case Stage::Status::LoadError: // ロード失敗
+			switch_scene(Scene::Select);
 		case Stage::Status::Clear: // ゲームクリア時
 			switch_scene(Scene::GameClear); // リザルトを見せてやるべきだけどとりあえず
 			break;
