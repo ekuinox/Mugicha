@@ -99,7 +99,6 @@ void Stage::stagefile_loader(const char * filepath)
 	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
 	
 	// ”wŒi‚Ì“o˜^
-//	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, REGISTER_BACKGROUND(map_size.w / 2, map_size.h / 2, map_size.w, map_size.h, textures["BACKGROUND"], camera)))->on();
 	(background = push_polygon_back(SquarePolygonBase::PolygonTypes::BACKGROUND, new StageBackground(textures["BACKGROUND"], camera)))->on();
 
 	// ƒvƒŒƒCƒ„‚Ì“o˜^
@@ -122,7 +121,6 @@ void Stage::stagefile_loader(const char * filepath)
 				break;
 			case 1:
 				// ‚±‚±‚ÅƒvƒŒƒCƒ„‚ð‰Šú‰»‚·‚é‚Ì‚Í‚â‚ß‚Ü‚·D
-			//	(player = push_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["PLAYER"], camera, polygons)))->on();
 				break;
 			case 2:
 				enemies.emplace_back(push_polygon_back(SquarePolygonBase::PolygonTypes::ENEMY, REGISTER_ENEMY_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], camera, polygons)));
@@ -132,14 +130,13 @@ void Stage::stagefile_loader(const char * filepath)
 				(goal = push_polygon_back(SquarePolygonBase::PolygonTypes::GOAL, REGISTER_GOAL(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["GOAL_01"], camera, player)))->on();
 				break;
 			case 4:
-				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], camera))->on();
-			//	push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["BLOCK2"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["SAMPLE1"], camera))->on();
 				break;
 			case 5:
-			//	push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["SAMPLE1"], camera))->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["FLOOR_01"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_HALF_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 6:
+				push_polygon_back(SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, REGISTER_RAGGED_HALF_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 7:
 				break;

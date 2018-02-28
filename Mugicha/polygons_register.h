@@ -19,6 +19,7 @@
 #define REGISTER_ENEMY_RIGHT(x, y, tex, camera, polygons) REGISTER_ENEMY(static_cast<float>(x), static_cast<float>(y), tex, camera, polygons, Enemy::Vec::RIGHT)
 #define REGISTER_BLOCK(x, y, tex, camera) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera)
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
+#define REGISTER_RAGGED_HALF_FLOOR(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT / 2, tex, 1, camera, player)
 #define REGISTER_GOAL(x, y, tex, camera, player) new Goal(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 #define REGISTER_THORN(x, y, tex, camera, vec) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, vec)
 #define REGISTER_THORN_UP(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x), static_cast<float>(y) - 1, tex, camera, Thorn::Vec::UP)
