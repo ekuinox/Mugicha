@@ -110,6 +110,22 @@ bool Player::collision_for_magmas()
 	return false;
 }
 
+bool Player::collision_for_bullets()
+{
+	// 弾丸との当たり判定
+	for (const auto& magma : polygons[SquarePolygonBase::PolygonTypes::BULLET])
+	{
+		if (is_collision(get_square(), magma->get_square()))
+		{
+#ifndef _WITHOUT_DEATH
+			kill(DeadReason::Shot);
+			return true;
+#endif
+		}
+	}
+	return false;
+}
+
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER)
@@ -161,10 +177,16 @@ void Player::update()
 			// 死
 			return;
 		}
+
+		if (collision_for_bullets())
+		{
+			// 死～
+			return;
+		}
 		
 		// 当たり精査
 		char result = 0x00;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN })
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON })
 			for (const auto& polygon : polygons[type])
 				result |= where_collision(this, polygon);
 
