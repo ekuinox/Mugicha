@@ -29,6 +29,8 @@ AirCannon::AirCannon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 
 	}
 
 	bullet = new Bullet(bullet_coords.x, bullet_coords.y, CELL_WIDTH, CELL_HEIGHT, _bullet_tex, 1, _camera, bullet_vec);
+	bullet->on();
+	bullet->trigger();
 }
 
 void AirCannon::update()
@@ -36,7 +38,7 @@ void AirCannon::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
-		if (is_collision(get_square() * POLSIZE(10, 10), bullet->get_square()))
+		if(std::abs(x - bullet->get_coords().x) < SCREEN_WIDTH && std::abs(y - bullet->get_coords().y) < SCREEN_HEIGHT)
 		{
 			bullet->update();
 		}
