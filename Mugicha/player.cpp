@@ -32,19 +32,41 @@ bool Player::collision_for_thorns()
 	// ƒgƒQ‚Æ‚Ì“–‚½‚è”»’è
 	// ’Êíó‘Ô‚æ‚èŽ©•ª‚ªƒfƒJ‚¢ó‘Ô‚ÅÚGŽ€‚Ì”»’è‚ðŽæ‚é
 	if (zoom_level.w > 1.0f) return false;
-	for (const auto& _thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
+	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
 	{
-		auto thorn = static_cast<Thorn*>(_thorn);
-		char result = where_collision(this, thorn, 1.0f);		
-		if (
-			(result & HitLine::BOTTOM && thorn->get_vec() == Thorn::Vec::UP)
-			|| (result & HitLine::TOP && thorn->get_vec() == Thorn::Vec::DOWN)
-			|| (result & HitLine::LEFT && thorn->get_vec() == Thorn::Vec::RIGHT)
-			|| (result &  HitLine::RIGHT && thorn->get_vec() == Thorn::Vec::LEFT)
-			)
+		auto self = get_square();
+		auto another = thorn->get_square();
+
+		switch (static_cast<Thorn*>(thorn)->get_vec())
 		{
-			kill(DeadReason::HitThorn);
-			return true;
+		case Thorn::Vec::UP:
+			if (hit_bottom(self, another))
+			{
+				kill(DeadReason::HitThorn);
+				return true;
+			}
+			break;
+		case Thorn::Vec::DOWN:
+			if (hit_top(self, another))
+			{
+				kill(DeadReason::HitThorn);
+				return true;
+			}
+			break;
+		case Thorn::Vec::RIGHT:
+			if (hit_left(self, another))
+			{
+				kill(DeadReason::HitThorn);
+				return true;
+			}
+			break;
+		case Thorn::Vec::LEFT:
+			if (hit_right(self, another))
+			{
+				kill(DeadReason::HitThorn);
+				return true;
+			}
+			break;
 		}
 	}
 
@@ -136,7 +158,7 @@ void Player::update()
 			auto vector = D3DXVECTOR2(0, 0); // ‚¢‚­‚çˆÚ“®‚µ‚½‚©‚ð‚±‚±‚É
 
 			// ‹²‚Ü‚ê”»’è
-			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
+			if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
 			{
 				kill(DeadReason::Sandwiched);
 			}
