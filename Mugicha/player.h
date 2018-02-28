@@ -23,6 +23,12 @@ public:
 		Falling, // 無に落下
 		HitMagma, // マグマでアチチ
 	};
+	enum class Vec
+	{
+		CENTER,
+		RIGHT,
+		LEFT
+	};
 private:
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
 	bool jumping; // ジャンプしている
@@ -34,6 +40,7 @@ private:
 	POLSIZE zoom_level; // ズームサイズ
 	POLSIZE before_zoom_level; // 前のヤツ
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // 当たり見るように持っときます
+	Player::Vec vec;
 
 	bool collision_for_enemies();
 	bool collision_for_thorns();
