@@ -9,6 +9,7 @@
 #include "thorn.h"
 #include "goal.h"
 #include "stage_background.h"
+#include "magma.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 
@@ -35,7 +36,7 @@
 #define REGISTER_AIRCANNON(x, y, tex, camera, floor, player) REGISTER_BLOCK(x, y, tex, camera) // 空気砲はまだ作れておらず
 #define REGISTER_GIMMICK REGISTER_BLOCK
 #define REGISTER_SWITCH REGISTER_BLOCK
-#define REGISTER_MAGMA REGISTER_BLOCK
+#define REGISTER_MAGMA(x, y, tex, camera) new Magma(static_cast<float>(x), static_cast<float>(y) - 5, CELL_WIDTH, CELL_HEIGHT - 10, tex, 1, camera)
 
 // 横長なモノ
 

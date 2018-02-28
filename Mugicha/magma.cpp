@@ -5,3 +5,8 @@ Magma::Magma(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, in
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh)
 {
 }
+
+SQUARE Magma::get_square()
+{
+	return SQUARE(x, y, w, h) * zoom_level;
+}

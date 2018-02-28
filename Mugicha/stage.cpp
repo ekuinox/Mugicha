@@ -207,6 +207,7 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 33:
 				// ƒ}ƒOƒ}
+				push_polygon_back(SquarePolygonBase::PolygonTypes::MAGMA, REGISTER_MAGMA(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["MAGMA_01"], camera))->on();
 				break;
 			}
 		}

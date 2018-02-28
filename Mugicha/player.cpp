@@ -99,7 +99,7 @@ bool Player::collision_for_magmas()
 	// ƒ}ƒOƒ}‚Æ‚Ì“–‚½‚è”»’è
 	for (const auto& magma : polygons[SquarePolygonBase::PolygonTypes::MAGMA])
 	{
-		if (is_collision(this, magma))
+		if (is_collision(get_square(), magma->get_square()))
 		{
 #ifndef _WITHOUT_DEATH
 			kill(DeadReason::HitMagma);
