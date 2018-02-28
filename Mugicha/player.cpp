@@ -40,10 +40,13 @@ bool Player::collision_for_thorns()
 		// ƒgƒQ‚ð—Ž‚Æ‚·
 		if (vec != Player::Vec::CENTER && static_cast<Thorn*>(thorn)->attack)
 		{
-			auto area = SQUARE(x + (vec == Player::Vec::RIGHT ? 10 : -10), y + 10, 10, 10);
-			if (is_collision(area, another))
+			if (is_collision(SQUARE(get_square().x + get_square().w * (vec == Player::Vec::RIGHT ? 1 : -1), get_square().y + get_square().h * 2, w * 2, get_square().h * 10), another))
 			{
 				static_cast<Thorn*>(thorn)->trigger_falling();
+			}
+			else
+			{
+				static_cast<Thorn*>(thorn)->stop_falling();
 			}
 		}
 

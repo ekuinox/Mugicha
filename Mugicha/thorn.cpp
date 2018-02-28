@@ -9,6 +9,7 @@ Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, in
 Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, bool _attack, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec), attack(_attack), falling(false)
 {
+	init();
 }
 
 void Thorn::set_floor(std::vector<SquarePolygonBase*> _floors)
@@ -62,12 +63,6 @@ void Thorn::update()
 		if (falling)
 		{
 			y -= 1.0f;
-
-			if (std::abs(floor->get_coords().y - y) > h * 4)
-			{
-				stop_falling();
-			}
-
 		}
 		// çÇÇ≥Çê›íËÇµÇ»Ç®Ç∑
 		else if (floor != nullptr)

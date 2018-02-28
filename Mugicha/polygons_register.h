@@ -29,8 +29,9 @@
 #define REGISTER_THORN_DOWN(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x), static_cast<float>(y) + 1, tex, camera, Thorn::Vec::DOWN)
 #define REGISTER_THORN_DOWN_HALF(x, y, tex, camera) REGISTER_THORN_HALF(static_cast<float>(x), static_cast<float>(y) + 1, tex, camera, Thorn::Vec::DOWN)
 #define REGISTER_THORN_LEFT(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x) + 1, static_cast<float>(y), tex, camera, Thorn::Vec::LEFT)
-#define REGISTER_THORN_RIGHT(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x) - 1, static_cast<float>(y), tex, camera, Thorn::Vec::RIGHT)
-#define REGISTER_THORN_WITH_FLOOR(x, y, tex, camera, vec, floor) new Thorns(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, vec, floor)
+#define REGISTER_THORN_RIGHT(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x) + 1, static_cast<float>(y), tex, camera, Thorn::Vec::RIGHT)
+#define REGISTER_THORN_FALL_DOWN(x, y, tex, camera) new Thorn(static_cast<float>(x), static_cast<float>(y) + 1, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, Thorn::Vec::DOWN, true)
+#define REGISTER_THORN_WITH_FLOOR(x, y, tex, camera, vec, floor) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, vec, floor)
 #define REGISTER_AIRCANNON(x, y, tex, camera, floor, player) REGISTER_BLOCK(x, y, tex, camera) // ãÛãCñCÇÕÇ‹ÇæçÏÇÍÇƒÇ®ÇÁÇ∏
 #define REGISTER_GIMMICK REGISTER_BLOCK
 #define REGISTER_SWITCH REGISTER_BLOCK

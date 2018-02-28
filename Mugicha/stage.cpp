@@ -185,7 +185,7 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 17:
 				// トゲ（落ちる）プレイヤに向かって
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_FALL_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
 				break;
 			case 21:
 				// 空気砲（上）
