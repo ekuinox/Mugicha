@@ -123,6 +123,8 @@ public:
 
 	virtual void add_coord(float _x, float _y) = 0; // x, yÀ•W‚É‰ÁŽZ
 	virtual void zoom(POLSIZE _zoom_level) = 0; // ”{—¦•ÏX‚ðs‚¤
+
+	virtual SquarePolygonBase* operator->() = 0;
 };
 
 /* global variable */

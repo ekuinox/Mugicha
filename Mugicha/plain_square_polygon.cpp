@@ -100,6 +100,11 @@ void PlainSquarePolygon::zoom(POLSIZE _zoom_level)
 	// ŽÀ‘•‚È‚µ
 }
 
+PlainSquarePolygon * PlainSquarePolygon::operator->()
+{
+	return this;
+}
+
 bool PlainSquarePolygon::is_active()
 {
 	return status;
