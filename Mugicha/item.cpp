@@ -14,11 +14,15 @@ void Item::update()
 	{
 		if (held)
 		{
+			// TODO: ‚Ç‚¤‚É‚©‚µ‚È‚³‚¢ƒ|ƒCƒ“ƒg‚Í‚±‚Ì•Ó‚Å‚·
+
+
 			auto player = static_cast<Player*>(polygons[SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT].front());
 			auto vec = player->get_vec();
 			
 			y = player->get_square().y;
 			x = player->get_square().right();
+
 			/*
 			if (vec == Player::Vec::LEFT)
 			{
