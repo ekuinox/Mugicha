@@ -2,10 +2,15 @@
 #include "collision_checker.h"
 
 Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, Vec _vec, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec), attack(false), falling(false)
 {
 	init();
 }
+Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, bool _attack, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec), attack(_attack), falling(false)
+{
+}
+
 void Thorn::set_floor(std::vector<SquarePolygonBase*> _floors)
 {
 	if (floor != nullptr) return;
@@ -54,8 +59,18 @@ void Thorn::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
+		if (falling)
+		{
+			y -= 1.0f;
+
+			if (std::abs(floor->get_coords().y - y) > h * 4)
+			{
+				stop_falling();
+			}
+
+		}
 		// ‚‚³‚ðÝ’è‚µ‚È‚¨‚·
-		if (floor != nullptr)
+		else if (floor != nullptr)
 		{
 			switch (vec)
 			{
@@ -71,8 +86,10 @@ void Thorn::update()
 			case Vec::RIGHT:
 				y = floor->get_coords().y;
 				break;
+
 			}
 		}
+
 		latest_update = current;
 	}
 	
@@ -81,4 +98,33 @@ void Thorn::update()
 Thorn::Vec Thorn::get_vec()
 {
 	return vec;
+}
+
+void Thorn::trigger_falling()
+{
+	if (attack) falling = true;
+}
+
+void Thorn::stop_falling()
+{
+	if (attack)
+	{
+		falling = false;
+		switch (vec)
+		{
+		case Vec::UP:
+			y = floor->get_coords().y + (floor->get_size().h + h) / 2;
+			break;
+		case Vec::DOWN:
+			y = floor->get_coords().y + (floor->get_size().h + h) / -2;
+			break;
+		case Vec::LEFT:
+			y = floor->get_coords().y;
+			break;
+		case Vec::RIGHT:
+			y = floor->get_coords().y;
+			break;
+
+		}
+	}
 }

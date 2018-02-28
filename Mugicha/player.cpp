@@ -37,6 +37,16 @@ bool Player::collision_for_thorns()
 		auto self = get_square();
 		auto another = thorn->get_square();
 
+		// トゲを落とす
+		if (vec != Player::Vec::CENTER && static_cast<Thorn*>(thorn)->attack)
+		{
+			auto area = SQUARE(x + (vec == Player::Vec::RIGHT ? 10 : -10), y + 10, 10, 10);
+			if (is_collision(area, another))
+			{
+				static_cast<Thorn*>(thorn)->trigger_falling();
+			}
+		}
+
 		switch (static_cast<Thorn*>(thorn)->get_vec())
 		{
 		case Thorn::Vec::UP:
@@ -89,7 +99,7 @@ bool Player::collision_for_magmas()
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER)
 {
 	init();
 }
@@ -216,6 +226,9 @@ void Player::update()
 			{
 				vector.y -= PLAYER_FALLING;
 			}
+
+			// 向き判定
+			vec = (vector.x < 0 ? Player::Vec::LEFT : Player::Vec::RIGHT);
 
 			// 変更を加算して終了
 			x += vector.x;
