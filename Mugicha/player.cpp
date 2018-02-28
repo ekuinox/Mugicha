@@ -2,8 +2,6 @@
 #include "player.h"
 #include "thorn.h"
 
-//#define _WITHOUT_DEATH
-
 bool Player::collision_for_enemies()
 {
 	// 敵との当たり判定
@@ -13,9 +11,11 @@ bool Player::collision_for_enemies()
 		{
 			if (zoom_level.w >= 1.0f)
 			{
+#ifndef _WITHOUT_DEATH
 				// プレイヤの負け
 				kill(DeadReason::HitEnemy);
 				return true;
+#endif
 			}
 			else
 			{
@@ -32,19 +32,62 @@ bool Player::collision_for_thorns()
 	// トゲとの当たり判定
 	// 通常状態より自分がデカい状態で接触死の判定を取る
 	if (zoom_level.w > 1.0f) return false;
-	for (const auto& _thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
+	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
 	{
-		auto thorn = static_cast<Thorn*>(_thorn);
-		char result = where_collision(this, thorn, 1.0f);		
-		if (
-			(result & HitLine::BOTTOM && thorn->get_vec() == Thorn::Vec::UP)
-			|| (result & HitLine::TOP && thorn->get_vec() == Thorn::Vec::DOWN)
-			|| (result & HitLine::LEFT && thorn->get_vec() == Thorn::Vec::RIGHT)
-			|| (result &  HitLine::RIGHT && thorn->get_vec() == Thorn::Vec::LEFT)
-			)
+		auto self = get_square();
+		auto another = thorn->get_square();
+
+		// トゲを落とす
+		if (vec != Player::Vec::CENTER && static_cast<Thorn*>(thorn)->attack)
 		{
-			kill(DeadReason::HitThorn);
-			return true;
+			if (is_collision(SQUARE(get_square().x + get_square().w * (vec == Player::Vec::RIGHT ? 1 : -1), get_square().y + get_square().h * 2, w * 2, get_square().h * 10), another))
+			{
+				static_cast<Thorn*>(thorn)->trigger_falling();
+			}
+			else
+			{
+				static_cast<Thorn*>(thorn)->stop_falling();
+			}
+		}
+
+		switch (static_cast<Thorn*>(thorn)->get_vec())
+		{
+		case Thorn::Vec::UP:
+			if (hit_bottom(self, another))
+			{
+#ifndef _WITHOUT_DEATH
+				kill(DeadReason::HitThorn);
+				return true;
+#endif
+			}
+			break;
+		case Thorn::Vec::DOWN:
+			if (hit_top(self, another))
+			{
+#ifndef _WITHOUT_DEATH
+				kill(DeadReason::HitThorn);
+				return true;
+#endif
+			}
+			break;
+		case Thorn::Vec::RIGHT:
+			if (hit_left(self, another))
+			{
+#ifndef _WITHOUT_DEATH
+				kill(DeadReason::HitThorn);
+				return true;
+#endif
+			}
+			break;
+		case Thorn::Vec::LEFT:
+			if (hit_right(self, another))
+			{
+#ifndef _WITHOUT_DEATH
+				kill(DeadReason::HitThorn);
+				return true;
+#endif
+			}
+			break;
 		}
 	}
 
@@ -56,10 +99,28 @@ bool Player::collision_for_magmas()
 	// マグマとの当たり判定
 	for (const auto& magma : polygons[SquarePolygonBase::PolygonTypes::MAGMA])
 	{
-		if (is_collision(this, magma))
+		if (is_collision(get_square(), magma->get_square()))
 		{
+#ifndef _WITHOUT_DEATH
 			kill(DeadReason::HitMagma);
 			return true;
+#endif
+		}
+	}
+	return false;
+}
+
+bool Player::collision_for_bullets()
+{
+	// 弾丸との当たり判定
+	for (const auto& magma : polygons[SquarePolygonBase::PolygonTypes::BULLET])
+	{
+		if (is_collision(get_square(), magma->get_square()))
+		{
+#ifndef _WITHOUT_DEATH
+			kill(DeadReason::Shot);
+			return true;
+#endif
 		}
 	}
 	return false;
@@ -67,7 +128,7 @@ bool Player::collision_for_magmas()
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER)
 {
 	init();
 }
@@ -99,7 +160,6 @@ void Player::update()
 	// 操作
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1ms間隔で
 	{
-#ifndef _WITHOUT_DEATH
 		if (collision_for_enemies())
 		{
 			// 死
@@ -117,11 +177,16 @@ void Player::update()
 			// 死
 			return;
 		}
-#endif
+
+		if (collision_for_bullets())
+		{
+			// 死～
+			return;
+		}
 		
 		// 当たり精査
 		char result = 0x00;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN })
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON })
 			for (const auto& polygon : polygons[type])
 				result |= where_collision(this, polygon);
 
@@ -136,7 +201,7 @@ void Player::update()
 			auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 
 			// 挟まれ判定
-			if ((result & HitLine::BOTTOM && result & HitLine::TOP) || (result & HitLine::LEFT && result & HitLine::RIGHT))
+			if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
 			{
 				kill(DeadReason::Sandwiched);
 			}
@@ -160,10 +225,12 @@ void Player::update()
 			if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
 			{
 				vector.x -= speed;
+				vec = Player::Vec::LEFT;
 			}
 			if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
 			{
 				vector.x += speed;
+				vec = Player::Vec::RIGHT;
 			}
 
 #ifdef _DEBUG

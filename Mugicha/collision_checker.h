@@ -41,6 +41,9 @@ bool hit_right(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
 // 左が当たったかだけを
 bool hit_left(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
 
+// ヘスティアすき
+enum HitLine where_collision(SQUARE &_self, SQUARE &_another, float sugar = 0.0f);
+
 // selfに甘さを追加する
 enum HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another, float sugar = 0.0f, bool without_precheck = true);
 

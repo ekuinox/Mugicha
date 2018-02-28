@@ -71,21 +71,28 @@ bool hit_left(SQUARE &_self, SQUARE &_another, float sugar)
 		) ? true : false;
 }
 
-HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar, bool without_precheck)
+HitLine where_collision(SQUARE & _self, SQUARE & _another, float sugar)
 {
 	char result = 0x00;
+	if (hit_top(_self, _another, sugar)) result |= TOP;
+	if (hit_bottom(_self, _another, sugar)) result |= BOTTOM;
+	if (hit_right(_self, _another, sugar)) result |= RIGHT;
+	if (hit_left(_self, _another, sugar)) result |= LEFT;
+
+	return static_cast<HitLine>(result);
+}
+
+HitLine where_collision(SquarePolygonBase * _self, SquarePolygonBase * _another, float sugar, bool without_precheck)
+{
 	if (without_precheck || is_collisionA(_self, _another))
 	{
 		auto self = _self->get_square();
 		auto another = _another->get_square();
 
-		if (hit_top(self, another, sugar)) result |= TOP;
-		if (hit_bottom(self, another, sugar)) result |= BOTTOM;
-		if (hit_right(self, another, sugar)) result |= RIGHT;
-		if (hit_left(self, another, sugar)) result |= LEFT;
+		return where_collision(self, another, sugar);
 	}
 
-	return static_cast<HitLine>(result);
+	return HitLine::NONE;
 }
 
 HitLine where_collision(SquarePolygonBase *_self, SquarePolygonBase *_another)
