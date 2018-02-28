@@ -52,8 +52,11 @@ void AirCannon::update()
 
 void AirCannon::draw()
 {
-	bullet->zoom(zoom_level);
-
 	ScalableObject::draw();
 	bullet->draw();
+}
+
+Bullet *AirCannon::get_bullet()
+{
+	return bullet;
 }
