@@ -1,8 +1,9 @@
 #include "item.h"
 #include "collision_checker.h"
+#include "player.h"
 
 Item::Item(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), held(false), polygons(_polygons), player(nullptr), on_ground(false)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), held(false), polygons(_polygons), on_ground(false)
 {
 }
 
@@ -13,6 +14,7 @@ void Item::update()
 	{
 		if (held)
 		{
+			auto player = static_cast<Player*>(polygons[SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT].front());
 			auto vec = player->get_vec();
 
 			if (vec == Player::Vec::LEFT)
@@ -25,6 +27,7 @@ void Item::update()
 				y = player->get_coords().y;
 				x = get_square().right();
 			}
+			
 		}
 		
 		// “–‚½‚è‚ðŽæ‚Á‚Ä‚¢‚«‚Ü‚·
@@ -53,8 +56,8 @@ void Item::update()
 
 SQUARE Item::get_square()
 {
-	if (held) PlainSquarePolygon::get_square();
-	else ScalableObject::get_square();
+	if (held) return PlainSquarePolygon::get_square();
+	else return ScalableObject::get_square();
 }
 
 void Item::hold()
@@ -62,9 +65,9 @@ void Item::hold()
 	held = true;
 }
 
-bool Item::hold(Player *_player)
+bool Item::hold(SQUARE sq)
 {
-	if (is_collision(_player->get_square(), get_square()))
+	if (is_collision(sq, get_square()))
 	{
 		hold();
 		return true;

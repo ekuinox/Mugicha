@@ -128,7 +128,7 @@ bool Player::collision_for_bullets()
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER), item(nullptr)
 {
 	init();
 }
@@ -279,6 +279,32 @@ bool Player::jump()
 	jumped_at = timeGetTime();
 	jumping = true;
 	return true;
+}
+
+bool Player::catch_item()
+{
+	for (const auto& _item : polygons[SquarePolygonBase::PolygonTypes::ITEM])
+	{
+		if (static_cast<Item*>(_item)->hold(get_square()))
+		{
+			item = static_cast<Item*>(_item);
+			holding_item = true;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Player::release_item()
+{
+	holding_item = false;
+	item->release();
+}
+
+bool Player::is_holding_item()
+{
+	return holding_item;
 }
 
 void Player::lock()

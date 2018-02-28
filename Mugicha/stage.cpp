@@ -319,6 +319,13 @@ void Stage::update()
 		player->jump();
 	}
 
+	// ƒvƒŒƒCƒ„‚É’Í‚Ü‚¹‚½‚è‚·‚é
+	if (GetKeyboardTrigger(DIK_U))
+	{
+		if (player->is_holding_item()) player->catch_item();
+		else player->release_item();
+	}
+
 
 	// ŽžŠÔ‚ð‹C‚É‚·‚é‚à‚Ì
 	auto current = std::chrono::system_clock::now();

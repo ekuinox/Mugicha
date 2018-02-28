@@ -1,6 +1,5 @@
 #pragma once
 #include "scalable_object.h"
-#include "player.h"
 #include <map>
 
 class Item : public ScalableObject
@@ -10,14 +9,13 @@ public:
 	void update();
 	SQUARE get_square();
 	void hold();
-	bool hold(Player *_player);
+	bool hold(SQUARE sq);
 	void release();
 	bool is_held();
 private:
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // “–‚½‚èŒ©‚é‚æ‚¤‚É‚Á‚Æ‚«‚Ü‚·
 	bool held; // ƒvƒŒƒCƒ„‚É’Í‚Ü‚ê‚Ä‚¢‚é‚©
 	bool on_ground;
-	Player *player;
 	void generate_vertexes();
 };
 
