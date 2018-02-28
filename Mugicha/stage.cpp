@@ -136,11 +136,11 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 5:
 				// ハーフ床（上）
-				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 6:
 				// ハーフ床（下）
-				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 7:
 				// switchで出現するなにか
@@ -185,7 +185,7 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 17:
 				// トゲ（落ちる）プレイヤに向かって
-				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
 				break;
 			case 21:
 				// 空気砲（上）
