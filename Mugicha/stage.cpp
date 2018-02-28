@@ -216,6 +216,7 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 31:
 				// 持てるオブジェクト
+				push_polygon_back(SquarePolygonBase::PolygonTypes::ITEM, REGISTER_ITEM(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["ITEM_01"], camera, polygons))->on();
 				break;
 			case 32:
 				// スイッチ

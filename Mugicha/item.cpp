@@ -16,17 +16,19 @@ void Item::update()
 		{
 			auto player = static_cast<Player*>(polygons[SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT].front());
 			auto vec = player->get_vec();
-
+			
+			y = player->get_square().y;
+			x = player->get_square().right();
+			/*
 			if (vec == Player::Vec::LEFT)
 			{
-				y = player->get_coords().y;
-				x = get_square().left();
+				x = player->get_square().left();
 			}
 			else if (vec == Player::Vec::RIGHT)
 			{
-				y = player->get_coords().y;
-				x = get_square().right();
+				x = player->get_square().right();
 			}
+			*/
 			
 		}
 		
