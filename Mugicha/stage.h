@@ -59,7 +59,7 @@ private:
 	void draw();
 
 	template<typename _T>
-	_T push_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
+	_T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
 public:
 	Stage(char _stage_select);
 	~Stage();
