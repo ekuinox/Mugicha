@@ -228,7 +228,14 @@ void Player::update()
 		
 		// “–‚½‚è¸¸
 		char result = 0x00;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON })
+		for (const auto& type : {
+			// “–‚½‚è”»’è‚ğæ‚éƒ|ƒŠƒSƒ“‚Ìƒ‰ƒxƒ‹‚Ü‚Æ‚ß
+			SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
+			SquarePolygonBase::PolygonTypes::RAGGED_FLOOR,
+			SquarePolygonBase::PolygonTypes::THORN,
+			SquarePolygonBase::PolygonTypes::AIRCANNON,
+			SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
+			})
 			for (const auto& polygon : polygons[type])
 				result |= where_collision(this, polygon);
 
