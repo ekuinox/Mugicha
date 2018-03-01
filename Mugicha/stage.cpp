@@ -297,7 +297,7 @@ void Stage::init()
 	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	auto exec_result = stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
-	zoom_level = { 1, 1 };
+	zoom_level = 1.0f;
 	zoom_sign = Stage::Sign::ZERO;
 
 #ifdef _DEBUG
@@ -330,45 +330,45 @@ void Stage::update()
 	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
 	{
 		// 最小にする => 自分は大きくなる
-		if (zoom_level.w > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
+		if (zoom_level > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
 		{
-			zoom_level_target.w = zoom_level_target.h = 0.5f;
+			zoom_level_target = zoom_level_target = 0.5f;
 			zoom_sign = Stage::Sign::MINUS;
 			player->lock();
 			gage->consume();
 		}
 
 		// 通常状態
-		if (zoom_level.w != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
+		if (zoom_level != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
 		{
-			zoom_level_target.w = zoom_level_target.h = 1.0f;
-			zoom_sign = (zoom_level.w < 0 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
+			zoom_level_target = zoom_level_target = 1.0f;
+			zoom_sign = (zoom_level < 0 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
 			player->lock();
 			gage->consume();
 		}
 
 		// 最大化 => 自分は小さくなる
-		if (zoom_level.w < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
+		if (zoom_level < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
 		{
-			zoom_level_target.w = zoom_level_target.h = 2.0f;
+			zoom_level_target = zoom_level_target = 2.0f;
 			zoom_sign = Stage::Sign::PLUS;
 			player->lock();
 			gage->consume();
 		}
 
 #ifdef _DEBUG
-		if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // 拡大
+		if (GetKeyboardTrigger(DIK_O) && zoom_level < 2.0f) // 拡大
 		{
 			zoom_sign = Stage::Sign::PLUS;
-			zoom_level_target.w = zoom_level.w * 2;
-			zoom_level_target.h = zoom_level.h * 2;
+			zoom_level_target = zoom_level * 2;
+			zoom_level_target = zoom_level * 2;
 			player->lock();
 		}
-		if (GetKeyboardTrigger(DIK_L) && zoom_level.w > 0.5f) // 縮小
+		if (GetKeyboardTrigger(DIK_L) && zoom_level > 0.5f) // 縮小
 		{
 			zoom_sign = Stage::Sign::MINUS;
-			zoom_level_target.w = zoom_level.w / 2;
-			zoom_level_target.h = zoom_level.h / 2;
+			zoom_level_target = zoom_level / 2;
+			zoom_level_target = zoom_level / 2;
 			player->lock();
 		}
 #endif
@@ -401,10 +401,10 @@ void Stage::update()
 
 	if (zoom_sign == Stage::Sign::PLUS)
 	{
-		if (zoom_level.w < zoom_level_target.w)
+		if (zoom_level < zoom_level_target)
 		{
-			zoom_level.w *= 1.01f;
-			zoom_level.h *= 1.01f;
+			zoom_level *= 1.01f;
+			zoom_level *= 1.01f;
 		}
 		else
 		{
@@ -416,10 +416,10 @@ void Stage::update()
 
 	if (zoom_sign == Stage::Sign::MINUS)
 	{
-		if (zoom_level.w > zoom_level_target.w)
+		if (zoom_level > zoom_level_target)
 		{
-			zoom_level.w /= 1.01f;
-			zoom_level.h /= 1.01f;
+			zoom_level /= 1.01f;
+			zoom_level /= 1.01f;
 		}
 		else
 		{
@@ -440,8 +440,8 @@ void Stage::update()
 	camera.y = player->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
 	
 	// 画面外は見せないようにする
-	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
-	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+	unless(camera.x < map_size.w * zoom_level - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level - SCREEN_WIDTH / 2;
+	unless (camera.y < map_size.h * zoom_level - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 

@@ -45,8 +45,8 @@ private:
 	std::chrono::system_clock::time_point latest_draw; // ÅI•`‰æ
 	D3DXVECTOR2 camera;
 	enum class Sign { ZERO,	PLUS, MINUS} zoom_sign; // Šg‘åó‘Ô‚©k¬ó‘Ô‚©‚Á‚ÄƒAƒŒ‚Å‚·
-	POLSIZE zoom_level_target; // ‚Ç‚±‚Ü‚ÅŠgk‚·‚é‚©‚Æ‚¢‚¤ƒAƒŒ
-	POLSIZE zoom_level;
+	float zoom_level_target; // ‚Ç‚±‚Ü‚ÅŠgk‚·‚é‚©‚Æ‚¢‚¤ƒAƒŒ
+	float zoom_level;
 	POLSIZE map_size; // ”wŒi‚ÌƒfƒJ‚³‚É‚È‚è‚Ü‚·
 	bool zooming;
 	bool switch_sample;

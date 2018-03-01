@@ -42,6 +42,8 @@ using SQUARE = struct _SQUARE
 	float right() { return x + w / 2; }
 	_SQUARE operator*(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
 	_SQUARE operator*=(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
+	_SQUARE operator*(const float& another) { return _SQUARE(x * another, y * another, w * another, h * another); }
+	_SQUARE operator*=(const float& another) { return _SQUARE(x * another, y * another, w * another, h * another); }
 };
 
 /*
@@ -125,7 +127,7 @@ public:
 	virtual VERTEX_2D *get_vertexes() = 0;
 
 	virtual void add_coord(float _x, float _y) = 0; // x, yÀ•W‚É‰ÁŽZ
-	virtual void zoom(POLSIZE _zoom_level) = 0; // ”{—¦•ÏX‚ðs‚¤
+	virtual void zoom(float _zoom_level) = 0; // ”{—¦•ÏX‚ðs‚¤
 
 	virtual SquarePolygonBase* operator->() = 0;
 };

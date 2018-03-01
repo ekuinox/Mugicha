@@ -71,8 +71,8 @@ bool Item::hold(SQUARE sq)
 void Item::release()
 {
 	// ƒY[ƒ€ƒŒƒxƒ‹‚É‡‚í‚µ‚½êŠ‚É–ß‚µ‚Ä‚â‚é
-	x /= zoom_level.w;
-	y /= zoom_level.h;
+	x /= zoom_level;
+	y /= zoom_level;
 	held = false;
 }
 

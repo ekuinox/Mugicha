@@ -10,7 +10,7 @@ bool Player::collision_for_enemies()
 	{
 		if (enemy->is_active() && is_collision(enemy->get_square(), get_square()))
 		{
-			if (zoom_level.w >= 1.0f)
+			if (zoom_level >= 1.0f)
 			{
 #ifndef _NEVER_DIE
 				// プレイヤの負け
@@ -32,7 +32,7 @@ bool Player::collision_for_thorns()
 {
 	// トゲとの当たり判定
 	// 通常状態より自分がデカい状態で接触死の判定を取る
-	if (zoom_level.w > 1.0f) return false;
+	if (zoom_level > 1.0f) return false;
 	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
 	{
 		auto self = get_square();
@@ -183,7 +183,7 @@ bool Player::is_fallen_hellgate()
 
 // コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER), item(nullptr), holding_item(false)
+	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER), item(nullptr), holding_item(false)
 {
 	init();
 }
@@ -201,7 +201,7 @@ void Player::init()
 	controll_lock = false;
 }
 
-void Player::zoom(POLSIZE _zoom_level)
+void Player::zoom(float _zoom_level)
 {
 	zoom_level = _zoom_level;
 }
@@ -258,8 +258,8 @@ void Player::update()
 	if (controll_lock)
 	{
 		// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
-		x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
-		y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
+		x = when_locked_coords.x * (zoom_level / before_zoom_level);
+		y = when_locked_coords.y * (zoom_level / before_zoom_level);
 	}
 	else
 	{

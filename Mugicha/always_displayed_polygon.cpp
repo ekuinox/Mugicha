@@ -111,7 +111,7 @@ void AlwaysDisplayedPolygon::add_coord(float _x, float _y)
 	y += _y;
 }
 
-void AlwaysDisplayedPolygon::zoom(POLSIZE _zoom_level)
+void AlwaysDisplayedPolygon::zoom(float _zoom_level)
 {
 }
 

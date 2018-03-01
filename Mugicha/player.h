@@ -40,8 +40,8 @@ private:
 	DWORD jumped_at;
 	bool controll_lock; // 操作を受け付けなくする
 	D3DXVECTOR2 when_locked_coords; // ロックされたときの座標値
-	POLSIZE zoom_level; // ズームサイズ
-	POLSIZE before_zoom_level; // 前のヤツ
+	float zoom_level; // ズームサイズ
+	float before_zoom_level; // 前のヤツ
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // 当たり見るように持っときます
 	Player::Vec vec;
 	bool holding_item; // アイテムを持っている状態
@@ -59,7 +59,7 @@ public:
 	
 	void init();
 	void update();
-	void zoom(POLSIZE _zoom_level);
+	void zoom(float _zoom_level);
 
 	// 独自関数
 	bool jump();

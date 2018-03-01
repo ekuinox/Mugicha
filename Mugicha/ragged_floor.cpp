@@ -31,7 +31,7 @@ void RaggedFloor::update()
 		burdened = false;
 	}
 
-	if (burdened && zoom_level.w < 1.0f) // “¥‚Ü‚ê‚Ä‚¢‚éŠÔ‚Ì‚Ý‰ÁŽZ‚·‚é
+	if (burdened && zoom_level < 1.0f) // “¥‚Ü‚ê‚Ä‚¢‚éŠÔ‚Ì‚Ý‰ÁŽZ‚·‚é
 	{
 		burdened_time += 1;
 	}
