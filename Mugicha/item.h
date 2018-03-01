@@ -12,6 +12,7 @@ public:
 	bool hold(SQUARE sq);
 	void release();
 	bool is_held();
+	bool move(D3DXVECTOR2 vec);
 private:
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // “–‚½‚èŒ©‚é‚æ‚¤‚É‚Á‚Æ‚«‚Ü‚·
 	bool held; // ƒvƒŒƒCƒ„‚É’Í‚Ü‚ê‚Ä‚¢‚é‚©

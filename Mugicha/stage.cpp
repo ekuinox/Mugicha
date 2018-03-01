@@ -323,8 +323,8 @@ void Stage::update()
 	// ƒvƒŒƒCƒ„‚É’Í‚Ü‚¹‚½‚è‚·‚é
 	if (GetKeyboardTrigger(DIK_U))
 	{
-		if (player->is_holding_item()) player->catch_item();
-		else player->release_item();
+		if (player->is_holding_item()) player->release_item();
+		else player->catch_item();
 	}
 
 

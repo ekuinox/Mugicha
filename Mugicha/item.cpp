@@ -14,47 +14,31 @@ void Item::update()
 	{
 		if (held)
 		{
-			// TODO: どうにかしなさいポイントはこの辺です
-
-
-			auto player = static_cast<Player*>(polygons[SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT].front());
-			auto vec = player->get_vec();
-			
-			y = player->get_square().y;
-			x = player->get_square().right();
-
-			/*
-			if (vec == Player::Vec::LEFT)
-			{
-				x = player->get_square().left();
-			}
-			else if (vec == Player::Vec::RIGHT)
-			{
-				x = player->get_square().right();
-			}
-			*/
-			
-		}
-		
-		// 当たりを取っていきます
-		char result = 0x00;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON})
-			for (const auto& polygon : polygons[type])
-				result |= where_collision(this, polygon, 1.0f);
-
-		if (result & HitLine::BOTTOM)
-		{
-			on_ground = true;
+			// ここではスイッチとの当たり判定を見る
 		}
 		else
 		{
-			on_ground = false;
-		}
+			// 当たりを取っていきます
+			char result = 0x00;
+			for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON })
+				for (const auto& polygon : polygons[type])
+					result |= where_collision(this, polygon, 1.0f);
 
-		if (!(on_ground || held))
-		{
-			y -= 1.0f;
+			if (result & HitLine::BOTTOM)
+			{
+				on_ground = true;
+			}
+			else
+			{
+				on_ground = false;
+			}
+
+			if (!(on_ground || held))
+			{
+				y -= 1.0f;
+			}
 		}
+		
 
 		latest_update = current;
 	}
@@ -89,6 +73,14 @@ void Item::release()
 bool Item::is_held()
 {
 	return held;
+}
+
+bool Item::move(D3DXVECTOR2 vec)
+{
+	if(!held) return false;
+	x = vec.x;
+	y = vec.y;
+	return true;
 }
 
 void Item::generate_vertexes()
