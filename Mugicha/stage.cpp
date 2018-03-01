@@ -262,7 +262,8 @@ bool Stage::stagefile_loader(const char * filepath)
 	// ゲージのセット
 	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(200, 200, textures["GAGE_01"])))->on();
 
-//	(emplace_polygon_back(SquarePolygonBase::PolygonTypes::PLAIN, new ScalableObject(map_size.w / 2, 100, map_size.w, 300, textures["HELLGATE_01"], 0, camera)))->on();
+	// 下から迫りくるアレ
+	(emplace_polygon_back(SquarePolygonBase::PolygonTypes::HELLGATE, new HellGate(map_size.w / 2, -100, map_size.w, 300, textures["HELLGATE_01"], 0, camera)))->on();
 
 #ifdef _DEBUG
 

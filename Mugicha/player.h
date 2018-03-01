@@ -24,7 +24,7 @@ public:
 		Falling, // 無に落下
 		HitMagma, // マグマでアチチ
 		Shot, // Bulletにドガーン
-
+		FallenHellGate, // HellGate(仮称)に飲み込まれた
 	};
 	enum class Vec
 	{
@@ -52,6 +52,7 @@ private:
 	bool collision_for_magmas();
 	bool collision_for_bullets();
 	bool collision_for_knockback_bullets(D3DXVECTOR2 &knockback);
+	bool is_fallen_hellgate();
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, int _layer, float _x, float _y, float _w, float _h, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~Player();
