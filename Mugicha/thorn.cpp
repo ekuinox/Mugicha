@@ -56,36 +56,29 @@ void Thorn::init()
 
 void Thorn::update()
 {
-	// ‚Æ‚­‚ÉŠÔŠÇ—‚·‚é‚±‚Æ‚È‚¢H
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
+	if (falling)
 	{
-		if (falling)
+		y -= 1.0f;
+	}
+	// ‚‚³‚ğİ’è‚µ‚È‚¨‚·
+	else if (floor != nullptr)
+	{
+		switch (vec)
 		{
-			y -= 1.0f;
-		}
-		// ‚‚³‚ğİ’è‚µ‚È‚¨‚·
-		else if (floor != nullptr)
-		{
-			switch (vec)
-			{
-			case Vec::UP:
-				y = floor->get_coords().y + (floor->get_size().h + h) / 2;
-				break;
-			case Vec::DOWN:
-				y = floor->get_coords().y + (floor->get_size().h + h) / -2;
-				break;
-			case Vec::LEFT:
-				y = floor->get_coords().y;
-				break;
-			case Vec::RIGHT:
-				y = floor->get_coords().y;
-				break;
+		case Vec::UP:
+			y = floor->get_coords().y + (floor->get_size().h + h) / 2;
+			break;
+		case Vec::DOWN:
+			y = floor->get_coords().y + (floor->get_size().h + h) / -2;
+			break;
+		case Vec::LEFT:
+			y = floor->get_coords().y;
+			break;
+		case Vec::RIGHT:
+			y = floor->get_coords().y;
+			break;
 
-			}
 		}
-
-		latest_update = current;
 	}
 	
 }

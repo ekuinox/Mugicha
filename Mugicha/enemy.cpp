@@ -10,13 +10,11 @@ Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x
 void Enemy::update()
 {
 	if (!status) return;
-	
-	auto current = std::chrono::system_clock::now();
 
 	// ‰æ–ÊŠO‚©‚Ç‚¤‚©‚Åmoving‚ğØ‚è•ª‚¯‚é
 	moving = (vertexes[0].x <= SCREEN_WIDTH * 1.25 && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT * 1.25 && vertexes[2].y >= 0) ? true : false;
 
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL && moving) // 1msŠÔŠu‚Å
+	if (moving) // 1msŠÔŠu‚Å
 	{
 		// “–‚½‚è¸¸
 		char result = 0x00;
@@ -60,7 +58,5 @@ void Enemy::update()
 		// ”½‰f
 		x += vector.x;
 		y += vector.y;
-
-		latest_update = current;
 	}
 }

@@ -31,32 +31,29 @@ void RaggedFloor::update()
 		burdened = false;
 	}
 
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
+	if (burdened && zoom_level.w < 1.0f) // 踏まれている間のみ加算する
 	{
-		if (burdened && zoom_level.w < 1.0f) // 踏まれている間のみ加算する
-		{
-			burdened_time += 1;
-		}
+		burdened_time += 1;
+	}
 
-		if (burdened_time > burdened_time_max) // 5秒も踏んづけやがって．．．
-		{
-			burdened = false; // 踏みつけオフ
-			
-			falling = true; // 落下オン
-		}
+	if (burdened_time > burdened_time_max) // 5秒も踏んづけやがって．．．
+	{
+		burdened = false; // 踏みつけオフ
 
-		if (falling)
-		{
-			y -= 1;
-		}
-		
-		if (y < 0) // 画面外に行っちゃったところからカウントスタート
-		{
-			disapper_time += 1;
-		}
-		if (disapper_time > disapper_time_max)
-		{
-			init();
-		}
+		falling = true; // 落下オン
+	}
+
+	if (falling)
+	{
+		y -= 1;
+	}
+
+	if (y < 0) // 画面外に行っちゃったところからカウントスタート
+	{
+		disapper_time += 1;
+	}
+	if (disapper_time > disapper_time_max)
+	{
+		init();
 	}
 }

@@ -17,14 +17,6 @@ void ScalableObject::update()
 {
 	// statusが有効になっていなければ抜けます
 	if (!status) return;
-
-	// 前回の更新から1ms経っていなければ行わない
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
-	{		
-		latest_update = current;
-	}
-
 }
 
 SQUARE ScalableObject::get_square()

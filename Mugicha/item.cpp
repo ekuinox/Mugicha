@@ -9,45 +9,40 @@ Item::Item(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int 
 
 void Item::update()
 {
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
+	unless(held)
 	{
-		unless(held)
+		// “–‚½‚è‚ðŽæ‚Á‚Ä‚¢‚«‚Ü‚·
+		char result = 0x00;
+		for (const auto& type : {
+			SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON, SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH
+			})
 		{
-			// “–‚½‚è‚ðŽæ‚Á‚Ä‚¢‚«‚Ü‚·
-			char result = 0x00;
-			for (const auto& type : {
-				SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON, SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH
-				})
+			for (const auto& polygon : polygons[type])
 			{
-				for (const auto& polygon : polygons[type])
+				auto _result = where_collision(this, polygon, 1.0f);
+				result |= _result;
+				if (type == SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH && _result & HitLine::BOTTOM)
 				{
-					auto _result = where_collision(this, polygon, 1.0f);
-					result |= _result;
-					if (type == SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH && _result & HitLine::BOTTOM)
-					{
-						gimmick_switch = static_cast<GimmickSwitch*>(polygon);
-						gimmick_switch->press();
-					}
-
+					gimmick_switch = static_cast<GimmickSwitch*>(polygon);
+					gimmick_switch->press();
 				}
-			}
-			
-			if (result & HitLine::BOTTOM)
-			{
-				on_ground = true;
-			}
-			else
-			{
-				on_ground = false;
-			}
 
-			if (!(on_ground || held))
-			{
-				y -= 1.0f;
 			}
 		}
-		latest_update = current;
+
+		if (result & HitLine::BOTTOM)
+		{
+			on_ground = true;
+		}
+		else
+		{
+			on_ground = false;
+		}
+
+		if (!(on_ground || held))
+		{
+			y -= 1.0f;
+		}
 	}
 }
 
