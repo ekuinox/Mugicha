@@ -90,10 +90,10 @@
     <ClCompile Include="air_cannon.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="item.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
   </ItemGroup>
@@ -164,10 +164,10 @@
     <ClInclude Include="air_cannon.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="item.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
   </ItemGroup>

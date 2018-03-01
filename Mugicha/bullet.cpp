@@ -24,6 +24,7 @@ void Bullet::update()
 		break;
 	case Bullet::Vec::DOWN:
 		y -= speed;
+		break;
 	case Bullet::Vec::LEFT:
 		x -= speed;
 		break;
