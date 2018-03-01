@@ -34,6 +34,12 @@
     <Filter Include="ソース ファイル\SquarePolygonBase\ScalableObjectDerived">
       <UniqueIdentifier>{da960dcb-955d-47c9-b0ff-09072aaff23a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\resources\stages">
+      <UniqueIdentifier>{dd93d4d5-2529-41ca-a2e7-b53f5a29bce0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\resources\texturtes">
+      <UniqueIdentifier>{30e1ac37-2d04-4746-91f6-3808f7a36965}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -178,8 +184,106 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\stages\sample.csv">
-      <Filter>リソース ファイル\resources</Filter>
+    <None Include="resources\stages\stage_01.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
     </None>
+    <None Include="resources\stages\stage_02.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\stage_03.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\textures_01.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\textures_02.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\textures_03.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\sample.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\aircannon_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\stage_select_bg.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\switch_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\thorns_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\thorns_02.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\thorns_03.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\thorns_04.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\title_bg.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\background.jpg">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\background2.jpg">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\block.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\block2.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\bullet_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\enemy_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\floor_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\gameclear_bg.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\gameover_bg.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\goal_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\item_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\magma_01.jpg">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\nowloading_bg.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\origin.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\player.jpg">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\player_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\sample1.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\selector.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
   </ItemGroup>
 </Project>
