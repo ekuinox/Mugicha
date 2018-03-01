@@ -37,26 +37,20 @@ void AirCannon::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
-		unless(std::abs(x - bullet->get_coords().x) < SCREEN_WIDTH && std::abs(y - bullet->get_coords().y) < SCREEN_HEIGHT)
+		bullet->update();
+
+		// –C‚Æ’e‚ª—£‚ê‚½‚ç’âŽ~‚³‚¹‰ŠúˆÊ’u‚É–ß‚·
+		if (bullet->is_triggered() && std::abs(x - bullet->get_coords().x) > SCREEN_WIDTH || std::abs(y - bullet->get_coords().y) > SCREEN_HEIGHT)
 		{
-			// ƒN[ƒ‹ƒ^ƒCƒ€‚Ý‚½‚¢‚È‚Ì‚ð“±“ü‚µ‚½‚¢
-
-			/*
-			if (bullet->is_triggered())
-			{
-				disappeared_time = current;
-				bullet->init();
-			}
-			else if (std::chrono::duration_cast<std::chrono::milliseconds>(disappeared_time - current).count() > 0)
-			{
-				bullet->trigger();
-			}
-			*/
-
 			bullet->init();
+			disappeared_time = std::chrono::system_clock::now();
+		}
+
+		// Ä‘•“U‚Étrigger_interval‚ÅŽw’è‚µ‚½ŽžŠÔ‚©‚¯‚é
+		if (!bullet->is_triggered() && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - disappeared_time).count() > trigger_interval)
+		{
 			bullet->trigger();
 		}
-		bullet->update();
 
 		latest_update = current;
 	}
