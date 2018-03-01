@@ -1,6 +1,7 @@
 #include "collision_checker.h"
 #include "player.h"
 #include "thorn.h"
+#include "bullet.h"
 
 bool Player::collision_for_enemies()
 {
@@ -110,17 +111,35 @@ bool Player::collision_for_magmas()
 	return false;
 }
 
-bool Player::collision_for_bullets()
+bool Player::collision_for_bullets(D3DXVECTOR2 &knockback)
 {
 	// ’eŠÛ‚Æ‚Ì“–‚½‚è”»’è
-	for (const auto& magma : polygons[SquarePolygonBase::PolygonTypes::BULLET])
+	for (const auto& bullet : polygons[SquarePolygonBase::PolygonTypes::BULLET])
 	{
-		if (is_collision(get_square(), magma->get_square()))
+		if (is_collision(get_square(), bullet->get_square()))
 		{
 #ifndef _WITHOUT_DEATH
 			kill(DeadReason::Shot);
 			return true;
 #endif
+			
+			switch (static_cast<Bullet*>(bullet)->get_vec())
+			{
+			case Bullet::Vec::DOWN:
+				knockback.y -= 2 * CELL_HEIGHT;
+				break;
+			case Bullet::Vec::UP:
+				knockback.y += 2 * CELL_HEIGHT;
+				break;
+			case Bullet::Vec::LEFT:
+				knockback.x -= 2 * CELL_WIDTH;
+				break;
+			case Bullet::Vec::RIGHT:
+				knockback.x += 2 * CELL_WIDTH;
+				break;
+			}
+
+			bullet->init();
 		}
 	}
 	return false;
@@ -160,6 +179,8 @@ void Player::update()
 	// ‘€ì
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1msŠÔŠu‚Å
 	{
+		auto vector = D3DXVECTOR2(0, 0); // ‚¢‚­‚çˆÚ“®‚µ‚½‚©‚ğ‚±‚±‚É
+
 		if (collision_for_enemies())
 		{
 			// €
@@ -178,7 +199,7 @@ void Player::update()
 			return;
 		}
 
-		if (collision_for_bullets())
+		if (collision_for_bullets(vector))
 		{
 			// €`
 			return;
@@ -198,7 +219,6 @@ void Player::update()
 		}
 		else
 		{
-			auto vector = D3DXVECTOR2(0, 0); // ‚¢‚­‚çˆÚ“®‚µ‚½‚©‚ğ‚±‚±‚É
 
 			// ‹²‚Ü‚ê”»’è
 			if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)

@@ -39,3 +39,8 @@ void Bullet::trigger()
 	triggered = true;
 }
 
+Bullet::Vec Bullet::get_vec()
+{
+	return vec;
+}
+

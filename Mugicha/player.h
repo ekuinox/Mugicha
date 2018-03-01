@@ -50,7 +50,7 @@ private:
 	bool collision_for_enemies();
 	bool collision_for_thorns();
 	bool collision_for_magmas();
-	bool collision_for_bullets();
+	bool collision_for_bullets(D3DXVECTOR2 &knockback);
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, int _layer, float _x, float _y, float _w, float _h, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~Player();
