@@ -39,6 +39,7 @@ private:
 	Goal *goal;
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
+	Gage* gage;
 	Stage::GameInfo info; // 続行管理と結果
 	std::chrono::system_clock::time_point latest_update; // 最終更新
 	std::chrono::system_clock::time_point latest_draw; // 最終描画

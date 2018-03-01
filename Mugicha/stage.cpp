@@ -259,6 +259,9 @@ bool Stage::stagefile_loader(const char * filepath)
 	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
 	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor(floors);
 
+	// ゲージのセット
+	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(200, 200, textures["GAGE_01"])))->on();
+
 #ifdef _DEBUG
 
 	// 原点
@@ -350,6 +353,12 @@ void Stage::update()
 	{
 		if (player->is_holding_item()) player->release_item();
 		else player->catch_item();
+	}
+
+	// ゲージの消費をテスト
+	if (GetKeyboardTrigger(DIK_J))
+	{
+		gage->consume();
 	}
 
 

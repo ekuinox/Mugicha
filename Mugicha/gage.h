@@ -18,7 +18,7 @@ public:
 private:
 	const float cost = 1.0f; // 一度に消費するコスト
 	const float cost_gage_max = 2.0f; // コストの満タン状態
-	const float cost_recovery_speed = 0.001f; // コスト回復速度（毎ms）
+	const float cost_recovery_speed = 0.01f; // コスト回復速度（毎ms）
 	float current_cost; // 現在のコスト
 };
 

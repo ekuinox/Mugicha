@@ -278,6 +278,7 @@
     <Image Include="resources\textures\bullet_01.png" />
     <Image Include="resources\textures\enemy_01.png" />
     <Image Include="resources\textures\floor_01.png" />
+    <Image Include="resources\textures\gage_01.png" />
     <Image Include="resources\textures\gameclear_bg.png" />
     <Image Include="resources\textures\gameover_bg.png" />
     <Image Include="resources\textures\goal_01.png" />

@@ -13,6 +13,8 @@
 #include "air_cannon.h"
 #include "item.h"
 #include "gimmick_switch.h"
+#include "always_displayed_polygon.h"
+#include "gage.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 
