@@ -282,6 +282,7 @@
     <Image Include="resources\textures\gameclear_bg.png" />
     <Image Include="resources\textures\gameover_bg.png" />
     <Image Include="resources\textures\goal_01.png" />
+    <Image Include="resources\textures\hellgate_01.png" />
     <Image Include="resources\textures\item_01.png" />
     <Image Include="resources\textures\magma_01.jpg" />
     <Image Include="resources\textures\nowloading_bg.png" />
