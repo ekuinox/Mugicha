@@ -210,154 +210,146 @@ void Player::update()
 {
 	if (!status) return; // statusみて切る
 
-	auto current = std::chrono::system_clock::now();
+	auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
 
-	// 操作
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1ms間隔で
+	if (collision_for_enemies())
 	{
-		auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
+		// 死
+		return;
+	}
 
-		if (collision_for_enemies())
-		{
-			// 死
-			return;
-		}
+	if (collision_for_thorns())
+	{
+		// 死
+		return;
+	}
 
-		if (collision_for_thorns())
-		{
-			// 死
-			return;
-		}
+	if (collision_for_magmas())
+	{
+		// 死
+		return;
+	}
 
-		if (collision_for_magmas())
-		{
-			// 死
-			return;
-		}
+	if (collision_for_bullets())
+	{
+		// 死～
+		return;
+	}
 
-		if (collision_for_bullets())
-		{
-			// 死～
-			return;
-		}
-
-		if (is_fallen_hellgate())
-		{
-			// 死～～
-			return;
-		}
+	if (is_fallen_hellgate())
+	{
+		// 死～～
+		return;
+	}
 		
-		// 当たり精査
-		char result = 0x00;
-		for (const auto& type : {
-			// 当たり判定を取るポリゴンのラベルまとめ
-			SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
-			SquarePolygonBase::PolygonTypes::RAGGED_FLOOR,
-			SquarePolygonBase::PolygonTypes::THORN,
-			SquarePolygonBase::PolygonTypes::AIRCANNON,
-			SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
-			})
-			for (const auto& polygon : polygons[type])
-				result |= where_collision(this, polygon);
+	// 当たり精査
+	char result = 0x00;
+	for (const auto& type : {
+		// 当たり判定を取るポリゴンのラベルまとめ
+		SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
+		SquarePolygonBase::PolygonTypes::RAGGED_FLOOR,
+		SquarePolygonBase::PolygonTypes::THORN,
+		SquarePolygonBase::PolygonTypes::AIRCANNON,
+		SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
+		})
+		for (const auto& polygon : polygons[type])
+			result |= where_collision(this, polygon);
 
-		if (controll_lock)
+	if (controll_lock)
+	{
+		// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
+		x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
+		y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
+	}
+	else
+	{
+		// ノックバックについて
+		auto knockback = D3DXVECTOR2(0, 0);
+
+		collision_for_knockback_bullets(knockback);
+
+		// 左右
+		if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
 		{
-			// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
-			x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
-			y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
+			vector.x += knockback.x;
+		}
+
+		// 上下
+		if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
+		{
+			vector.y += knockback.y;
+		}
+
+		// 挟まれ判定
+		if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
+		{
+			kill(DeadReason::Sandwiched);
+		}
+
+		// 枠外落下判定
+		if (y < -50)
+		{
+			kill(DeadReason::Falling);
+		}
+
+		// 接地判定
+		if (result & HitLine::BOTTOM)
+		{
+			ground = true;
 		}
 		else
 		{
-			// ノックバックについて
-			auto knockback = D3DXVECTOR2(0, 0);
-
-			collision_for_knockback_bullets(knockback);
-
-			// 左右
-			if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
-			{
-				vector.x += knockback.x;
-			}
-
-			// 上下
-			if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
-			{
-				vector.y += knockback.y;
-			}
-
-			// 挟まれ判定
-			if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
-			{
-				kill(DeadReason::Sandwiched);
-			}
-
-			// 枠外落下判定
-			if (y < -50)
-			{
-				kill(DeadReason::Falling);
-			}
-
-			// 接地判定
-			if (result & HitLine::BOTTOM)
-			{
-				ground = true;
-			}
-			else
-			{
-				ground = false;
-			}
+			ground = false;
+		}
 
 
-			if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
-			{
-				vector.x -= speed;
-				vec = Player::Vec::LEFT;
-			}
-			if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
-			{
-				vector.x += speed;
-				vec = Player::Vec::RIGHT;
-			}
+		if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
+		{
+			vector.x -= speed;
+			vec = Player::Vec::LEFT;
+		}
+		if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
+		{
+			vector.x += speed;
+			vec = Player::Vec::RIGHT;
+		}
 
 #ifdef _DEBUG
-			if (GetKeyboardPress(DIK_W))
-			{
-				vector.y += 5;
-			}
-			if (GetKeyboardPress(DIK_S))
-			{
-				vector.y -= 5;
-			}
+		if (GetKeyboardPress(DIK_W))
+		{
+			vector.y += 5;
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			vector.y -= 5;
+		}
 #endif
 
-			// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
-			if (!(result & HitLine::TOP) && jumping)
-			{
-				if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
-				vector.y += PLAYER_JUMP_POWER;
-			}
-
-			if(result & HitLine::TOP)
-			{
-				jumping = false;
-			}
-
-			// TODO: 同様に落下速度も調整する必要がある
-			unless(ground)
-			{
-				vector.y -= PLAYER_FALLING;
-			}
-
-			// 変更を加算して終了
-			x += vector.x;
-			y += vector.y;
+		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
+		if (!(result & HitLine::TOP) && jumping)
+		{
+			if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
+			vector.y += PLAYER_JUMP_POWER;
 		}
-		
-		// itemを持っているならitemの位置を修正してあげる
-		if (holding_item) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
 
-		latest_update = current;
+		if(result & HitLine::TOP)
+		{
+			jumping = false;
+		}
+
+		// TODO: 同様に落下速度も調整する必要がある
+		unless(ground)
+		{
+			vector.y -= PLAYER_FALLING;
+		}
+
+		// 変更を加算して終了
+		x += vector.x;
+		y += vector.y;
 	}
+		
+	// itemを持っているならitemの位置を修正してあげる
+	if (holding_item) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
 }
 
 bool Player::jump()
