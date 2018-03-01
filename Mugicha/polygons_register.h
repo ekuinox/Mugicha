@@ -53,7 +53,7 @@
 
 #define REGISTER_ITEM(x, y, tex, camera, polygons) new Item(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, polygons)
 
-#define REGISTER_SWITCH REGISTER_BLOCK
+#define REGISTER_GIMMICK_SWITCH(x, y, tex, camera, flag) new GimmickSwitch(static_cast<float>(x), static_cast<float>(y - 5), CELL_WIDTH -10, CELL_HEIGHT - 10, tex, 1, camera, flag)
 
 #define REGISTER_MAGMA(x, y, tex, camera) new Magma(static_cast<float>(x), static_cast<float>(y) - 5, CELL_WIDTH, CELL_HEIGHT - 10, tex, 1, camera)
 
@@ -83,7 +83,7 @@
 #define REGISTER_BLOCK_NUMBER_23 REGISTER_AIRCANNON
 #define REGISTER_BLOCK_NUMBER_24 REGISTER_AIRCANNON
 
-#define REGISTER_BLOCK_NUMBER_31 REGISTER_GIMMICK
-#define REGISTER_BLOCK_NUMBER_32 REGISTER_SWITCH
+#define REGISTER_BLOCK_NUMBER_31 REGISTER_GIMMICK_SWITCH
+#define REGISTER_BLOCK_NUMBER_32 REGISTER_GIMMICK_SWITCH
 #define REGISTER_BLOCK_NUMBER_33 REGISTER_MAGMA
 

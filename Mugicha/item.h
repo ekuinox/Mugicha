@@ -1,6 +1,6 @@
 #pragma once
-#include "scalable_object.h"
 #include <map>
+#include "gimmick_switch.h"
 
 class Item : public ScalableObject
 {
@@ -17,6 +17,8 @@ private:
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // “–‚½‚èŒ©‚é‚æ‚¤‚É‚Á‚Æ‚«‚Ü‚·
 	bool held; // ƒvƒŒƒCƒ„‚É’Í‚Ü‚ê‚Ä‚¢‚é‚©
 	bool on_ground;
+	GimmickSwitch *gimmick_switch;
+
 	void generate_vertexes();
 };
 

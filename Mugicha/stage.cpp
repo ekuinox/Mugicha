@@ -9,7 +9,7 @@
 
 // コンストラクタ
 Stage::Stage(char _stage_select)
-	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select), switch_sample(false)
 {
 	init();
 }
@@ -220,6 +220,7 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 32:
 				// スイッチ
+				push_polygon_back(SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH, REGISTER_GIMMICK_SWITCH(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["SWITCH_01"], camera, switch_sample))->on();
 				break;
 			case 33:
 				// マグマ
@@ -408,6 +409,10 @@ void Stage::update()
 	{
 		for (const auto& polygon : _polygons.second) polygon->update();
 	}
+
+
+	// スイッチのテスト
+	if (switch_sample) puts("ほげ～～～～～");
 }
 
 // 描画処理

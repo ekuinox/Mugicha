@@ -48,6 +48,8 @@ private:
 	POLSIZE zoom_level;
 	POLSIZE map_size; // ”wŒi‚ÌƒfƒJ‚³‚É‚È‚è‚Ü‚·
 
+	bool switch_sample;
+
 	// funcs
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void multi_texture_loader(const char *filepath);

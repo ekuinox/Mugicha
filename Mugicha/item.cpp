@@ -1,10 +1,9 @@
 #include "item.h"
 #include "collision_checker.h"
 #include "player.h"
-#include "gimmick_switch.h"
 
 Item::Item(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), held(false), polygons(_polygons), on_ground(false)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), held(false), polygons(_polygons), on_ground(false), gimmick_switch(nullptr)
 {
 }
 
@@ -17,10 +16,23 @@ void Item::update()
 		{
 			// 当たりを取っていきます
 			char result = 0x00;
-			for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON })
+			for (const auto& type : {
+				SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON, SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH
+				})
+			{
 				for (const auto& polygon : polygons[type])
-					result |= where_collision(this, polygon, 1.0f);
+				{
+					auto _result = where_collision(this, polygon, 1.0f);
+					result |= _result;
+					if (type == SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH && _result & HitLine::BOTTOM)
+					{
+						gimmick_switch = static_cast<GimmickSwitch*>(polygon);
+						gimmick_switch->press();
+					}
 
+				}
+			}
+			
 			if (result & HitLine::BOTTOM)
 			{
 				on_ground = true;
@@ -35,24 +47,6 @@ void Item::update()
 				y -= 1.0f;
 			}
 		}
-
-		// スイッチ類との当たり判定
-		for (const auto& gimmick_switch : polygons[SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH])
-		{
-			auto another = gimmick_switch->get_square();
-			auto self = get_square();
-
-			// スイッチの上に当たっとるか
-			if (hit_top(another, self))
-			{
-				static_cast<GimmickSwitch*>(gimmick_switch)->press();
-			}
-			else
-			{
-				static_cast<GimmickSwitch*>(gimmick_switch)->release();
-			}
-		}
-
 		latest_update = current;
 	}
 }
@@ -66,6 +60,7 @@ SQUARE Item::get_square()
 void Item::hold()
 {
 	held = true;
+	if(gimmick_switch != nullptr) gimmick_switch->release();
 }
 
 bool Item::hold(SQUARE sq)
