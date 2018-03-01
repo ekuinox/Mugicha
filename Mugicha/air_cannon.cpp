@@ -1,7 +1,7 @@
 #include "air_cannon.h"
 
 AirCannon::AirCannon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, LPDIRECT3DTEXTURE9 _bullet_tex, int _layer, D3DXVECTOR2 & _camera, AirCannon::Vec _vec, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), disappeared_time(std::chrono::system_clock::now())
 {
 	auto bullet_coords = D3DXVECTOR2(x, y);
 	Bullet::Vec bullet_vec;
@@ -37,14 +37,27 @@ void AirCannon::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
-		if(std::abs(x - bullet->get_coords().x) < SCREEN_WIDTH && std::abs(y - bullet->get_coords().y) < SCREEN_HEIGHT)
+		unless(std::abs(x - bullet->get_coords().x) < SCREEN_WIDTH && std::abs(y - bullet->get_coords().y) < SCREEN_HEIGHT)
 		{
-			bullet->update();
-		}
-		else
-		{
+			// クールタイムみたいなのを導入したい
+
+			/*
+			if (bullet->is_triggered())
+			{
+				disappeared_time = current;
+				bullet->init();
+			}
+			else if (std::chrono::duration_cast<std::chrono::milliseconds>(disappeared_time - current).count() > 0)
+			{
+				bullet->trigger();
+			}
+			*/
+
 			bullet->init();
+			bullet->trigger();
 		}
+		bullet->update();
+
 		latest_update = current;
 	}
 }

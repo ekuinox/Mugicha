@@ -10,6 +10,7 @@ void Bullet::init()
 {
 	x = init_coords.x;
 	y = init_coords.y;
+	triggered = false;
 }
 
 void Bullet::update()
@@ -42,5 +43,10 @@ void Bullet::trigger()
 Bullet::Vec Bullet::get_vec()
 {
 	return vec;
+}
+
+bool Bullet::is_triggered()
+{
+	return triggered;
 }
 
