@@ -12,6 +12,7 @@
 #include "magma.h"
 #include "air_cannon.h"
 #include "item.h"
+#include "gimmick_switch.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 

@@ -1,6 +1,7 @@
 #include "item.h"
 #include "collision_checker.h"
 #include "player.h"
+#include "gimmick_switch.h"
 
 Item::Item(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, float _u, float _v, float _uw, float _vh)
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), held(false), polygons(_polygons), on_ground(false)
@@ -12,11 +13,7 @@ void Item::update()
 	auto current = std::chrono::system_clock::now();
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
 	{
-		if (held)
-		{
-			// ここではスイッチとの当たり判定を見る
-		}
-		else
+		unless(held)
 		{
 			// 当たりを取っていきます
 			char result = 0x00;
@@ -38,7 +35,24 @@ void Item::update()
 				y -= 1.0f;
 			}
 		}
-		
+
+		// スイッチ類との当たり判定
+		for (const auto& gimmick_switch : polygons[SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH])
+		{
+			auto another = gimmick_switch->get_square();
+			auto self = get_square();
+
+			// スイッチの上に当たっとるか
+			if (hit_top(another, self))
+			{
+				static_cast<GimmickSwitch*>(gimmick_switch)->press();
+			}
+			else
+			{
+				static_cast<GimmickSwitch*>(gimmick_switch)->release();
+			}
+		}
+
 		latest_update = current;
 	}
 }
