@@ -111,18 +111,31 @@ bool Player::collision_for_magmas()
 	return false;
 }
 
-bool Player::collision_for_bullets(D3DXVECTOR2 &knockback)
+bool Player::collision_for_bullets()
 {
 	// 弾丸との当たり判定
 	for (const auto& bullet : polygons[SquarePolygonBase::PolygonTypes::BULLET])
 	{
 		if (is_collision(get_square(), bullet->get_square()))
 		{
+			bullet->init();
 #ifndef _WITHOUT_DEATH
 			kill(DeadReason::Shot);
 			return true;
 #endif
-			
+		}
+	}
+	return false;
+}
+
+bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
+{
+	for (const auto& bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
+	{
+		// knockback用
+		if (is_collision(get_square(), bullet->get_square()))
+		{
+
 			switch (static_cast<Bullet*>(bullet)->get_vec())
 			{
 			case Bullet::Vec::DOWN:
@@ -138,11 +151,14 @@ bool Player::collision_for_bullets(D3DXVECTOR2 &knockback)
 				knockback.x += 2 * CELL_WIDTH;
 				break;
 			}
-
 			bullet->init();
+
 		}
+
+
 	}
 	return false;
+	
 }
 
 // コンストラクタ 座標とかをセットしていく
@@ -199,7 +215,7 @@ void Player::update()
 			return;
 		}
 
-		if (collision_for_bullets(vector))
+		if (collision_for_bullets())
 		{
 			// 死～
 			return;
