@@ -114,6 +114,9 @@
     <ClCompile Include="always_displayed_polygon.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClCompile>
+    <ClCompile Include="gage.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -192,6 +195,9 @@
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
     <ClInclude Include="always_displayed_polygon.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="gage.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
