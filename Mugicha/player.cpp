@@ -12,7 +12,7 @@ bool Player::collision_for_enemies()
 		{
 			if (zoom_level.w >= 1.0f)
 			{
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 				// プレイヤの負け
 				kill(DeadReason::HitEnemy);
 				return true;
@@ -56,7 +56,7 @@ bool Player::collision_for_thorns()
 		case Thorn::Vec::UP:
 			if (hit_bottom(self, another))
 			{
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
 #endif
@@ -65,7 +65,7 @@ bool Player::collision_for_thorns()
 		case Thorn::Vec::DOWN:
 			if (hit_top(self, another))
 			{
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
 #endif
@@ -74,7 +74,7 @@ bool Player::collision_for_thorns()
 		case Thorn::Vec::RIGHT:
 			if (hit_left(self, another))
 			{
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
 #endif
@@ -83,7 +83,7 @@ bool Player::collision_for_thorns()
 		case Thorn::Vec::LEFT:
 			if (hit_right(self, another))
 			{
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
 #endif
@@ -102,7 +102,7 @@ bool Player::collision_for_magmas()
 	{
 		if (is_collision(get_square(), magma->get_square()))
 		{
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 			kill(DeadReason::HitMagma);
 			return true;
 #endif
@@ -119,7 +119,7 @@ bool Player::collision_for_bullets()
 		if (is_collision(get_square(), bullet->get_square()))
 		{
 			bullet->init();
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 			kill(DeadReason::Shot);
 			return true;
 #endif
@@ -164,6 +164,21 @@ bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
 	}
 	return false;
 	
+}
+
+bool Player::is_fallen_hellgate()
+{
+	auto self = get_square();
+	self.h *= 0.9; // 甘さ
+	if (is_collision(self, polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->get_square()))
+	{
+#ifndef _NEVER_DIE
+		// プレイヤの負け
+		kill(DeadReason::FallenHellGate);
+		return true;
+#endif
+	}
+	return false;
 }
 
 // コンストラクタ 座標とかをセットしていく
@@ -223,6 +238,12 @@ void Player::update()
 		if (collision_for_bullets())
 		{
 			// 死～
+			return;
+		}
+
+		if (is_fallen_hellgate())
+		{
+			// 死～～
 			return;
 		}
 		
@@ -389,7 +410,7 @@ void Player::unlock()
 
 void Player::kill(const DeadReason & _dead_reason)
 {
-#ifndef _WITHOUT_DEATH
+#ifndef _NEVER_DIE
 	dead_reason = _dead_reason;
 #endif
 }

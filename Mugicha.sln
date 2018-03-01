@@ -1,20 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mugicha", "Mugicha\Mugicha.vcxproj", "{82DA19B8-9CE6-4951-8370-7D97528481A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug(NeverDie)|x64 = Debug(NeverDie)|x64
+		Debug(NeverDie)|x86 = Debug(NeverDie)|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-		WITHOUT_DEATH|x64 = WITHOUT_DEATH|x64
-		WITHOUT_DEATH|x86 = WITHOUT_DEATH|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug(NeverDie)|x64.ActiveCfg = Debug(NeverDie)|x64
+		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug(NeverDie)|x64.Build.0 = Debug(NeverDie)|x64
+		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug(NeverDie)|x86.ActiveCfg = Debug(NeverDie)|Win32
+		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug(NeverDie)|x86.Build.0 = Debug(NeverDie)|Win32
 		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug|x64.ActiveCfg = Debug|x64
 		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug|x64.Build.0 = Debug|x64
 		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Debug|x86.ActiveCfg = Debug|Win32
@@ -23,10 +27,6 @@ Global
 		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Release|x64.Build.0 = Release|x64
 		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Release|x86.ActiveCfg = Release|Win32
 		{82DA19B8-9CE6-4951-8370-7D97528481A7}.Release|x86.Build.0 = Release|Win32
-		{82DA19B8-9CE6-4951-8370-7D97528481A7}.WITHOUT_DEATH|x64.ActiveCfg = WITHOUT_DEATH|x64
-		{82DA19B8-9CE6-4951-8370-7D97528481A7}.WITHOUT_DEATH|x64.Build.0 = WITHOUT_DEATH|x64
-		{82DA19B8-9CE6-4951-8370-7D97528481A7}.WITHOUT_DEATH|x86.ActiveCfg = WITHOUT_DEATH|Win32
-		{82DA19B8-9CE6-4951-8370-7D97528481A7}.WITHOUT_DEATH|x86.Build.0 = WITHOUT_DEATH|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

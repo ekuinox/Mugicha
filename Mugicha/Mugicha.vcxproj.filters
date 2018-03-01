@@ -40,24 +40,33 @@
     <Filter Include="リソース ファイル\resources\texturtes">
       <UniqueIdentifier>{30e1ac37-2d04-4746-91f6-3808f7a36965}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived">
+      <UniqueIdentifier>{ee2ccdcb-3748-4837-982d-355a7099807e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived">
+      <UniqueIdentifier>{78df14e9-9d1e-4db1-923f-2ea3ddbebd3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\utils">
+      <UniqueIdentifier>{ac885444-7f2f-44cf-958b-9e12f8c00a4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\io">
+      <UniqueIdentifier>{0e8fea2b-1b06-420f-85a2-7be4440ed6f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\io">
+      <UniqueIdentifier>{2e647320-c60f-42b2-a88c-03f121acfd11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\utils">
+      <UniqueIdentifier>{59ff1f42-9348-4d41-bc36-7b87e9ae7db0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="input.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="debug_console.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="stage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="collision_checker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="selector.cpp">
@@ -105,18 +114,27 @@
     <ClCompile Include="gimmick_switch.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
+    <ClCompile Include="always_displayed_polygon.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="gage.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="hellgate.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="collision_checker.cpp">
+      <Filter>ソース ファイル\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="debug_console.cpp">
+      <Filter>ソース ファイル\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>ソース ファイル\io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="conf.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="debug_console.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="stage.h">
@@ -125,13 +143,7 @@
     <ClInclude Include="controller.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="collision_checker.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="square_polygon_base.h">
-      <Filter>ヘッダー ファイル\SquarePolygonBase</Filter>
-    </ClInclude>
-    <ClInclude Include="plain_square_polygon.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase</Filter>
     </ClInclude>
     <ClInclude Include="background.h">
@@ -151,15 +163,6 @@
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClInclude>
-    <ClInclude Include="scalable_object.h">
-      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClInclude>
-    <ClInclude Include="csv_loader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="polygons_register.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="magma.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
@@ -181,6 +184,39 @@
     </ClInclude>
     <ClInclude Include="gimmick_switch.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="plain_square_polygon.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="scalable_object.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="always_displayed_polygon.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="gage.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="hellgate.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="collision_checker.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="debug_console.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="polygons_register.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>ヘッダー ファイル\io</Filter>
+    </ClInclude>
+    <ClInclude Include="csv_loader.h">
+      <Filter>ヘッダー ファイル\io</Filter>
+    </ClInclude>
+    <ClInclude Include="conf.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +319,12 @@
       <Filter>リソース ファイル\resources\texturtes</Filter>
     </Image>
     <Image Include="resources\textures\selector.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\gage_01.png">
+      <Filter>リソース ファイル\resources\texturtes</Filter>
+    </Image>
+    <Image Include="resources\textures\hellgate_01.png">
       <Filter>リソース ファイル\resources\texturtes</Filter>
     </Image>
   </ItemGroup>

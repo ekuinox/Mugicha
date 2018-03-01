@@ -39,6 +39,7 @@ private:
 	Goal *goal;
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
+	Gage* gage;
 	Stage::GameInfo info; // 続行管理と結果
 	std::chrono::system_clock::time_point latest_update; // 最終更新
 	std::chrono::system_clock::time_point latest_draw; // 最終描画
@@ -47,7 +48,7 @@ private:
 	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
 	POLSIZE zoom_level;
 	POLSIZE map_size; // 背景のデカさになります
-
+	bool zooming;
 	bool switch_sample;
 
 	// funcs
