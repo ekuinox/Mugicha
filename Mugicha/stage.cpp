@@ -194,25 +194,25 @@ bool Stage::stagefile_loader(const char * filepath)
 				// 空気砲（上）
 				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
 				aircannon->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				push_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 22:
 				// 空気砲（下）
 				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
 				aircannon->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				push_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 23:
 				// 空気砲（右）
 				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
 				aircannon->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				push_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 24:
 				// 空気砲（左）
 				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
 				aircannon->on();
-				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				push_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 31:
 				// 持てるオブジェクト
@@ -224,6 +224,30 @@ bool Stage::stagefile_loader(const char * filepath)
 			case 33:
 				// マグマ
 				push_polygon_back(SquarePolygonBase::PolygonTypes::MAGMA, REGISTER_MAGMA(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["MAGMA_01"], camera))->on();
+				break;
+			case 41:
+				// キル（上）
+				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				break;
+			case 42:
+				// キル（下）
+				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				break;
+			case 43:
+				// キル（右）
+				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
+				break;
+			case 44:
+				// キル砲（左）
+				aircannon = push_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon->on();
+				push_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
 			}
 		}

@@ -130,29 +130,34 @@ bool Player::collision_for_bullets()
 
 bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
 {
+	auto self = get_square();
+	
 	for (const auto& bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
 	{
-		// knockback用
-		if (is_collision(get_square(), bullet->get_square()))
+
+		auto another = bullet->get_square();
+		auto vec = static_cast<Bullet*>(bullet)->get_vec();
+		auto result = where_collision(another, self, 0.0f);
+
+		if (result & HitLine::TOP && vec == Bullet::Vec::UP)
 		{
-
-			switch (static_cast<Bullet*>(bullet)->get_vec())
-			{
-			case Bullet::Vec::DOWN:
-				knockback.y -= 2 * CELL_HEIGHT;
-				break;
-			case Bullet::Vec::UP:
-				knockback.y += 2 * CELL_HEIGHT;
-				break;
-			case Bullet::Vec::LEFT:
-				knockback.x -= 2 * CELL_WIDTH;
-				break;
-			case Bullet::Vec::RIGHT:
-				knockback.x += 2 * CELL_WIDTH;
-				break;
-			}
+			knockback.y += CELL_WIDTH;
 			bullet->init();
-
+		}
+		else if (result & HitLine::BOTTOM && vec == Bullet::Vec::DOWN)
+		{	
+			knockback.y -= CELL_WIDTH;
+			bullet->init();
+		}
+		else if (result & HitLine::LEFT && vec == Bullet::Vec::LEFT)
+		{
+			knockback.x -= CELL_WIDTH;
+			bullet->init();
+		}
+		else if (result & HitLine::RIGHT && vec == Bullet::Vec::RIGHT)
+		{
+			knockback.x += CELL_WIDTH;
+			bullet->init();
 		}
 
 
@@ -235,6 +240,22 @@ void Player::update()
 		}
 		else
 		{
+			// ノックバックについて
+			auto knockback = D3DXVECTOR2(0, 0);
+
+			collision_for_knockback_bullets(knockback);
+
+			// 左右
+			if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
+			{
+				vector.x += knockback.x;
+			}
+
+			// 上下
+			if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
+			{
+				vector.y += knockback.y;
+			}
 
 			// 挟まれ判定
 			if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
@@ -257,6 +278,7 @@ void Player::update()
 			{
 				ground = false;
 			}
+
 
 			if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
 			{
