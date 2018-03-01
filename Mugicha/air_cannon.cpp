@@ -27,7 +27,7 @@ AirCannon::AirCannon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 
 		bullet_vec = Bullet::Vec::RIGHT;
 	}
 
-	bullet = new Bullet(bullet_coords.x, bullet_coords.y, CELL_WIDTH, CELL_HEIGHT, _bullet_tex, 1, _camera, bullet_vec);
+	bullet = new Bullet(bullet_coords.x, bullet_coords.y, CELL_WIDTH * 0.8, CELL_HEIGHT * 0.8, _bullet_tex, 1, _camera, bullet_vec);
 	bullet->on();
 	bullet->trigger();
 }
