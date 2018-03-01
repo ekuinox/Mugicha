@@ -35,19 +35,11 @@ void StageBackground::update()
 
 	auto current = std::chrono::system_clock::now();
 
-	// ëÄçÏ
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1msä‘äuÇ≈
-	{
-		// cameraÇópÇ¢ÇƒÅCUVç¿ïWÇãÅÇﬂÇÈ
+	auto uv_vec = D3DXVECTOR2();
 
-		auto uv_vec = D3DXVECTOR2();
+	u = camera.x / SCREEN_WIDTH / zoom_level.w * uvset.u;
+	v = 1.0f - (camera.y / SCREEN_HEIGHT / zoom_level.h * uvset.v);
 
-		u = camera.x / SCREEN_WIDTH / zoom_level.w * uvset.u;
-		v = 1.0f - (camera.y / SCREEN_HEIGHT / zoom_level.h * uvset.v);
-
-		uw = uvset.uw * zoom_level.w;
-		vh = uvset.vh * zoom_level.h;
-
-		latest_update = current;
-	}
+	uw = uvset.uw * zoom_level.w;
+	vh = uvset.vh * zoom_level.h;
 }
