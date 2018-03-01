@@ -15,6 +15,7 @@ public:
 	Gage(float _x, float _y, LPDIRECT3DTEXTURE9 _tex);
 	void update();
 	float consume(); // 一回分消費して残量を返す，コストが足らない場合は負の値を返す
+	bool can_consume();
 private:
 	const float cost = 1.0f; // 一度に消費するコスト
 	const float cost_gage_max = 2.0f; // コストの満タン状態

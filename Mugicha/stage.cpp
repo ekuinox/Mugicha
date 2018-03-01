@@ -9,7 +9,7 @@
 
 // コンストラクタ
 Stage::Stage(char _stage_select)
-	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select), switch_sample(false)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select), switch_sample(false), zooming(false)
 {
 	init();
 }
@@ -324,8 +324,36 @@ void Stage::update()
 	}
 
 	// 拡縮
-	if (zoom_sign == Stage::Sign::ZERO)
+	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
 	{
+		// 最小にする => 自分は大きくなる
+		if (zoom_level.w > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
+		{
+			zoom_level_target.w = zoom_level_target.h = 0.5f;
+			zoom_sign = Stage::Sign::MINUS;
+			player->lock();
+			gage->consume();
+		}
+
+		// 通常状態
+		if (zoom_level.w != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
+		{
+			zoom_level_target.w = zoom_level_target.h = 1.0f;
+			zoom_sign = (zoom_level.w < 0 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
+			player->lock();
+			gage->consume();
+		}
+
+		// 最大化 => 自分は小さくなる
+		if (zoom_level.w < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
+		{
+			zoom_level_target.w = zoom_level_target.h = 2.0f;
+			zoom_sign = Stage::Sign::PLUS;
+			player->lock();
+			gage->consume();
+		}
+
+#ifdef _DEBUG
 		if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // 拡大
 		{
 			zoom_sign = Stage::Sign::PLUS;
@@ -340,6 +368,7 @@ void Stage::update()
 			zoom_level_target.h = zoom_level.h / 2;
 			player->lock();
 		}
+#endif
 	}
 	
 	// プレイヤをジャンプさせる

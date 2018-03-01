@@ -48,7 +48,7 @@ private:
 	POLSIZE zoom_level_target; // Ç«Ç±Ç‹Ç≈ägèkÇ∑ÇÈÇ©Ç∆Ç¢Ç§ÉAÉå
 	POLSIZE zoom_level;
 	POLSIZE map_size; // îwåiÇÃÉfÉJÇ≥Ç…Ç»ÇËÇ‹Ç∑
-
+	bool zooming;
 	bool switch_sample;
 
 	// funcs

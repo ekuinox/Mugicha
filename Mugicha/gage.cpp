@@ -36,3 +36,8 @@ float Gage::consume()
 		return current_cost;
 	}
 }
+
+bool Gage::can_consume()
+{
+	return current_cost >= cost;
+}
