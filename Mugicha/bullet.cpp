@@ -8,6 +8,8 @@ Bullet::Bullet(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, 
 
 void Bullet::init()
 {
+	triggered = false;
+	hide(); // ”­ŽË‚³‚ê‚é‚Ü‚Å‰B‚·
 	x = init_coords.x;
 	y = init_coords.y;
 }
@@ -24,6 +26,7 @@ void Bullet::update()
 		break;
 	case Bullet::Vec::DOWN:
 		y -= speed;
+		break;
 	case Bullet::Vec::LEFT:
 		x -= speed;
 		break;
@@ -36,5 +39,16 @@ void Bullet::update()
 void Bullet::trigger()
 {
 	triggered = true;
+	show(); // ”­ŽË‚³‚ê‚½’iŠK‚ÅŒ©‚¦‚é‚æ‚¤‚É
+}
+
+Bullet::Vec Bullet::get_vec()
+{
+	return vec;
+}
+
+bool Bullet::is_triggered()
+{
+	return triggered;
 }
 

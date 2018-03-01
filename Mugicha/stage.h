@@ -48,6 +48,8 @@ private:
 	POLSIZE zoom_level;
 	POLSIZE map_size; // ”wŒi‚ÌƒfƒJ‚³‚É‚È‚è‚Ü‚·
 
+	bool switch_sample;
+
 	// funcs
 	void multi_texture_loader(std::map<std::string, const char *> _textures);
 	void multi_texture_loader(const char *filepath);
@@ -57,7 +59,7 @@ private:
 	void draw();
 
 	template<typename _T>
-	_T push_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
+	_T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
 public:
 	Stage(char _stage_select);
 	~Stage();

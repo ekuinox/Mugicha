@@ -8,6 +8,7 @@
 #include "conf.h"
 #include <map>
 #include "input.h"
+#include "item.h"
 
 // プレイヤークラス
 
@@ -43,11 +44,14 @@ private:
 	POLSIZE before_zoom_level; // 前のヤツ
 	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // 当たり見るように持っときます
 	Player::Vec vec;
+	bool holding_item; // アイテムを持っている状態
+	Item *item;
 
 	bool collision_for_enemies();
 	bool collision_for_thorns();
 	bool collision_for_magmas();
 	bool collision_for_bullets();
+	bool collision_for_knockback_bullets(D3DXVECTOR2 &knockback);
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, int _layer, float _x, float _y, float _w, float _h, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	~Player();
@@ -58,9 +62,12 @@ public:
 
 	// 独自関数
 	bool jump();
+	bool catch_item();
+	void release_item();
+	bool is_holding_item();
 	void lock();
 	void unlock();
 	void kill(const DeadReason &_dead_reason);
 	Player::DeadReason dead();
-	Player* operator*() { return this; }
+	Player::Vec get_vec();
 };

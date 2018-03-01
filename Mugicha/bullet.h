@@ -14,6 +14,8 @@ public:
 	void init();
 	void update();
 	void trigger();
+	Bullet::Vec get_vec();
+	bool is_triggered();
 private:
 	Bullet::Vec vec;
 	D3DXVECTOR2 init_coords;

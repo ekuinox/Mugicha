@@ -20,7 +20,7 @@ void Enemy::update()
 	{
 		// ìñÇΩÇËê∏ç∏
 		char result = 0x00;
-		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN })
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON })
 			for (const auto& polygon : polygons[type])
 				result |= where_collision(this, polygon, 1.0f);
 

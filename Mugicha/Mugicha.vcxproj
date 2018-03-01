@@ -214,8 +214,10 @@
     <ClCompile Include="debug_console.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="gimmick_switch.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="magma.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -237,8 +239,10 @@
     <ClInclude Include="debug_console.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="gimmick_switch.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
@@ -254,6 +258,40 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\stages\sample.csv" />
+    <None Include="resources\stages\stage_01.csv" />
+    <None Include="resources\stages\stage_02.csv" />
+    <None Include="resources\stages\stage_03.csv" />
+    <None Include="resources\stages\textures_01.csv" />
+    <None Include="resources\stages\textures_02.csv" />
+    <None Include="resources\stages\textures_03.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\aircannon_01.png" />
+    <Image Include="resources\textures\background.jpg" />
+    <Image Include="resources\textures\background2.jpg" />
+    <Image Include="resources\textures\block.png" />
+    <Image Include="resources\textures\block2.png" />
+    <Image Include="resources\textures\bullet_01.png" />
+    <Image Include="resources\textures\enemy_01.png" />
+    <Image Include="resources\textures\floor_01.png" />
+    <Image Include="resources\textures\gameclear_bg.png" />
+    <Image Include="resources\textures\gameover_bg.png" />
+    <Image Include="resources\textures\goal_01.png" />
+    <Image Include="resources\textures\item_01.png" />
+    <Image Include="resources\textures\magma_01.jpg" />
+    <Image Include="resources\textures\nowloading_bg.png" />
+    <Image Include="resources\textures\origin.png" />
+    <Image Include="resources\textures\player.jpg" />
+    <Image Include="resources\textures\player_01.png" />
+    <Image Include="resources\textures\sample1.png" />
+    <Image Include="resources\textures\selector.png" />
+    <Image Include="resources\textures\stage_select_bg.png" />
+    <Image Include="resources\textures\switch_01.png" />
+    <Image Include="resources\textures\thorns_01.png" />
+    <Image Include="resources\textures\thorns_02.png" />
+    <Image Include="resources\textures\thorns_03.png" />
+    <Image Include="resources\textures\thorns_04.png" />
+    <Image Include="resources\textures\title_bg.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
