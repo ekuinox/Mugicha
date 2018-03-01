@@ -10,6 +10,8 @@
 class PlainSquarePolygon : public SquarePolygonBase
 {
 protected:
+	D3DXVECTOR2 & camera; // 描画中心座標 => 基本的にプレイヤ中心
+	
 	void generate_vertexes();
 public:
 	PlainSquarePolygon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);

@@ -62,9 +62,6 @@ protected:
 	bool status; // 有効/無効 => update用の
 	LPDIRECT3DTEXTURE9 tex; // テクスチャ
 	VERTEX_2D vertexes[4]; // ポリゴン頂点情報 => 実際ドローするときに生成して使います
-
-	D3DXVECTOR2 &camera; // 描画中心座標 => 基本的にプレイヤ中心
-
 	// === 関数 ===
 	virtual void generate_vertexes() = 0; // vertexesを生成するのに使う．draw()より呼ばれるべきで，publicにはしてません
 
@@ -95,8 +92,8 @@ public:
 	int layer; // レイヤー番号 重複は可，数字が大きいものから描画したい
 
 	// === 関数 ===
-	SquarePolygonBase(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, float _u, float _v, float _uw, float _vh)
-		: x(_x), y(_y), w(_w), h(_h), tex(_tex), layer(_layer), camera(_camera), u(_u), v(_v), uw(_uw), vh(_vh), drawing(false), status(false), drawing_coord(_x, _y), speed(1.0f), latest_update(std::chrono::system_clock::now()) {}
+	SquarePolygonBase(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, float _u, float _v, float _uw, float _vh)
+		: x(_x), y(_y), w(_w), h(_h), tex(_tex), layer(_layer), u(_u), v(_v), uw(_uw), vh(_vh), drawing(false), status(false), drawing_coord(_x, _y), speed(1.0f), latest_update(std::chrono::system_clock::now()) {}
 
 	virtual void init() = 0; // 初期化処理
 	

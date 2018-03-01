@@ -40,6 +40,12 @@
     <Filter Include="リソース ファイル\resources\texturtes">
       <UniqueIdentifier>{30e1ac37-2d04-4746-91f6-3808f7a36965}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived">
+      <UniqueIdentifier>{ee2ccdcb-3748-4837-982d-355a7099807e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived">
+      <UniqueIdentifier>{78df14e9-9d1e-4db1-923f-2ea3ddbebd3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -104,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="gimmick_switch.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="always_displayed_polygon.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="scalable_object.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="always_displayed_polygon.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
