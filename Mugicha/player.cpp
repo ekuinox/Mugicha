@@ -265,11 +265,11 @@ void Player::update()
 			// •ÏX‚ð‰ÁŽZ‚µ‚ÄI—¹
 			x += vector.x;
 			y += vector.y;
-
-			// item‚ðŽ‚Á‚Ä‚¢‚é‚È‚çitem‚ÌˆÊ’u‚ðC³‚µ‚Ä‚ ‚°‚é
-			if (holding_item) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
 		}
 		
+		// item‚ðŽ‚Á‚Ä‚¢‚é‚È‚çitem‚ÌˆÊ’u‚ðC³‚µ‚Ä‚ ‚°‚é
+		if (holding_item) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
+
 		latest_update = current;
 	}
 }

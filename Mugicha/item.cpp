@@ -39,7 +39,6 @@ void Item::update()
 			}
 		}
 		
-
 		latest_update = current;
 	}
 }
