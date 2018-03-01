@@ -117,6 +117,9 @@
     <ClCompile Include="gage.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClCompile>
+    <ClCompile Include="hellgate.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="gage.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="hellgate.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -218,6 +218,7 @@
     <ClCompile Include="gage.cpp" />
     <ClCompile Include="gimmick_switch.cpp" />
     <ClCompile Include="goal.cpp" />
+    <ClCompile Include="hellgate.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="magma.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="gage.h" />
     <ClInclude Include="gimmick_switch.h" />
     <ClInclude Include="goal.h" />
+    <ClInclude Include="hellgate.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="magma.h" />
