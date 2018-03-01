@@ -409,10 +409,6 @@ void Stage::update()
 	{
 		for (const auto& polygon : _polygons.second) polygon->update();
 	}
-
-
-	// スイッチのテスト
-	if (switch_sample) puts("ほげ～～～～～");
 }
 
 // 描画処理
