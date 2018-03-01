@@ -131,9 +131,6 @@
     <ClInclude Include="square_polygon_base.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase</Filter>
     </ClInclude>
-    <ClInclude Include="plain_square_polygon.h">
-      <Filter>ヘッダー ファイル\SquarePolygonBase</Filter>
-    </ClInclude>
     <ClInclude Include="background.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
@@ -150,9 +147,6 @@
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClInclude>
-    <ClInclude Include="scalable_object.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
     <ClInclude Include="csv_loader.h">
@@ -180,6 +174,12 @@
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
     <ClInclude Include="gimmick_switch.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="plain_square_polygon.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="scalable_object.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClInclude>
   </ItemGroup>
