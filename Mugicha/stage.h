@@ -32,38 +32,41 @@ public:
 		_GameInfo(int _score, enum Stage::Status _status, int _stage_number) : score(_score), status(_status), stage_number(_stage_number), dead_reason(Player::DeadReason::ALIVE){}
 	};
 private:
-	// vars
-	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
-	PolygonsContainer polygons;
-	StageBackground *background;
-	Goal *goal;
-	Player *player; // プレイヤの変数
-	std::vector<Enemy*> enemies; // 敵の可変長配列
-	Gage* gage;
+	// 変数群
+	std::map<std::string, LPDIRECT3DTEXTURE9> textures; // テクスチャ格納
+	D3DXVECTOR2 camera; // カメラ位置
+	
+	PolygonsContainer polygons; // すべてのポリゴンがここにくる
+	Goal *goal; // ゴール
+	Player *player; // プレイヤ
+	Gage* gage; // 拡縮のゲージ
+
 	Stage::GameInfo info; // 続行管理と結果
+	
 	time_point latest_update; // 最終更新
 	time_point latest_draw; // 最終描画
-	D3DXVECTOR2 camera;
+	
 	enum class Sign { ZERO,	PLUS, MINUS} zoom_sign; // 拡大状態か縮小状態かってアレです
 	float zoom_level_target; // どこまで拡縮するかというアレ
-	float zoom_level;
-	POLSIZE map_size; // 背景のデカさになります
-	bool zooming;
-	bool switch_sample;
+	float zoom_level; // 最新のズームレベル
 
-	// funcs
-	void multi_texture_loader(std::map<std::string, const char *> _textures);
-	void multi_texture_loader(const char *filepath);
-	bool stagefile_loader(const char* filepath);
-	void init();
+	POLSIZE map_size; // 背景のデカさになります
+	
+	std::map<std::string, bool> switches; // スイッチマップ
+
+	// 関数群
+	void multi_texture_loader(std::map<std::string, const char *> _textures); // テクスチャを読み込む
+	void multi_texture_loader(const char *filepath); // テクスチャを読み込むためのmapを作成して渡す
+	bool stagefile_loader(const char* filepath); // ステージファイルをロードする
+	void init(); // ステージの初期設定をやる
 	void update();
 	void draw();
 
 	template<typename _T>
-	_T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon);
+	_T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon); // polygonsの指定されたラベルの最後にで追加する
 public:
 	Stage(char _stage_select);
 	~Stage();
 
-	GameInfo exec();
+	GameInfo exec(); // 外からはこれしか叩かない
 };

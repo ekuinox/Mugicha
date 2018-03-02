@@ -150,10 +150,6 @@ void Controller::update()
 	}
 	else
 	{
-		auto current = SCNOW;
-		if (time_diff(latest_update, current) < UPDATE_INTERVAL) return;
-		latest_update = current;
-
 		for (const auto& polygon : polygons) polygon->update();
 
 		switch (scene)
