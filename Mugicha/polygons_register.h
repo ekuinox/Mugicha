@@ -24,7 +24,8 @@
 #define REGISTER_BACKGROUND(x, y, w, h, tex, camera) new Background(static_cast<float>(x), static_cast<float>(y), w, h, tex, camera)
 
 #define REGISTER_PLAYER(x, y, tex, camera, polygons) new Player(tex, camera, polygons, 0, static_cast<float>(x), static_cast<float>(y), PLAYER_WIDTH, PLAYER_HEIGHT)
-#define REGISTER_ENEMY(x, y, tex, camera, polygons, vec) new Enemy(tex, camera, 1, static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, vec, polygons)
+
+#define REGISTER_ENEMY(x, y, tex, camera, polygons, vec) new Enemy(tex, camera, 1, static_cast<float>(x), static_cast<float>(y), PLAYER_WIDTH, PLAYER_HEIGHT, vec, polygons)
 #define REGISTER_ENEMY_LEFT(x, y, tex, camera, polygons) REGISTER_ENEMY(static_cast<float>(x), static_cast<float>(y), tex, camera, polygons, Enemy::Vec::LEFT)
 #define REGISTER_ENEMY_RIGHT(x, y, tex, camera, polygons) REGISTER_ENEMY(static_cast<float>(x), static_cast<float>(y), tex, camera, polygons, Enemy::Vec::RIGHT)
 
@@ -37,8 +38,8 @@
 
 #define REGISTER_GOAL(x, y, tex, camera, player) new Goal(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 
-#define REGISTER_THORN(x, y, tex, camera, vec) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, vec)
-#define REGISTER_THORN_HALF(x, y, tex, camera, vec) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT / 2, tex, 1, camera, vec)
+#define REGISTER_THORN(x, y, tex, camera, vec) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH - 10, CELL_HEIGHT - 10, tex, 1, camera, vec)
+#define REGISTER_THORN_HALF(x, y, tex, camera, vec) new Thorn(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH - 10, CELL_HEIGHT / 2 - 5, tex, 1, camera, vec)
 #define REGISTER_THORN_UP(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x), static_cast<float>(y) - 1, tex, camera, Thorn::Vec::UP)
 #define REGISTER_THORN_UP_HALF(x, y, tex, camera) REGISTER_THORN_HALF(static_cast<float>(x), static_cast<float>(y) - 1, tex, camera, Thorn::Vec::UP)
 #define REGISTER_THORN_DOWN(x, y, tex, camera) REGISTER_THORN(static_cast<float>(x), static_cast<float>(y) + 1, tex, camera, Thorn::Vec::DOWN)
