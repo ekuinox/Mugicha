@@ -48,7 +48,7 @@ public:
 		LEFT
 	};
 private:
-	std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &polygons; // 当たり見るように持っときます
+	PolygonsContainer &polygons; // 当たり見るように持っときます
 
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
 	
@@ -62,6 +62,7 @@ private:
 	
 	float zoom_level; // ズームサイズ
 	float before_zoom_level; // 前のヤツ
+
 	Player::Vec vec;
 	
 	Item *item; // 持っているアイテムを格納する．持っていない場合はnullptrにする．
