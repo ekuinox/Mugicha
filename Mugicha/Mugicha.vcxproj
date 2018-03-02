@@ -247,6 +247,7 @@
     <ClInclude Include="gimmick_switch.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="hellgate.h" />
+    <ClInclude Include="helpers.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="magma.h" />

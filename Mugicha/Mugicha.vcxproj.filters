@@ -218,6 +218,9 @@
     <ClInclude Include="conf.h">
       <Filter>ヘッダー ファイル\utils</Filter>
     </ClInclude>
+    <ClInclude Include="helpers.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\stages\stage_01.csv">

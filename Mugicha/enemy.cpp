@@ -1,15 +1,15 @@
 #include "enemy.h"
 #include "collision_checker.h"
 
-Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, float _w, float _h, Vec _vec, PolygonsContainer &_polygons, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), alive(true), polygons(_polygons), moving(false)
+Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w, float _h, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), polygons(_polygons), moving(false)
 {
-	speed = 0.3f;
+	speed = ENEMY_SPEED;
 }
 
 void Enemy::update()
 {
-	if (!status) return;
+	unless (status) return;
 
 	// 画面外かどうかでmovingを切り分ける
 	moving = (vertexes[0].x <= SCREEN_WIDTH * 1.25 && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT * 1.25 && vertexes[2].y >= 0) ? true : false;
@@ -39,13 +39,13 @@ void Enemy::update()
 		vector.x += speed * (vec == Vec::RIGHT ? 1 : -1);
 
 		// ジャンプ開始から時間が経過
-		if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
+		if (timeGetTime() - jumped_at > ENEMY_JUMP_TIME) jumping = false;
 		
 		// ジャンプなう
-		if (jumping) vector.y += 1.01f;
+		if (jumping) vector.y += ENEMY_JUMP_POWER;
 		
 		// 空中に居る間は落下し続ける
-		if (!on_ground) vector.y -= PLAYER_FALLING;
+		if (!on_ground) vector.y -= ENEMY_FALLING;
 
 		// 次々ジャンプしていけ
 		if (on_ground && !jumping)

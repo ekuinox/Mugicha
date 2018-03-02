@@ -25,7 +25,7 @@
 
 #define REGISTER_PLAYER(x, y, tex, camera, polygons) new Player(tex, camera, polygons, 0, static_cast<float>(x), static_cast<float>(y))
 
-#define REGISTER_ENEMY(x, y, tex, camera, polygons, vec) new Enemy(tex, camera, 1, static_cast<float>(x), static_cast<float>(y), PLAYER_WIDTH, PLAYER_HEIGHT, vec, polygons)
+#define REGISTER_ENEMY(x, y, tex, camera, polygons, vec) new Enemy(tex, camera, 1, static_cast<float>(x), static_cast<float>(y), vec, polygons)
 #define REGISTER_ENEMY_LEFT(x, y, tex, camera, polygons) REGISTER_ENEMY(static_cast<float>(x), static_cast<float>(y), tex, camera, polygons, Enemy::Vec::LEFT)
 #define REGISTER_ENEMY_RIGHT(x, y, tex, camera, polygons) REGISTER_ENEMY(static_cast<float>(x), static_cast<float>(y), tex, camera, polygons, Enemy::Vec::RIGHT)
 
