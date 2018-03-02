@@ -59,6 +59,12 @@ void Thorn::update()
 	if (falling)
 	{
 		y -= 1.0f;
+
+		// ここをブロックと接触すれば終了にする
+		if (floor->get_coords().y - y > CELL_HEIGHT * 4)
+		{
+			stop_falling();
+		}
 	}
 	// 高さを設定しなおす
 	else if (floor != nullptr)

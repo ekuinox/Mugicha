@@ -45,10 +45,12 @@ bool Player::collision_for_thorns()
 			{
 				static_cast<Thorn*>(thorn)->trigger_falling();
 			}
+			/*
 			else
 			{
 				static_cast<Thorn*>(thorn)->stop_falling();
 			}
+			*/
 		}
 
 		switch (static_cast<Thorn*>(thorn)->get_vec())
