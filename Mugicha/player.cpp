@@ -333,8 +333,9 @@ void Player::update()
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
 		if (!(result & HitLine::TOP) && jumping)
 		{
-			if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
-			vector.y += PLAYER_JUMP_POWER;
+			auto spent = timeGetTime() - jumped_at;
+			if (spent < PLAYER_JUMP_TIME || (GetKeyboardPress(DIK_SPACE) && spent < PLAYER_HOLD_JUMP_TIME)) vector.y += PLAYER_JUMP_POWER;
+			else jumping = false;
 		}
 
 		if(result & HitLine::TOP)
