@@ -33,8 +33,6 @@ void StageBackground::update()
 {
 	if (!status) return;
 
-	auto current = std::chrono::system_clock::now();
-
 	auto uv_vec = D3DXVECTOR2();
 
 	u = camera.x / SCREEN_WIDTH / zoom_level.w * uvset.u;
