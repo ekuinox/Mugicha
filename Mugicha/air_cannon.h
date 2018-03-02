@@ -26,7 +26,5 @@ public:
 private:
 	Bullet *bullet;
 	AirCannon::Vec vec;
-	const int trigger_interval = 1000;
-	std::chrono::system_clock::time_point disappeared_time; // 消えたタイミング
 };
 

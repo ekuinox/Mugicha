@@ -20,5 +20,7 @@ private:
 	Bullet::Vec vec;
 	D3DXVECTOR2 init_coords;
 	bool triggered;
+	const int trigger_interval = 1000;
+	std::chrono::system_clock::time_point disappeared_time; // 消えたタイミング
 };
 
