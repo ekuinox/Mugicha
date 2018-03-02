@@ -9,7 +9,7 @@
 
 // コンストラクタ
 Stage::Stage(char _stage_select)
-	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select), switch_sample(false), zooming(false)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select), switch_sample(false), zooming(false)
 {
 	init();
 }
@@ -93,7 +93,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	if (table[0].size() != 4) return false; // 一行目にはw,hにしておいて欲しいので
 
 	// すべて無にする　後のことは考えてない　すみません
-	std::map<SquarePolygonBase::PolygonTypes, polygon_vec>().swap(polygons);
+	PolygonsContainer().swap(polygons);
 	
 	// マップのサイズを入れたい
 	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
@@ -285,7 +285,7 @@ bool Stage::stagefile_loader(const char * filepath)
 void Stage::init()
 {
 #ifdef _DEBUG
-	const auto exec_start = std::chrono::system_clock::now();
+	const auto exec_start = SCNOW;
 #endif
 	char filepath[256]; // ファイルパス格納
 
@@ -300,7 +300,7 @@ void Stage::init()
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - exec_start).count() << std::endl;
+	std::cout << time_diff(exec_start) << std::endl;
 #endif
 	if (exec_result) info.status = Stage::Status::Ready;
 	else info.status = Stage::Status::LoadError;
@@ -393,8 +393,8 @@ void Stage::update()
 
 
 	// 時間を気にするもの
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < UPDATE_INTERVAL) return;
+	auto current = SCNOW;
+	if (time_diff(latest_update, current) < UPDATE_INTERVAL) return;
 	latest_update = current;
 
 	if (zoom_sign == Stage::Sign::PLUS)
@@ -454,8 +454,8 @@ void Stage::update()
 // 描画処理
 void Stage::draw()
 {
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
+	auto current = SCNOW;
+	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	// ここから描画処理

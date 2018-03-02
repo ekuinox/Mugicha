@@ -2,7 +2,7 @@
 
 /* ゲーム本体 */
 Controller::Controller()
-	: scene(Scene::Ready), latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now())
+	: scene(Scene::Ready), latest_update(SCNOW), latest_draw(SCNOW)
 {
 	init();
 }
@@ -127,9 +127,6 @@ void Controller::update()
 {
 	UpdateInput();
 
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < UPDATE_INTERVAL) return;
-
 	if (scene == Scene::Gaming)
 	{
 		game_info = stage->exec();
@@ -153,6 +150,10 @@ void Controller::update()
 	}
 	else
 	{
+		auto current = SCNOW;
+		if (time_diff(latest_update, current) < UPDATE_INTERVAL) return;
+		latest_update = current;
+
 		for (const auto& polygon : polygons) polygon->update();
 
 		switch (scene)
@@ -194,8 +195,7 @@ void Controller::update()
 		case Scene::End:
 			break;
 		}
-	}
-	
+	}	
 }
 
 // ポリゴンをまとめてドロー
@@ -203,8 +203,8 @@ void Controller::draw()
 {
 	if (scene == Scene::Gaming) return; // ゲーム中はStage->exec();にまかせて
 
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
+	auto current = SCNOW;
+	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	polygon_vec drawing_polygons;
