@@ -45,12 +45,6 @@ bool Player::collision_for_thorns()
 			{
 				static_cast<Thorn*>(thorn)->trigger_falling();
 			}
-			/*
-			else
-			{
-				static_cast<Thorn*>(thorn)->stop_falling();
-			}
-			*/
 		}
 
 		switch (static_cast<Thorn*>(thorn)->get_vec())
@@ -284,7 +278,6 @@ void Player::drifting(D3DXVECTOR2 & vector)
 	unless(ground) vector.y -= PLAYER_FALLING;
 }
 
-// コンストラクタ 座標とかをセットしていく
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),

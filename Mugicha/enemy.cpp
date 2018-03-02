@@ -2,7 +2,7 @@
 #include "collision_checker.h"
 
 Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), polygons(_polygons), moving(false)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), polygons(_polygons), moving(false), jumping(false), jumped_at(SCNOW), on_ground(true)
 {
 	speed = ENEMY_SPEED;
 }
@@ -39,7 +39,7 @@ void Enemy::update()
 		vector.x += speed * (vec == Vec::RIGHT ? 1 : -1);
 
 		// ジャンプ開始から時間が経過
-		if (timeGetTime() - jumped_at > ENEMY_JUMP_TIME) jumping = false;
+		if (time_diff(jumped_at) > ENEMY_JUMP_TIME) jumping = false;
 		
 		// ジャンプなう
 		if (jumping) vector.y += ENEMY_JUMP_POWER;
@@ -52,7 +52,7 @@ void Enemy::update()
 		{
 			jumping = true;
 			on_ground = false;
-			jumped_at = timeGetTime();
+			jumped_at = SCNOW;
 		}
 
 		// 反映

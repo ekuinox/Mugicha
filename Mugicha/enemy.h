@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scalable_object.h"
+#include "helpers.h"
 
 // 初期値など
 #define COLLISION_CHECK_POLYGONTYPES { \
@@ -30,7 +31,7 @@ private:
 	bool on_ground; // 接地
 	bool jumping; // ジャンプしている
 	bool moving; // 行動
-	DWORD jumped_at; // ジャンプした時点の時刻
+	time_point jumped_at; // ジャンプした時点の時刻
 	Vec vec;
 	PolygonsContainer &polygons;
 public:
