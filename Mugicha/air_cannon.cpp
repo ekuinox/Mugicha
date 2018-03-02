@@ -1,7 +1,8 @@
 #include "air_cannon.h"
+#include "collision_checker.h"
 
-AirCannon::AirCannon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, LPDIRECT3DTEXTURE9 _bullet_tex, int _layer, D3DXVECTOR2 & _camera, AirCannon::Vec _vec, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec)
+AirCannon::AirCannon(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, LPDIRECT3DTEXTURE9 _bullet_tex, int _layer, D3DXVECTOR2 & _camera, AirCannon::Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), polygons(_polygons)
 {
 	auto bullet_coords = D3DXVECTOR2(x, y);
 	Bullet::Vec bullet_vec;
@@ -36,14 +37,22 @@ void AirCannon::update()
 {
 	bullet->update();
 
-	// –C‚Æ’e‚ª—£‚ê‚½‚ç’âŽ~‚³‚¹‰ŠúˆÊ’u‚É–ß‚·
-	if (bullet->is_triggered() && std::abs(x - bullet->get_coords().x) > SCREEN_WIDTH || std::abs(y - bullet->get_coords().y) > SCREEN_HEIGHT)
+	// •Ç‚Ö‚Ì“–‚½‚è‚ð‚Ý‚Äinit‚µ‚Ä‚â‚é
+	if (bullet->is_triggered())
 	{
-		bullet->init();
+		for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR })
+		{
+			for (const auto& polygon : polygons[type])
+			{
+				if (is_collision(bullet->get_square(), polygon->get_square()))
+				{
+					bullet->init();
+					break;
+				}
+			}
+		}
 	}
-
-	// Ä‘•“U‚Étrigger_interval‚ÅŽw’è‚µ‚½ŽžŠÔ‚©‚¯‚é
-	if (!bullet->is_triggered())
+	else
 	{
 		bullet->trigger();
 	}
@@ -51,8 +60,8 @@ void AirCannon::update()
 
 void AirCannon::draw()
 {
-	ScalableObject::draw();
 	bullet->draw();
+	ScalableObject::draw();
 }
 
 Bullet *AirCannon::get_bullet()

@@ -312,26 +312,22 @@ void Player::update()
 		}
 
 
-		if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
+		if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A))) // 左方向への移動
 		{
 			vector.x -= speed;
 			vec = Player::Vec::LEFT;
 		}
-		if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
+		if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D))) // 右方向への移動
 		{
 			vector.x += speed;
 			vec = Player::Vec::RIGHT;
 		}
 
-#ifdef _DEBUG
-		if (GetKeyboardPress(DIK_W))
-		{
-			vector.y += 5;
-		}
-		if (GetKeyboardPress(DIK_S))
-		{
-			vector.y -= 5;
-		}
+#ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
+		if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
+		if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
+		if (GetKeyboardPress(DIK_LEFTARROW)) vector.x -= 5;
+		if (GetKeyboardPress(DIK_RIGHTARROW)) vector.x += 5;
 #endif
 
 		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ

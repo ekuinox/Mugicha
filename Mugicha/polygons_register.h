@@ -31,7 +31,7 @@
 
 #define REGISTER_BLOCK(x, y, tex, camera) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera)
 
-#define REGISTER_HALF_BLOCK(x, y, tex, camera, player) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT / 2, tex, 1, camera)
+#define REGISTER_HALF_BLOCK(x, y, tex, camera, player) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT / 2, tex, 5, camera)
 #define REGISTER_HALF_WALL(x, y, tex, camera, player) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH / 2, CELL_HEIGHT, tex, 1, camera)
 
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
@@ -48,11 +48,11 @@
 #define REGISTER_THORN_RIGHT(x, y, tex, camera, polygons) REGISTER_THORN(static_cast<float>(x) + 1, static_cast<float>(y), tex, camera, Thorn::Vec::RIGHT, polygons)
 #define REGISTER_THORN_FALL_DOWN(x, y, tex, camera, polygons) new Thorn(static_cast<float>(x), static_cast<float>(y) + 1, CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, Thorn::Vec::DOWN, polygons, true)
 
-#define REGISTER_AIRCANNON(x, y, tex, bul_tex, camera, vec) new AirCannon(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, bul_tex, 1, camera, vec)
-#define REGISTER_AIRCANNON_UP(x, y, tex, bul_tex, camera) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::UP)
-#define REGISTER_AIRCANNON_DOWN(x, y, tex, bul_tex, camera) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::DOWN)
-#define REGISTER_AIRCANNON_LEFT(x, y, tex, bul_tex, camera) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::LEFT)
-#define REGISTER_AIRCANNON_RIGHT(x, y, tex, bul_tex, camera) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::RIGHT)
+#define REGISTER_AIRCANNON(x, y, tex, bul_tex, camera, vec, polygons) new AirCannon(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, bul_tex, 1, camera, vec, polygons)
+#define REGISTER_AIRCANNON_UP(x, y, tex, bul_tex, camera, polygons) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::UP, polygons)
+#define REGISTER_AIRCANNON_DOWN(x, y, tex, bul_tex, camera, polygons) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::DOWN, polygons)
+#define REGISTER_AIRCANNON_LEFT(x, y, tex, bul_tex, camera, polygons) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::LEFT, polygons)
+#define REGISTER_AIRCANNON_RIGHT(x, y, tex, bul_tex, camera, polygons) REGISTER_AIRCANNON(static_cast<float>(x), static_cast<float>(y), tex, bul_tex, camera, AirCannon::Vec::RIGHT, polygons)
 
 #define REGISTER_ITEM(x, y, tex, camera, polygons) new Item(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, polygons)
 
