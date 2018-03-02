@@ -255,9 +255,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	}
 
 	// トゲの床をセットしていきます
-	std::vector<SquarePolygonBase*> floors;
-	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
-	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor(floors);
+	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor();
 
 	// ゲージのセット
 	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(25, 50, textures["GAGE_01"])))->on();

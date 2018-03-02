@@ -6,58 +6,42 @@ Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, in
 {
 }
 
-Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, bool _attack, long _interval, float _u, float _v, float _uw, float _vh)
+Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, bool _attack, long _interval, float _speed, float _u, float _v, float _uw, float _vh)
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), attack(_attack), falling(false), polygons(_polygons), floor(nullptr), stop_time(std::chrono::system_clock::now()), interval(_interval)
 {
+	speed = _speed;
 }
 
-void Thorn::set_floor(std::vector<SquarePolygonBase*> _floors)
+void Thorn::set_floor()
 {
 	if (floor != nullptr) return;
 
-	// その向きに合わせて，床になるブロックを探す
-	for (const auto& _floor : _floors)
-	{
-		char result = where_collision(this, _floor, 0);
+	auto self = get_square();
 
-		if (vec == Vec::UP && result == HitLine::BOTTOM)
+	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR })
+	{
+		for (const auto& block : polygons[type])
 		{
-			set_floor(_floor);
-			break;
-		}
-		if (vec == Vec::DOWN && result == HitLine::TOP)
-		{
-			set_floor(_floor);
-			break;
-		}
-		if (vec == Vec::LEFT && result == HitLine::RIGHT)
-		{
-			set_floor(_floor);
-			break;
-		}
-		if (vec == Vec::RIGHT && result == HitLine::LEFT)
-		{
-			set_floor(_floor);
-			break;
+			auto block_sq = block->get_square();
+
+			if ((vec == Vec::UP && hit_bottom(self, block_sq))
+				|| (vec == Vec::DOWN && hit_top(self, block_sq))
+				|| (vec == Vec::LEFT && hit_right(self, block_sq))
+				|| (vec == Vec::RIGHT && hit_left(self, block_sq)))
+			{
+				floor = block;
+				break;
+			}
+			
 		}
 	}
-}
-void Thorn::set_floor(SquarePolygonBase *_floor)
-{
-	if (floor != nullptr) return;
-
-	floor = _floor;
-}
-
-void Thorn::init()
-{
 }
 
 void Thorn::update()
 {
 	if (falling)
 	{
-		y -= 1.0f;
+		y -= speed;
 
 		// ここをブロックと接触すれば終了にする
 		if (attack)
@@ -108,7 +92,8 @@ Thorn::Vec Thorn::get_vec()
 
 void Thorn::trigger_falling()
 {
-	if (attack && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - stop_time).count() > interval) falling = true;
+	// 攻撃するかつ，前回の落下終了から一定時刻が経過していれば，再び落下を開始する
+	if (attack && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - stop_time).count() > interval)falling = true;
 }
 
 void Thorn::stop_falling()

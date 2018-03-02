@@ -24,10 +24,8 @@ private:
 	const long interval; // Ä‘•“UŠÔ
 public:
 	Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, enum Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
-	Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, enum Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, bool _attack, long _interval = 5000, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
-	void set_floor(std::vector<SquarePolygonBase*> _floors); // floor‚ªnullptr‚Ì‚Ü‚Ü‚Ìê‡‚±‚±‚Åİ’è‚µ‚È‚¨‚µ‚Ü‚·D
-	void set_floor(SquarePolygonBase *_floor); // floor‚ªnullptr‚Ì‚Ü‚Ü‚Ìê‡‚±‚±‚Åİ’è‚µ‚È‚¨‚µ‚Ü‚·D
-	void init();
+	Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, enum Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>> &_polygons, bool _attack, long _interval = 5000, float _speed = 1.0f, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	void set_floor(); // polygons‚©‚çŒŸõ‚·‚é
 	void update();
 
 	// original
