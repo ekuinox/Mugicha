@@ -154,11 +154,11 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 9:
 				// ハーフ壁（右）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH / 0.75, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH * 0.75, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 10:
 				// ハーフ壁（左）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH / 0.25, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH * 0.25, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 11:
 				// トゲ（下）
