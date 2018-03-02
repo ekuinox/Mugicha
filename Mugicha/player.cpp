@@ -134,33 +134,40 @@ bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
 {
 	auto self = get_square();
 	
-	for (const auto& bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
+	for (const auto& _bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
 	{
+		const auto& bullet = static_cast<Bullet*>(_bullet);
 
-		auto another = bullet->get_square();
-		auto vec = static_cast<Bullet*>(bullet)->get_vec();
-		auto result = where_collision(another, self, 0.0f);
+		// ”­ŽË‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î–³Ž‹
+		if (bullet->is_triggered())
+		{
+			auto another = bullet->get_square();
+			auto vec = bullet->get_vec();
+			auto result = where_collision(another, self, 0.0f);
 
-		if (result & HitLine::TOP && vec == Bullet::Vec::UP)
-		{
-			knockback.y += CELL_WIDTH;
-			bullet->init();
+			if (result & HitLine::TOP && vec == Bullet::Vec::UP)
+			{
+				knockback.y += CELL_WIDTH;
+				bullet->init();
+			}
+			else if (result & HitLine::BOTTOM && vec == Bullet::Vec::DOWN)
+			{
+				knockback.y -= CELL_WIDTH;
+				bullet->init();
+			}
+			else if (result & HitLine::LEFT && vec == Bullet::Vec::LEFT)
+			{
+				knockback.x -= CELL_WIDTH;
+				bullet->init();
+			}
+			else if (result & HitLine::RIGHT && vec == Bullet::Vec::RIGHT)
+			{
+				knockback.x += CELL_WIDTH;
+				bullet->init();
+			}
 		}
-		else if (result & HitLine::BOTTOM && vec == Bullet::Vec::DOWN)
-		{	
-			knockback.y -= CELL_WIDTH;
-			bullet->init();
-		}
-		else if (result & HitLine::LEFT && vec == Bullet::Vec::LEFT)
-		{
-			knockback.x -= CELL_WIDTH;
-			bullet->init();
-		}
-		else if (result & HitLine::RIGHT && vec == Bullet::Vec::RIGHT)
-		{
-			knockback.x += CELL_WIDTH;
-			bullet->init();
-		}
+		
+		
 
 
 	}

@@ -1,9 +1,10 @@
 #include "bullet.h"
 
-Bullet::Bullet(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Bullet::Vec _vec, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), init_coords(_x, _y), triggered(false), disappeared_time(std::chrono::system_clock::now())
+Bullet::Bullet(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Bullet::Vec _vec, int _interval, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), init_coords(_x, _y), triggered(false), disappeared_time(std::chrono::system_clock::now()), interval(_interval)
 {
 	speed = 1.0f;
+	init();
 }
 
 void Bullet::init()
@@ -39,7 +40,7 @@ void Bullet::update()
 
 void Bullet::trigger()
 {
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - disappeared_time).count() > trigger_interval)
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - disappeared_time).count() > interval)
 	{
 		triggered = true;
 		show(); // ”­ŽË‚³‚ê‚½’iŠK‚ÅŒ©‚¦‚é‚æ‚¤‚É
