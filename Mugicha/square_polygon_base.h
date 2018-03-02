@@ -10,7 +10,8 @@
 
 #include <iostream>
 #include "debug_console.h"
-#
+#include <map>
+#include <vector>
 
 // ドローする本体
 using VERTEX_2D = struct _VERTEX_2D
@@ -131,6 +132,9 @@ public:
 
 	virtual SquarePolygonBase* operator->() = 0;
 };
+
+// 長いのでエイリアス
+using PolygonsContainer = std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>;
 
 /* global variable */
 extern LPDIRECT3DDEVICE9 d3d_device; // Devece obj

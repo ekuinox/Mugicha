@@ -130,8 +130,10 @@ bool Player::collision_for_bullets()
 	return false;
 }
 
-bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
+D3DXVECTOR2 Player::collision_for_knockback_bullets()
 {
+	auto knockback = D3DXVECTOR2(0, 0);
+
 	auto self = get_square();
 	
 	for (const auto& _bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
@@ -166,13 +168,24 @@ bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
 				bullet->init();
 			}
 		}
-		
-		
-
-
 	}
-	return false;
-	
+	return knockback;
+}
+
+void Player::collision_for_knockback_bullets(D3DXVECTOR2 & vector, char & result)
+{
+	auto knockback = collision_for_knockback_bullets();
+
+	if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
+	{
+		vector.x += knockback.x;
+	}
+
+	// 上下
+	if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
+	{
+		vector.y += knockback.y;
+	}
 }
 
 bool Player::is_fallen_hellgate()
@@ -190,9 +203,92 @@ bool Player::is_fallen_hellgate()
 	return false;
 }
 
+char Player::collision_check()
+{
+	// 当たり精査
+	char result = 0x00;
+	for (const auto& type : COLLISION_CHECK_POLYGONTYPES)
+		for (const auto& polygon : polygons[type])
+			result |= where_collision(this, polygon);
+	return result;
+}
+
+void Player::sandwich_check(char &result)
+{
+	// 挟まれ判定
+	if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
+	{
+		kill(DeadReason::Sandwiched);
+	}
+}
+
+void Player::falling_out_check(char &result)
+{
+	if (y < FALLING_OUT_Y)
+	{
+		kill(DeadReason::Falling);
+	}
+
+}
+
+void Player::ground_check(char &result)
+{
+	if (result & HitLine::BOTTOM)
+	{
+		ground = true;
+	}
+	else
+	{
+		ground = false;
+	}
+}
+
+void Player::head_check(char & result)
+{
+	if (result & HitLine::TOP) jumping = false;
+}
+
+void Player::controlls(D3DXVECTOR2 & vector, char & result)
+{
+	if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A))) // 左方向への移動
+	{
+		vector.x -= speed;
+		vec = Player::Vec::LEFT;
+	}
+	if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D))) // 右方向への移動
+	{
+		vector.x += speed;
+		vec = Player::Vec::RIGHT;
+	}
+
+#ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
+	if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
+	if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
+	if (GetKeyboardPress(DIK_LEFTARROW)) vector.x -= 5;
+	if (GetKeyboardPress(DIK_RIGHTARROW)) vector.x += 5;
+#endif
+}
+
+void Player::jump(D3DXVECTOR2 & vector, char & result)
+{
+	if (!(result & HitLine::TOP) && jumping)
+	{
+		auto spent = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - jumped_at).count();
+		if (spent < PLAYER_JUMP_TIME || (GetKeyboardPress(DIK_SPACE) && spent < PLAYER_HOLD_JUMP_TIME)) vector.y += PLAYER_JUMP_POWER;
+		else jumping = false;
+	}
+}
+
+void Player::drifting(D3DXVECTOR2 & vector)
+{
+	unless(ground) vector.y -= PLAYER_FALLING;
+}
+
 // コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER), item(nullptr), holding_item(false)
+Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
+	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
+	vec(Player::Vec::CENTER), item(nullptr), jumped_at(std::chrono::system_clock::now()), jumping(false)
 {
 	init();
 }
@@ -217,53 +313,44 @@ void Player::zoom(float _zoom_level)
 
 void Player::update()
 {
-	if (!status) return; // statusみて切る
+	// statusみて切る
+	unless (status) return; 
 
-	auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
-
+	// 敵との当たり判定
 	if (collision_for_enemies())
 	{
 		// 死
 		return;
 	}
 
+	// トゲとの当たり判定
 	if (collision_for_thorns())
 	{
 		// 死
 		return;
 	}
 
+	// マグマとの当たり判定
 	if (collision_for_magmas())
 	{
 		// 死
 		return;
 	}
 
+	// 弾丸との当たり判定
 	if (collision_for_bullets())
 	{
 		// 死～
 		return;
 	}
 
+	// 下から上がってくるアレとの当たり判定
 	if (is_fallen_hellgate())
 	{
 		// 死～～
 		return;
 	}
 		
-	// 当たり精査
-	char result = 0x00;
-	for (const auto& type : {
-		// 当たり判定を取るポリゴンのラベルまとめ
-		SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
-		SquarePolygonBase::PolygonTypes::RAGGED_FLOOR,
-		SquarePolygonBase::PolygonTypes::THORN,
-		SquarePolygonBase::PolygonTypes::AIRCANNON,
-		SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
-		})
-		for (const auto& polygon : polygons[type])
-			result |= where_collision(this, polygon);
-
 	if (controll_lock)
 	{
 		// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
@@ -272,82 +359,35 @@ void Player::update()
 	}
 	else
 	{
-		// ノックバックについて
-		auto knockback = D3DXVECTOR2(0, 0);
+		// いくら移動したかをここに
+		auto vector = D3DXVECTOR2(0, 0);
+		
+		// 障害物などとの当たり判定								 
+		auto result = collision_check(); 
+		
+		// ノックバックのある空気砲について当たり判定を見る
+		collision_for_knockback_bullets(vector, result);
 
-		collision_for_knockback_bullets(knockback);
-
-		// 左右
-		if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
-		{
-			vector.x += knockback.x;
-		}
-
-		// 上下
-		if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
-		{
-			vector.y += knockback.y;
-		}
-
-		// 挟まれ判定
-		if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
-		{
-			kill(DeadReason::Sandwiched);
-		}
+		// 挟まれているか判定
+		sandwich_check(result);
 
 		// 枠外落下判定
-		if (y < -50)
-		{
-			kill(DeadReason::Falling);
-		}
-
+		falling_out_check(result);
+		
 		// 接地判定
-		if (result & HitLine::BOTTOM)
-		{
-			ground = true;
-		}
-		else
-		{
-			ground = false;
-		}
+		ground_check(result);
 
+		// 頭をぶつけていないか
+		head_check(result);
 
-		if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A))) // 左方向への移動
-		{
-			vector.x -= speed;
-			vec = Player::Vec::LEFT;
-		}
-		if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D))) // 右方向への移動
-		{
-			vector.x += speed;
-			vec = Player::Vec::RIGHT;
-		}
+		// 操作
+		controlls(vector, result);
 
-#ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
-		if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
-		if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
-		if (GetKeyboardPress(DIK_LEFTARROW)) vector.x -= 5;
-		if (GetKeyboardPress(DIK_RIGHTARROW)) vector.x += 5;
-#endif
+		// ジャンプ処理
+		jump(vector, result);
 
-		// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
-		if (!(result & HitLine::TOP) && jumping)
-		{
-			auto spent = timeGetTime() - jumped_at;
-			if (spent < PLAYER_JUMP_TIME || (GetKeyboardPress(DIK_SPACE) && spent < PLAYER_HOLD_JUMP_TIME)) vector.y += PLAYER_JUMP_POWER;
-			else jumping = false;
-		}
-
-		if(result & HitLine::TOP)
-		{
-			jumping = false;
-		}
-
-		// TODO: 同様に落下速度も調整する必要がある
-		unless(ground)
-		{
-			vector.y -= PLAYER_FALLING;
-		}
+		// 浮いている状態
+		drifting(vector);
 
 		// 変更を加算して終了
 		x += vector.x;
@@ -355,15 +395,14 @@ void Player::update()
 	}
 		
 	// itemを持っているならitemの位置を修正してあげる
-	if (holding_item) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
+	if (is_holding_item()) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
 }
 
 bool Player::jump()
 {
-	unless(ground) return false;
-	if (controll_lock) return false;
+	if (controll_lock || !ground) return false;
 	ground = false;
-	jumped_at = timeGetTime();
+	jumped_at = std::chrono::system_clock::now();
 	jumping = true;
 	return true;
 }
@@ -375,7 +414,6 @@ bool Player::catch_item()
 		if (static_cast<Item*>(_item)->hold(get_square()))
 		{
 			item = static_cast<Item*>(_item);
-			holding_item = true;
 			return true;
 		}
 	}
@@ -385,13 +423,13 @@ bool Player::catch_item()
 
 void Player::release_item()
 {
-	holding_item = false;
 	item->release();
+	item = nullptr;
 }
 
 bool Player::is_holding_item()
 {
-	return holding_item;
+	return item != nullptr;
 }
 
 void Player::lock()
