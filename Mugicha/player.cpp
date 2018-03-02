@@ -293,12 +293,6 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer 
 	init();
 }
 
-// デストラクタ
-Player::~Player()
-{
-	// 特になし
-}
-
 void Player::init()
 {
 	speed = PLAYER_SPEED;
