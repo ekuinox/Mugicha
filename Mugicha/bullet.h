@@ -1,5 +1,6 @@
 #pragma once
 #include "scalable_object.h"
+#include "helpers.h"
 
 #define BULLET_INTERVAL (3000)
 
@@ -24,6 +25,6 @@ private:
 	D3DXVECTOR2 init_coords;
 	bool triggered;
 	const int interval;
-	std::chrono::system_clock::time_point disappeared_time; // 消えたタイミング
+	time_point disappeared_time; // 消えたタイミング
 };
 
