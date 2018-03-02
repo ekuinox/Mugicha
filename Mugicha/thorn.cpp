@@ -60,9 +60,22 @@ void Thorn::update()
 		y -= 1.0f;
 
 		// ここをブロックと接触すれば終了にする
-		if (floor->get_coords().y - y > CELL_HEIGHT * 4)
+		if (attack)
 		{
-			stop_falling();
+			auto self = get_square();
+			for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR })
+			{
+				for (const auto& block : polygons[type])
+				{
+					auto block_sq = block->get_square();
+					if(hit_bottom(self, block_sq))
+					{
+						stop_falling();
+						break;
+					}
+				}
+			}
+			
 		}
 	}
 	// 高さを設定しなおす
