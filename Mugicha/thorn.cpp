@@ -6,8 +6,8 @@ Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, in
 {
 }
 
-Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, bool _attack, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), attack(_attack), falling(false), polygons(_polygons), floor(nullptr)
+Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, bool _attack, long _reloading_time, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), attack(_attack), falling(false), polygons(_polygons), floor(nullptr), stop_time(std::chrono::system_clock::now()), reloading_time(_reloading_time)
 {
 }
 
@@ -108,7 +108,7 @@ Thorn::Vec Thorn::get_vec()
 
 void Thorn::trigger_falling()
 {
-	if (attack) falling = true;
+	if (attack && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - stop_time).count() > reloading_time) falling = true;
 }
 
 void Thorn::stop_falling()
@@ -132,5 +132,6 @@ void Thorn::stop_falling()
 			break;
 
 		}
+		stop_time = std::chrono::system_clock::now(); // èIóπÇµÇΩéûçèÇï€ä«
 	}
 }
