@@ -5,7 +5,7 @@
 #include <string>
 #include <algorithm>
 #include "polygons_register.h"
-
+#include "helpers.h"
 
 using polygon_vec = std::vector<SquarePolygonBase*>;
 
@@ -34,19 +34,19 @@ public:
 private:
 	// vars
 	std::map<std::string, LPDIRECT3DTEXTURE9> textures;
-	std::map<SquarePolygonBase::PolygonTypes, polygon_vec> polygons;
+	PolygonsContainer polygons;
 	StageBackground *background;
 	Goal *goal;
 	Player *player; // プレイヤの変数
 	std::vector<Enemy*> enemies; // 敵の可変長配列
 	Gage* gage;
 	Stage::GameInfo info; // 続行管理と結果
-	std::chrono::system_clock::time_point latest_update; // 最終更新
-	std::chrono::system_clock::time_point latest_draw; // 最終描画
+	time_point latest_update; // 最終更新
+	time_point latest_draw; // 最終描画
 	D3DXVECTOR2 camera;
 	enum class Sign { ZERO,	PLUS, MINUS} zoom_sign; // 拡大状態か縮小状態かってアレです
-	POLSIZE zoom_level_target; // どこまで拡縮するかというアレ
-	POLSIZE zoom_level;
+	float zoom_level_target; // どこまで拡縮するかというアレ
+	float zoom_level;
 	POLSIZE map_size; // 背景のデカさになります
 	bool zooming;
 	bool switch_sample;

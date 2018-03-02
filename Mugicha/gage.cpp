@@ -9,19 +9,11 @@ void Gage::update()
 {
 	if (!status) return; // status‚İ‚ÄØ‚é
 
-	auto current = std::chrono::system_clock::now();
+	current_cost += cost_recovery_speed;
 
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > 1000)
-	{
-		current_cost += cost_recovery_speed;
+	if (current_cost > cost_gage_max) current_cost = cost_gage_max;
 
-		if (current_cost > cost_gage_max) current_cost = cost_gage_max;
-
-		v = current_cost / 3.0f;
-		
-		// cost‚É‡‚í‚¹‚Äu,v’l‚ğ•Ï‚¦‚Ä‚â‚é
-		latest_update = current;
-	}
+	v = current_cost / 3.0f;
 }
 
 float Gage::consume()

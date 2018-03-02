@@ -9,7 +9,7 @@
 
 // コンストラクタ
 Stage::Stage(char _stage_select)
-	: latest_update(std::chrono::system_clock::now()), latest_draw(std::chrono::system_clock::now()), info(0, Stage::Status::Prep, _stage_select), switch_sample(false), zooming(false)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select), switch_sample(false), zooming(false)
 {
 	init();
 }
@@ -93,7 +93,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	if (table[0].size() != 4) return false; // 一行目にはw,hにしておいて欲しいので
 
 	// すべて無にする　後のことは考えてない　すみません
-	std::map<SquarePolygonBase::PolygonTypes, polygon_vec>().swap(polygons);
+	PolygonsContainer().swap(polygons);
 	
 	// マップのサイズを入れたい
 	map_size = POLSIZE(static_cast<float>(std::atof(table[0][0].c_str()) * CELL_WIDTH), static_cast<float>(std::atof(table[0][1].c_str()) * CELL_HEIGHT));
@@ -154,63 +154,63 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 9:
 				// ハーフ壁（右）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH / 0.75, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH * 0.75, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 10:
 				// ハーフ壁（左）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH / 0.25, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_WALL(j * CELL_WIDTH + CELL_WIDTH * 0.25, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 11:
 				// トゲ（下）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera, polygons))->on();
 				break;
 			case 12:
 				// トゲ（上）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera, polygons))->on();
 				break;
 			case 13:
 				// トゲ（右）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera, polygons))->on();
 				break;
 			case 14:
 				// トゲ（左）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera, polygons))->on();
 				break;
 			case 15:
 				// トゲ（下）壁（上）
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["THORN_DOWN"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["THORN_DOWN"], camera, polygons))->on();
 				break;
 			case 16:
 				// トゲ（上）壁（下）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["THORN_UP"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["THORN_UP"], camera, polygons))->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 17:
 				// トゲ（落ちる）プレイヤに向かって
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_FALL_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_FALL_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera, polygons))->on();
 				break;
 			case 21:
 				// 空気砲（上）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 22:
 				// 空気砲（下）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 23:
 				// 空気砲（右）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
 			case 24:
 				// 空気砲（左）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET, aircannon->get_bullet());
 				break;
@@ -228,25 +228,25 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 41:
 				// キル（上）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
 			case 42:
 				// キル（下）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
 			case 43:
 				// キル（右）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
 			case 44:
 				// キル砲（左）
-				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera));
+				aircannon = emplace_polygon_back(SquarePolygonBase::PolygonTypes::AIRCANNON, REGISTER_AIRCANNON_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["AIRCANNON_01"], textures["BULLET_01"], camera, polygons));
 				aircannon->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
@@ -255,9 +255,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	}
 
 	// トゲの床をセットしていきます
-	std::vector<SquarePolygonBase*> floors;
-	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
-	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor(floors);
+	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor();
 
 	// ゲージのセット
 	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(25, 50, textures["GAGE_01"])))->on();
@@ -287,7 +285,7 @@ bool Stage::stagefile_loader(const char * filepath)
 void Stage::init()
 {
 #ifdef _DEBUG
-	const auto exec_start = std::chrono::system_clock::now();
+	const auto exec_start = SCNOW;
 #endif
 	char filepath[256]; // ファイルパス格納
 
@@ -297,12 +295,12 @@ void Stage::init()
 	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	auto exec_result = stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
-	zoom_level = { 1, 1 };
+	zoom_level = 1.0f;
 	zoom_sign = Stage::Sign::ZERO;
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - exec_start).count() << std::endl;
+	std::cout << time_diff(exec_start) << std::endl;
 #endif
 	if (exec_result) info.status = Stage::Status::Ready;
 	else info.status = Stage::Status::LoadError;
@@ -330,45 +328,45 @@ void Stage::update()
 	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
 	{
 		// 最小にする => 自分は大きくなる
-		if (zoom_level.w > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
+		if (zoom_level > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
 		{
-			zoom_level_target.w = zoom_level_target.h = 0.5f;
+			zoom_level_target = zoom_level_target = 0.5f;
 			zoom_sign = Stage::Sign::MINUS;
 			player->lock();
 			gage->consume();
 		}
 
 		// 通常状態
-		if (zoom_level.w != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
+		if (zoom_level != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
 		{
-			zoom_level_target.w = zoom_level_target.h = 1.0f;
-			zoom_sign = (zoom_level.w < 0 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
+			zoom_level_target = zoom_level_target = 1.0f;
+			zoom_sign = (zoom_level < 0 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
 			player->lock();
 			gage->consume();
 		}
 
 		// 最大化 => 自分は小さくなる
-		if (zoom_level.w < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
+		if (zoom_level < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
 		{
-			zoom_level_target.w = zoom_level_target.h = 2.0f;
+			zoom_level_target = zoom_level_target = 2.0f;
 			zoom_sign = Stage::Sign::PLUS;
 			player->lock();
 			gage->consume();
 		}
 
 #ifdef _DEBUG
-		if (GetKeyboardTrigger(DIK_O) && zoom_level.h < 2.0f) // 拡大
+		if (GetKeyboardTrigger(DIK_O) && zoom_level < 2.0f) // 拡大
 		{
 			zoom_sign = Stage::Sign::PLUS;
-			zoom_level_target.w = zoom_level.w * 2;
-			zoom_level_target.h = zoom_level.h * 2;
+			zoom_level_target = zoom_level * 2;
+			zoom_level_target = zoom_level * 2;
 			player->lock();
 		}
-		if (GetKeyboardTrigger(DIK_L) && zoom_level.w > 0.5f) // 縮小
+		if (GetKeyboardTrigger(DIK_L) && zoom_level > 0.5f) // 縮小
 		{
 			zoom_sign = Stage::Sign::MINUS;
-			zoom_level_target.w = zoom_level.w / 2;
-			zoom_level_target.h = zoom_level.h / 2;
+			zoom_level_target = zoom_level / 2;
+			zoom_level_target = zoom_level / 2;
 			player->lock();
 		}
 #endif
@@ -395,16 +393,16 @@ void Stage::update()
 
 
 	// 時間を気にするもの
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() < UPDATE_INTERVAL) return;
+	auto current = SCNOW;
+	if (time_diff(latest_update, current) < UPDATE_INTERVAL) return;
 	latest_update = current;
 
 	if (zoom_sign == Stage::Sign::PLUS)
 	{
-		if (zoom_level.w < zoom_level_target.w)
+		if (zoom_level < zoom_level_target)
 		{
-			zoom_level.w *= 1.01f;
-			zoom_level.h *= 1.01f;
+			zoom_level *= 1.01f;
+			zoom_level *= 1.01f;
 		}
 		else
 		{
@@ -416,10 +414,10 @@ void Stage::update()
 
 	if (zoom_sign == Stage::Sign::MINUS)
 	{
-		if (zoom_level.w > zoom_level_target.w)
+		if (zoom_level > zoom_level_target)
 		{
-			zoom_level.w /= 1.01f;
-			zoom_level.h /= 1.01f;
+			zoom_level /= 1.01f;
+			zoom_level /= 1.01f;
 		}
 		else
 		{
@@ -439,12 +437,13 @@ void Stage::update()
 	camera.x = player->get_coords().x;
 	camera.y = player->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
 	
+#ifndef _DEBUG // 本番は見せないように
 	// 画面外は見せないようにする
-	unless(camera.x < map_size.w * zoom_level.w - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level.w - SCREEN_WIDTH / 2;
-	unless (camera.y < map_size.h * zoom_level.h - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level.h - SCREEN_HEIGHT / 2;
+	unless(camera.x < map_size.w * zoom_level - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level - SCREEN_WIDTH / 2;
+	unless (camera.y < map_size.h * zoom_level - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
-
+#endif
 	// ポリゴンの全更新
 	for (const auto& _polygons : polygons)
 	{
@@ -455,8 +454,8 @@ void Stage::update()
 // 描画処理
 void Stage::draw()
 {
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_draw).count() < 1000 / FRAME_RATES) return;
+	auto current = SCNOW;
+	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
 	// ここから描画処理

@@ -10,7 +10,7 @@ bool Player::collision_for_enemies()
 	{
 		if (enemy->is_active() && is_collision(enemy->get_square(), get_square()))
 		{
-			if (zoom_level.w >= 1.0f)
+			if (zoom_level >= 1.0f)
 			{
 #ifndef _NEVER_DIE
 				// プレイヤの負け
@@ -32,7 +32,7 @@ bool Player::collision_for_thorns()
 {
 	// トゲとの当たり判定
 	// 通常状態より自分がデカい状態で接触死の判定を取る
-	if (zoom_level.w > 1.0f) return false;
+	if (zoom_level > 1.0f) return false;
 	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN])
 	{
 		auto self = get_square();
@@ -44,10 +44,6 @@ bool Player::collision_for_thorns()
 			if (is_collision(SQUARE(get_square().x + get_square().w * (vec == Player::Vec::RIGHT ? 1 : -1), get_square().y + get_square().h * 2, w * 2, get_square().h * 10), another))
 			{
 				static_cast<Thorn*>(thorn)->trigger_falling();
-			}
-			else
-			{
-				static_cast<Thorn*>(thorn)->stop_falling();
 			}
 		}
 
@@ -128,42 +124,62 @@ bool Player::collision_for_bullets()
 	return false;
 }
 
-bool Player::collision_for_knockback_bullets(D3DXVECTOR2 &knockback)
+D3DXVECTOR2 Player::collision_for_knockback_bullets()
 {
+	auto knockback = D3DXVECTOR2(0, 0);
+
 	auto self = get_square();
 	
-	for (const auto& bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
+	for (const auto& _bullet : polygons[SquarePolygonBase::PolygonTypes::KNOCKBACK_BULLET])
 	{
+		const auto& bullet = static_cast<Bullet*>(_bullet);
 
-		auto another = bullet->get_square();
-		auto vec = static_cast<Bullet*>(bullet)->get_vec();
-		auto result = where_collision(another, self, 0.0f);
-
-		if (result & HitLine::TOP && vec == Bullet::Vec::UP)
+		// 発射されていなければ無視
+		if (bullet->is_triggered())
 		{
-			knockback.y += CELL_WIDTH;
-			bullet->init();
-		}
-		else if (result & HitLine::BOTTOM && vec == Bullet::Vec::DOWN)
-		{	
-			knockback.y -= CELL_WIDTH;
-			bullet->init();
-		}
-		else if (result & HitLine::LEFT && vec == Bullet::Vec::LEFT)
-		{
-			knockback.x -= CELL_WIDTH;
-			bullet->init();
-		}
-		else if (result & HitLine::RIGHT && vec == Bullet::Vec::RIGHT)
-		{
-			knockback.x += CELL_WIDTH;
-			bullet->init();
-		}
+			auto another = bullet->get_square();
+			auto vec = bullet->get_vec();
+			auto result = where_collision(another, self, 0.0f);
 
-
+			if (result & HitLine::TOP && vec == Bullet::Vec::UP)
+			{
+				knockback.y += CELL_WIDTH;
+				bullet->init();
+			}
+			else if (result & HitLine::BOTTOM && vec == Bullet::Vec::DOWN)
+			{
+				knockback.y -= CELL_WIDTH;
+				bullet->init();
+			}
+			else if (result & HitLine::LEFT && vec == Bullet::Vec::LEFT)
+			{
+				knockback.x -= CELL_WIDTH;
+				bullet->init();
+			}
+			else if (result & HitLine::RIGHT && vec == Bullet::Vec::RIGHT)
+			{
+				knockback.x += CELL_WIDTH;
+				bullet->init();
+			}
+		}
 	}
-	return false;
-	
+	return knockback;
+}
+
+void Player::collision_for_knockback_bullets(D3DXVECTOR2 & vector, char & result)
+{
+	auto knockback = collision_for_knockback_bullets();
+
+	if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
+	{
+		vector.x += knockback.x;
+	}
+
+	// 上下
+	if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
+	{
+		vector.y += knockback.y;
+	}
 }
 
 bool Player::is_fallen_hellgate()
@@ -181,17 +197,93 @@ bool Player::is_fallen_hellgate()
 	return false;
 }
 
-// コンストラクタ 座標とかをセットしていく
-Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: polygons(_polygons), PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), before_zoom_level(1, 1), dead_reason(DeadReason::ALIVE), vec(Player::Vec::CENTER), item(nullptr), holding_item(false)
+char Player::collision_check()
 {
-	init();
+	// 当たり精査
+	char result = 0x00;
+	for (const auto& type : COLLISION_CHECK_POLYGONTYPES)
+		for (const auto& polygon : polygons[type])
+			result |= where_collision(this, polygon);
+	return result;
 }
 
-// デストラクタ
-Player::~Player()
+void Player::sandwich_check(char &result)
 {
-	// 特になし
+	// 挟まれ判定
+	if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
+	{
+		kill(DeadReason::Sandwiched);
+	}
+}
+
+void Player::falling_out_check(char &result)
+{
+	if (y < FALLING_OUT_Y)
+	{
+		kill(DeadReason::Falling);
+	}
+
+}
+
+void Player::ground_check(char &result)
+{
+	if (result & HitLine::BOTTOM)
+	{
+		ground = true;
+	}
+	else
+	{
+		ground = false;
+	}
+}
+
+void Player::head_check(char & result)
+{
+	if (result & HitLine::TOP) jumping = false;
+}
+
+void Player::controlls(D3DXVECTOR2 & vector, char & result)
+{
+	if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A))) // 左方向への移動
+	{
+		vector.x -= speed;
+		vec = Player::Vec::LEFT;
+	}
+	if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D))) // 右方向への移動
+	{
+		vector.x += speed;
+		vec = Player::Vec::RIGHT;
+	}
+
+#ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
+	if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
+	if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
+	if (GetKeyboardPress(DIK_LEFTARROW)) vector.x -= 5;
+	if (GetKeyboardPress(DIK_RIGHTARROW)) vector.x += 5;
+#endif
+}
+
+void Player::jump(D3DXVECTOR2 & vector, char & result)
+{
+	if (!(result & HitLine::TOP) && jumping)
+	{
+		auto spent = time_diff(jumped_at);
+		if (spent < PLAYER_JUMP_TIME || (GetKeyboardPress(DIK_SPACE) && spent < PLAYER_HOLD_JUMP_TIME)) vector.y += PLAYER_JUMP_POWER;
+		else jumping = false;
+	}
+}
+
+void Player::drifting(D3DXVECTOR2 & vector)
+{
+	unless(ground) vector.y -= PLAYER_FALLING;
+}
+
+Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
+	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
+	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
+	vec(Player::Vec::CENTER), item(nullptr), jumped_at(SCNOW), jumping(false)
+{
+	init();
 }
 
 void Player::init()
@@ -201,171 +293,103 @@ void Player::init()
 	controll_lock = false;
 }
 
-void Player::zoom(POLSIZE _zoom_level)
+void Player::zoom(float _zoom_level)
 {
 	zoom_level = _zoom_level;
 }
 
 void Player::update()
 {
-	if (!status) return; // statusみて切る
+	// statusみて切る
+	unless (status) return; 
 
-	auto current = std::chrono::system_clock::now();
-
-	// 操作
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1ms間隔で
+	// 敵との当たり判定
+	if (collision_for_enemies())
 	{
-		auto vector = D3DXVECTOR2(0, 0); // いくら移動したかをここに
-
-		if (collision_for_enemies())
-		{
-			// 死
-			return;
-		}
-
-		if (collision_for_thorns())
-		{
-			// 死
-			return;
-		}
-
-		if (collision_for_magmas())
-		{
-			// 死
-			return;
-		}
-
-		if (collision_for_bullets())
-		{
-			// 死～
-			return;
-		}
-
-		if (is_fallen_hellgate())
-		{
-			// 死～～
-			return;
-		}
-		
-		// 当たり精査
-		char result = 0x00;
-		for (const auto& type : {
-			// 当たり判定を取るポリゴンのラベルまとめ
-			SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
-			SquarePolygonBase::PolygonTypes::RAGGED_FLOOR,
-			SquarePolygonBase::PolygonTypes::THORN,
-			SquarePolygonBase::PolygonTypes::AIRCANNON,
-			SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
-			})
-			for (const auto& polygon : polygons[type])
-				result |= where_collision(this, polygon);
-
-		if (controll_lock)
-		{
-			// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
-			x = when_locked_coords.x * (zoom_level.w / before_zoom_level.w);
-			y = when_locked_coords.y * (zoom_level.h / before_zoom_level.h);
-		}
-		else
-		{
-			// ノックバックについて
-			auto knockback = D3DXVECTOR2(0, 0);
-
-			collision_for_knockback_bullets(knockback);
-
-			// 左右
-			if ((knockback.x < 0 && !(result & HitLine::LEFT)) || knockback.x > 0 && !(result & HitLine::RIGHT))
-			{
-				vector.x += knockback.x;
-			}
-
-			// 上下
-			if ((knockback.y < 0 && !(result & HitLine::BOTTOM)) || knockback.y > 0 && !(result & HitLine::TOP))
-			{
-				vector.y += knockback.y;
-			}
-
-			// 挟まれ判定
-			if (result & HitLine::BOTTOM && result & HitLine::TOP && result & HitLine::LEFT && result & HitLine::RIGHT)
-			{
-				kill(DeadReason::Sandwiched);
-			}
-
-			// 枠外落下判定
-			if (y < -50)
-			{
-				kill(DeadReason::Falling);
-			}
-
-			// 接地判定
-			if (result & HitLine::BOTTOM)
-			{
-				ground = true;
-			}
-			else
-			{
-				ground = false;
-			}
-
-
-			if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_LEFTARROW))) // 左方向への移動
-			{
-				vector.x -= speed;
-				vec = Player::Vec::LEFT;
-			}
-			if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D) || GetKeyboardPress(DIK_RIGHTARROW))) // 右方向への移動
-			{
-				vector.x += speed;
-				vec = Player::Vec::RIGHT;
-			}
-
-#ifdef _DEBUG
-			if (GetKeyboardPress(DIK_W))
-			{
-				vector.y += 5;
-			}
-			if (GetKeyboardPress(DIK_S))
-			{
-				vector.y -= 5;
-			}
-#endif
-
-			// TODO: ジャンプ量とジャンプしている時間を調整する必要アリ
-			if (!(result & HitLine::TOP) && jumping)
-			{
-				if (timeGetTime() - jumped_at > PLAYER_JUMP_TIME) jumping = false;
-				vector.y += PLAYER_JUMP_POWER;
-			}
-
-			if(result & HitLine::TOP)
-			{
-				jumping = false;
-			}
-
-			// TODO: 同様に落下速度も調整する必要がある
-			unless(ground)
-			{
-				vector.y -= PLAYER_FALLING;
-			}
-
-			// 変更を加算して終了
-			x += vector.x;
-			y += vector.y;
-		}
-		
-		// itemを持っているならitemの位置を修正してあげる
-		if (holding_item) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
-
-		latest_update = current;
+		// 死
+		return;
 	}
+
+	// トゲとの当たり判定
+	if (collision_for_thorns())
+	{
+		// 死
+		return;
+	}
+
+	// マグマとの当たり判定
+	if (collision_for_magmas())
+	{
+		// 死
+		return;
+	}
+
+	// 弾丸との当たり判定
+	if (collision_for_bullets())
+	{
+		// 死～
+		return;
+	}
+
+	// 下から上がってくるアレとの当たり判定
+	if (is_fallen_hellgate())
+	{
+		// 死～～
+		return;
+	}
+		
+	if (controll_lock)
+	{
+		// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
+		x = when_locked_coords.x * (zoom_level / before_zoom_level);
+		y = when_locked_coords.y * (zoom_level / before_zoom_level);
+	}
+	else
+	{
+		// いくら移動したかをここに
+		auto vector = D3DXVECTOR2(0, 0);
+		
+		// 障害物などとの当たり判定								 
+		auto result = collision_check(); 
+		
+		// ノックバックのある空気砲について当たり判定を見る
+		collision_for_knockback_bullets(vector, result);
+
+		// 挟まれているか判定
+		sandwich_check(result);
+
+		// 枠外落下判定
+		falling_out_check(result);
+		
+		// 接地判定
+		ground_check(result);
+
+		// 頭をぶつけていないか
+		head_check(result);
+
+		// 操作
+		controlls(vector, result);
+
+		// ジャンプ処理
+		jump(vector, result);
+
+		// 浮いている状態
+		drifting(vector);
+
+		// 変更を加算して終了
+		x += vector.x;
+		y += vector.y;
+	}
+		
+	// itemを持っているならitemの位置を修正してあげる
+	if (is_holding_item()) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
 }
 
 bool Player::jump()
 {
-	unless(ground) return false;
-	if (controll_lock) return false;
+	if (controll_lock || !ground) return false;
 	ground = false;
-	jumped_at = timeGetTime();
+	jumped_at = SCNOW;
 	jumping = true;
 	return true;
 }
@@ -377,7 +401,6 @@ bool Player::catch_item()
 		if (static_cast<Item*>(_item)->hold(get_square()))
 		{
 			item = static_cast<Item*>(_item);
-			holding_item = true;
 			return true;
 		}
 	}
@@ -387,13 +410,13 @@ bool Player::catch_item()
 
 void Player::release_item()
 {
-	holding_item = false;
 	item->release();
+	item = nullptr;
 }
 
 bool Player::is_holding_item()
 {
-	return holding_item;
+	return item != nullptr;
 }
 
 void Player::lock()

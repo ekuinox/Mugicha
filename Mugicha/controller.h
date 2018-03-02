@@ -4,6 +4,7 @@
 #include <string>
 #include "stage.h"
 #include "selector.h"
+#include "helpers.h"
 
 // ƒQ[ƒ€ŠÇ——p‚ÌƒNƒ‰ƒX
 class Controller
@@ -23,8 +24,8 @@ public:
 private:
 	Scene scene;
 	Stage::GameInfo game_info;
-	std::chrono::system_clock::time_point latest_draw;
-	std::chrono::system_clock::time_point latest_update;
+	time_point latest_draw;
+	time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
 	polygon_vec polygons;
 	Background *background; // ”wŒiƒ|ƒŠƒSƒ“

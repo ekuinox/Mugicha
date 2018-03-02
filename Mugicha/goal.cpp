@@ -18,19 +18,15 @@ void Goal::update()
 
 	auto current = std::chrono::system_clock::now();
 
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
-	{
-		// 触れただけでゴールってのもアレなので，アレする
-		auto core = SQUARE(static_cast<float>(x * zoom_level.w), static_cast<float>(y * zoom_level.w), static_cast<float>(w * zoom_level.w / 2), static_cast<float>(h * zoom_level.h * 0.8));
+	// 触れただけでゴールってのもアレなので，アレする
+	auto core = SQUARE(static_cast<float>(x * zoom_level), static_cast<float>(y * zoom_level), static_cast<float>(w * zoom_level / 2), static_cast<float>(h * zoom_level * 0.8));
 
-		if (is_collision(player->get_square(), core)) // コアに当たり申した
-		{
+	if (is_collision(player->get_square(), core)) // コアに当たり申した
+	{
 #ifdef _DEBUG
-			std::cout << "ここがゴールわよ\n";
+		std::cout << "ここがゴールわよ\n";
 #endif
-			completed = true;
-		}
-		latest_update = current;
+		completed = true;
 	}
 }
 

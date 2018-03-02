@@ -10,11 +10,5 @@ void HellGate::update()
 {
 	unless(status) return;
 
-	auto current = std::chrono::system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL)
-	{
-		y += speed;
-
-		latest_update = current;
-	}
+	y += speed;
 }

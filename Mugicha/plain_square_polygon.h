@@ -39,7 +39,7 @@ public:
 
 	void add_coord(float _x, float _y);
 
-	void zoom(POLSIZE _zoom_level);
+	void zoom(float _zoom_level);
 	
 	PlainSquarePolygon* operator->();
 };

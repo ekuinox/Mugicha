@@ -19,13 +19,4 @@ void Background::update()
 {
 	if (!status) return;
 	
-	auto current = std::chrono::system_clock::now();
-
-	// ‘€ì
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(current - latest_update).count() > UPDATE_INTERVAL) // 1msŠÔŠu‚Å
-	{
-		// uv’l‚Ì•ÏX‚È‚Ç‚ğ‚·‚é
-
-		latest_update = current;
-	}
 }

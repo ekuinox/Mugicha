@@ -28,12 +28,6 @@
 #define CELL_WIDTH (100)
 #define CELL_HEIGHT (100)
 
-// プレイヤのデカさ
-#define PLAYER_SPEED (0.675f) // プレイや移動速度
-#define PLAYER_JUMP_POWER (2.0f) // ジャンプ力，1msにどんだけ飛ぶか
-#define PLAYER_JUMP_TIME (500) // ジャンプ時間(ms)
-#define PLAYER_FALLING (1.0f) // 落下速度
-
 // 背景のデカさ
 #define BACKGROUND_WIDTH (SCREEN_WIDTH)
 #define BACKGROUND_HEIGHT (SCREEN_HEIGHT)

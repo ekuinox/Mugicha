@@ -95,7 +95,7 @@ void PlainSquarePolygon::add_coord(float _x, float _y)
 	y += _y;
 }
 
-void PlainSquarePolygon::zoom(POLSIZE _zoom_level)
+void PlainSquarePolygon::zoom(float _zoom_level)
 {
 	// ŽÀ‘•‚È‚µ
 }

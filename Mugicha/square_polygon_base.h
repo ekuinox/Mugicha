@@ -10,7 +10,8 @@
 
 #include <iostream>
 #include "debug_console.h"
-#
+#include <map>
+#include <vector>
 
 // ドローする本体
 using VERTEX_2D = struct _VERTEX_2D
@@ -42,6 +43,8 @@ using SQUARE = struct _SQUARE
 	float right() { return x + w / 2; }
 	_SQUARE operator*(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
 	_SQUARE operator*=(const POLSIZE& another) { return _SQUARE(x * another.w, y * another.h, w * another.w, h * another.h); }
+	_SQUARE operator*(const float& another) { return _SQUARE(x * another, y * another, w * another, h * another); }
+	_SQUARE operator*=(const float& another) { return _SQUARE(x * another, y * another, w * another, h * another); }
 };
 
 /*
@@ -125,10 +128,13 @@ public:
 	virtual VERTEX_2D *get_vertexes() = 0;
 
 	virtual void add_coord(float _x, float _y) = 0; // x, y座標に加算
-	virtual void zoom(POLSIZE _zoom_level) = 0; // 倍率変更を行う
+	virtual void zoom(float _zoom_level) = 0; // 倍率変更を行う
 
 	virtual SquarePolygonBase* operator->() = 0;
 };
+
+// 長いのでエイリアス
+using PolygonsContainer = std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>;
 
 /* global variable */
 extern LPDIRECT3DDEVICE9 d3d_device; // Devece obj
