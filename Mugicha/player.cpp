@@ -267,7 +267,7 @@ void Player::jump(D3DXVECTOR2 & vector, char & result)
 {
 	if (!(result & HitLine::TOP) && jumping)
 	{
-		auto spent = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - jumped_at).count();
+		auto spent = time_diff(jumped_at);
 		if (spent < PLAYER_JUMP_TIME || (GetKeyboardPress(DIK_SPACE) && spent < PLAYER_HOLD_JUMP_TIME)) vector.y += PLAYER_JUMP_POWER;
 		else jumping = false;
 	}
@@ -281,7 +281,7 @@ void Player::drifting(D3DXVECTOR2 & vector)
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
-	vec(Player::Vec::CENTER), item(nullptr), jumped_at(std::chrono::system_clock::now()), jumping(false)
+	vec(Player::Vec::CENTER), item(nullptr), jumped_at(SCNOW), jumping(false)
 {
 	init();
 }
@@ -389,7 +389,7 @@ bool Player::jump()
 {
 	if (controll_lock || !ground) return false;
 	ground = false;
-	jumped_at = std::chrono::system_clock::now();
+	jumped_at = SCNOW;
 	jumping = true;
 	return true;
 }

@@ -5,6 +5,7 @@
 #include <map>
 #include "input.h"
 #include "item.h"
+#include "helpers.h"
 
 // 初期値など
 #define PLAYER_SPEED (0.675f) // プレイや移動速度
@@ -53,7 +54,7 @@ private:
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
 	
 	bool jumping; // ジャンプしている
-	std::chrono::system_clock::time_point jumped_at;
+	time_point jumped_at;
 	bool ground; // 着地状態
 	bool moving; // 動いている(x軸)
 	
