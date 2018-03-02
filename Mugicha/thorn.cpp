@@ -1,15 +1,14 @@
 #include "thorn.h"
 #include "collision_checker.h"
 
-Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 &_camera, Vec _vec, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec), attack(false), falling(false)
+Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, float _u, float _v, float _uw, float _vh)
+	: Thorn(_x, _y, _w, _h, _tex, _layer, _camera, _vec, _polygons, false)
 {
-	init();
 }
-Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, bool _attack, SquarePolygonBase * _floor, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), floor(_floor), vec(_vec), attack(_attack), falling(false)
+
+Thorn::Thorn(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Vec _vec, std::map<SquarePolygonBase::PolygonTypes, std::vector<SquarePolygonBase*>>& _polygons, bool _attack, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), attack(_attack), falling(false), polygons(_polygons), floor(nullptr)
 {
-	init();
 }
 
 void Thorn::set_floor(std::vector<SquarePolygonBase*> _floors)

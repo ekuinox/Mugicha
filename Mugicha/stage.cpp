@@ -162,33 +162,33 @@ bool Stage::stagefile_loader(const char * filepath)
 				break;
 			case 11:
 				// トゲ（下）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera, polygons))->on();
 				break;
 			case 12:
 				// トゲ（上）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_UP"], camera, polygons))->on();
 				break;
 			case 13:
 				// トゲ（右）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_RIGHT"], camera, polygons))->on();
 				break;
 			case 14:
 				// トゲ（左）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_LEFT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_LEFT"], camera, polygons))->on();
 				break;
 			case 15:
 				// トゲ（下）壁（上）
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player))->on();
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["THORN_DOWN"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_DOWN_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["THORN_DOWN"], camera, polygons))->on();
 				break;
 			case 16:
 				// トゲ（上）壁（下）
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["THORN_UP"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_UP_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["THORN_UP"], camera, polygons))->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player))->on();
 				break;
 			case 17:
 				// トゲ（落ちる）プレイヤに向かって
-				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_FALL_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera))->on();
+				emplace_polygon_back(SquarePolygonBase::PolygonTypes::THORN, REGISTER_THORN_FALL_DOWN(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["THORN_DOWN"], camera, polygons))->on();
 				break;
 			case 21:
 				// 空気砲（上）
@@ -256,7 +256,7 @@ bool Stage::stagefile_loader(const char * filepath)
 
 	// トゲの床をセットしていきます
 	std::vector<SquarePolygonBase*> floors;
-	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::ENEMY, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
+	for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR}) floors.insert(floors.end(), polygons[type].begin(), polygons[type].end());
 	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor(floors);
 
 	// ゲージのセット
