@@ -1,10 +1,11 @@
 #include "bullet.h"
 #include "collision_checker.h"
 
-Bullet::Bullet(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Bullet::Vec _vec, int _interval, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), init_coords(_x, _y), triggered(false), disappeared_time(SCNOW), interval(_interval)
+Bullet::Bullet(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, Bullet::Vec _vec, int _interval, float _speed, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
+	vec(_vec), init_coords(_x, _y), triggered(false), disappeared_time(SCNOW), interval(_interval)
 {
-	speed = 1.0f;
+	speed = _speed;
 	init();
 }
 
