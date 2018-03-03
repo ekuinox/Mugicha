@@ -15,8 +15,8 @@
 #define ENEMY_HEIGHT (CELL_HEIGHT * 0.8) // 高さ
 #define ENEMY_SPEED (0.3f)
 #define ENEMY_JUMP_POWER (1.01f)
-#define ENEMY_FALLING PLAYER_FALLING
-#define ENEMY_JUMP_TIME PLAYER_JUMP_TIME
+#define ENEMY_FALLING (1.0f)
+#define ENEMY_JUMP_TIME (300)
 #define RESPAWN_TIME (5000) // リスポーンにかかる時間（初期値）
 /*
 * Enemy

@@ -258,8 +258,8 @@ void Player::jump(D3DXVECTOR2 & vector, char & result)
 {
 	if (!(result & HitLine::TOP) && jumping)
 	{
-		auto spent = time_diff(jumped_at);
-		if (spent < PLAYER_JUMP_TIME || (GetKeyboardPress(DIK_SPACE) && spent < PLAYER_HOLD_JUMP_TIME)) vector.y += PLAYER_JUMP_POWER;
+		auto diff = y - jumped_at;
+		if (diff < PLAYER_JUMP_HEIGHT || (GetKeyboardPress(DIK_SPACE) && diff < PLAYER_HOLD_JUMP_HEIGHT)) vector.y += PLAYER_JUMP_POWER;
 		else jumping = false;
 	}
 }
@@ -297,7 +297,7 @@ bool Player::is_holding_item()
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
-	vec(Player::Vec::CENTER), item(nullptr), jumped_at(SCNOW), jumping(false)
+	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y)
 {
 	init();
 }
@@ -456,7 +456,7 @@ void Player::trigger_controlls()
 	if (!controll_lock && ground && GetKeyboardTrigger(DIK_SPACE))
 	{
 		ground = false;
-		jumped_at = SCNOW;
+		jumped_at = y;
 		jumping = true;
 	}
 

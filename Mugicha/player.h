@@ -10,8 +10,8 @@
 // 初期値など
 #define PLAYER_SPEED (0.675f) // プレイや移動速度
 #define PLAYER_JUMP_POWER (2.0f) // ジャンプ力，1msにどんだけ飛ぶか
-#define PLAYER_JUMP_TIME (200) // ジャンプ時間(ms)
-#define PLAYER_HOLD_JUMP_TIME (500) // 長押しジャンプ
+#define PLAYER_JUMP_HEIGHT (CELL_HEIGHT * 2.5) // ジャンプする高さ
+#define PLAYER_HOLD_JUMP_HEIGHT (CELL_HEIGHT * 3.5) // 長押しジャンプする高さ
 #define PLAYER_FALLING (1.0f) // 落下速度
 #define PLAYER_WIDTH (CELL_WIDTH * 0.8) // プレイヤの幅
 #define PLAYER_HEIGHT (CELL_HEIGHT * 0.8) // プレイヤの高さ
@@ -55,7 +55,7 @@ private:
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
 	
 	bool jumping; // ジャンプしている
-	time_point jumped_at;
+	float jumped_at;
 	bool ground; // 着地状態
 	bool moving; // 動いている(x軸)
 	
