@@ -6,9 +6,10 @@
 bool Player::collision_for_enemies()
 {
 	// “G‚Æ‚Ì“–‚½‚è”»’è
-	for (const auto& enemy : polygons[SquarePolygonBase::PolygonTypes::ENEMY])
+	for (const auto& _enemy : polygons[SquarePolygonBase::PolygonTypes::ENEMY])
 	{
-		if (enemy->is_active() && is_collision(enemy->get_square(), get_square()))
+		const auto& enemy = static_cast<Enemy*>(_enemy);
+		if (enemy->is_alive() && is_collision(enemy->get_square(), get_square()))
 		{
 			if (zoom_level >= 1.0f)
 			{
@@ -21,7 +22,7 @@ bool Player::collision_for_enemies()
 			else
 			{
 				// “G‚Ì•‰‚¯
-				enemy->off();
+				enemy->kill();
 			}
 		}
 	}
