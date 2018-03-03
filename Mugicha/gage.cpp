@@ -34,7 +34,9 @@ bool Gage::can_consume()
 	return current_cost >= cost;
 }
 
+#ifdef _DEBUG
 void Gage::cure()
 {
 	current_cost = cost_gage_max;
 }
+#endif
