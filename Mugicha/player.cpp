@@ -13,11 +13,9 @@ bool Player::collision_for_enemies()
 		{
 			if (zoom_level >= 1.0f)
 			{
-#ifndef _NEVER_DIE
 				// プレイヤの負け
 				kill(DeadReason::HitEnemy);
 				return true;
-#endif
 			}
 			else
 			{
@@ -53,37 +51,29 @@ bool Player::collision_for_thorns()
 		case Thorn::Vec::UP:
 			if (hit_bottom(self, another))
 			{
-#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
-#endif
 			}
 			break;
 		case Thorn::Vec::DOWN:
 			if (hit_top(self, another))
 			{
-#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
-#endif
 			}
 			break;
 		case Thorn::Vec::RIGHT:
 			if (hit_left(self, another))
 			{
-#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
-#endif
 			}
 			break;
 		case Thorn::Vec::LEFT:
 			if (hit_right(self, another))
 			{
-#ifndef _NEVER_DIE
 				kill(DeadReason::HitThorn);
 				return true;
-#endif
 			}
 			break;
 		}
@@ -99,10 +89,8 @@ bool Player::collision_for_magmas()
 	{
 		if (is_collision(get_square(), magma->get_square()))
 		{
-#ifndef _NEVER_DIE
 			kill(DeadReason::HitMagma);
 			return true;
-#endif
 		}
 	}
 	return false;
@@ -116,10 +104,8 @@ bool Player::collision_for_bullets()
 		if (is_collision(get_square(), bullet->get_square()))
 		{
 			bullet->init();
-#ifndef _NEVER_DIE
 			kill(DeadReason::Shot);
 			return true;
-#endif
 		}
 	}
 	return false;
@@ -189,11 +175,9 @@ bool Player::is_fallen_hellgate()
 	self.h *= 0.9; // 甘さ
 	if (is_collision(self, polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->get_square()))
 	{
-#ifndef _NEVER_DIE
 		// プレイヤの負け
 		kill(DeadReason::FallenHellGate);
 		return true;
-#endif
 	}
 	return false;
 }
@@ -347,39 +331,17 @@ void Player::update()
 	// statusみて切る
 	unless (status) return; 
 
-	// 敵との当たり判定
-	if (collision_for_enemies())
+	if (
+		collision_for_enemies() // 敵との当たり判定
+		|| collision_for_thorns() // トゲとの当たり判定
+		|| collision_for_magmas() // マグマとの当たり判定
+		|| collision_for_bullets() // 弾丸との当たり判定
+		|| is_fallen_hellgate() // 下から上がってくるアレとの当たり判定
+		)
 	{
-		// 死
+#ifndef _NEVER_DIE
 		return;
-	}
-
-	// トゲとの当たり判定
-	if (collision_for_thorns())
-	{
-		// 死
-		return;
-	}
-
-	// マグマとの当たり判定
-	if (collision_for_magmas())
-	{
-		// 死
-		return;
-	}
-
-	// 弾丸との当たり判定
-	if (collision_for_bullets())
-	{
-		// 死～
-		return;
-	}
-
-	// 下から上がってくるアレとの当たり判定
-	if (is_fallen_hellgate())
-	{
-		// 死～～
-		return;
+#endif
 	}
 		
 	if (controll_lock)
@@ -443,6 +405,35 @@ void Player::unlock()
 
 void Player::kill(const DeadReason & _dead_reason)
 {
+#ifdef _DEBUG
+	switch (_dead_reason)
+	{
+	case DeadReason::ALIVE:
+		puts(STRING(DeadReason::ALIVE));
+		break;
+	case DeadReason::Sandwiched:
+		puts(STRING(DeadReason::Sandwiched));
+		break;
+	case DeadReason::HitEnemy:
+		puts(STRING(DeadReason::HitEnemy));
+		break;
+	case DeadReason::HitThorn:
+		puts(STRING(DeadReason::HitThorn));
+		break;
+	case DeadReason::Falling:
+		puts(STRING(DeadReason::Falling));
+		break;
+	case DeadReason::HitMagma:
+		puts(STRING(DeadReason::HitMagma));
+		break;
+	case DeadReason::Shot:
+		puts(STRING(DeadReason::Shot));
+		break;
+	case DeadReason::FallenHellGate:
+		puts(STRING(DeadReason::FallenHellGate));
+		break;
+	}
+#endif
 #ifndef _NEVER_DIE
 	dead_reason = _dead_reason;
 #endif
