@@ -7,6 +7,8 @@
 #include "polygons_register.h"
 #include "helpers.h"
 
+#define CAMERA_HEIGHT (200) // カメラのプレイヤからの高さ
+
 using polygon_vec = std::vector<SquarePolygonBase*>;
 
 class Stage {
@@ -59,11 +61,11 @@ private:
 	void multi_texture_loader(const char *filepath); // テクスチャを読み込むためのmapを作成して渡す
 	bool stagefile_loader(const char* filepath); // ステージファイルをロードする
 	void init(); // ステージの初期設定をやる
-	void update();
-	void draw();
-
-	template<typename _T>
-	_T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon); // polygonsの指定されたラベルの最後にで追加する
+	void update(); // 更新処理
+	void draw(); // 描画処理
+	void zoom(); // ズームに関する処理
+	void controll_camera(); // カメラの調節
+	template<typename _T> _T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon); // polygonsの指定されたラベルの最後にで追加する
 public:
 	Stage(char _stage_select);
 	~Stage();

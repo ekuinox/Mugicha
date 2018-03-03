@@ -7,17 +7,16 @@
 #include <string>
 #include <typeinfo>
 
-// コンストラクタ
 Stage::Stage(char _stage_select)
 	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select)
 {
 	init();
 }
 
-// デストラクタ
 Stage::~Stage()
 {
-	for (auto tex : textures)
+	// テクスチャの開放
+	for (auto&& tex : textures)
 	{
 		if (tex.second)
 		{
@@ -25,9 +24,13 @@ Stage::~Stage()
 			tex.second = NULL;
 		}
 	}
+
+	// ポリゴンの開放
+	for (const auto& _polygons : polygons)
+		for (const auto& polygon : _polygons.second)
+			delete polygon;
 }
 
-// ここを叩いてステージを更新したり描画したりする
 Stage::GameInfo Stage::exec()
 {
 	update();
@@ -355,13 +358,13 @@ bool Stage::stagefile_loader(const char * filepath)
 	return true;
 }
 
-// 初期化, コンストラクタから呼ぶ
 void Stage::init()
 {
 #ifdef _DEBUG
 	const auto exec_start = SCNOW;
 	std::cout << "Stage Loading Started..." << std::endl;
 #endif
+
 	char filepath[256]; // ファイルパス格納
 
 	sprintf_s(filepath, STAGEFILES_DIR "textures_%02d.csv", info.stage_number);
@@ -373,16 +376,15 @@ void Stage::init()
 	zoom_level = 1.0f;
 	zoom_sign = Stage::Sign::ZERO;
 
+	if (exec_result) info.status = Stage::Status::Ready;
+	else info.status = Stage::Status::LoadError;
+
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
 	std::cout << time_diff(exec_start) << std::endl;
 #endif
-
-	if (exec_result) info.status = Stage::Status::Ready;
-	else info.status = Stage::Status::LoadError;
 }
 
-// 更新処理
 void Stage::update()
 {
 	// 時間を気にしないもの
@@ -394,12 +396,66 @@ void Stage::update()
 		return;
 	}
 
-	// タイトルに戻る（無確認）
+#ifdef _DEBUG // プレイヤの位置とかを吐かせる
 	if (GetKeyboardTrigger(DIK_F2))
 	{
 		printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);
 	}
+#endif
 
+	// 時間を気にするもの
+	auto current = SCNOW;
+	unless (time_diff(latest_update, current) < UPDATE_INTERVAL)
+	{
+		latest_update = current;
+
+		// ズーム処理
+		zoom();
+
+		// ここから更新処理
+		controll_camera();
+
+		// ポリゴンの全更新
+		for (const auto& _polygons : polygons)
+			for (const auto& polygon : _polygons.second)
+				polygon->update();
+	}
+}
+
+void Stage::draw()
+{
+	auto current = SCNOW;
+	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
+	latest_draw = current;
+
+	// ここから描画処理
+
+	// ソート
+	polygon_vec drawing_polygons;
+	for (const auto& pol_vec : polygons)
+		for (const auto& polygon : pol_vec.second)
+			if(polygon->is_drawing())
+				drawing_polygons.emplace_back(polygon);
+
+	// 大きいものが前に来るように
+	sort(drawing_polygons.begin(), drawing_polygons.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });
+	
+	d3d_device->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+
+	if (SUCCEEDED(d3d_device->BeginScene()))
+	{
+		for (const auto& _polygons : polygons)
+		{
+			for (const auto& drawing_polygon : drawing_polygons) drawing_polygon->draw();
+		}
+	}
+	d3d_device->EndScene();
+
+	d3d_device->Present(NULL, NULL, NULL, NULL);
+}
+
+void Stage::zoom()
+{
 	// 拡縮
 	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
 	{
@@ -447,11 +503,6 @@ void Stage::update()
 		}
 #endif
 	}
-	
-	// 時間を気にするもの
-	auto current = SCNOW;
-	if (time_diff(latest_update, current) < UPDATE_INTERVAL) return;
-	latest_update = current;
 
 	if (zoom_sign == Stage::Sign::PLUS)
 	{
@@ -485,62 +536,24 @@ void Stage::update()
 
 	// 全ズーム変更
 	for (const auto& _polygons : polygons)
-	{
-		for (const auto& polygon : _polygons.second) polygon->zoom(zoom_level);
-	}
+		for (const auto& polygon : _polygons.second)
+			polygon->zoom(zoom_level);
+}
 
-	// ここから更新処理
+void Stage::controll_camera()
+{
 	camera.x = player->get_coords().x;
-	camera.y = player->get_coords().y + 200; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
-	
+	camera.y = player->get_coords().y + CAMERA_HEIGHT; // プレイヤからのカメラの高さ，同じじゃなんか変だと思う
+
 #ifndef _DEBUG // 本番は見せないように
-	// 画面外は見せないようにする
+													   // 画面外は見せないようにする
 	unless(camera.x < map_size.w * zoom_level - SCREEN_WIDTH / 2) camera.x = map_size.w * zoom_level - SCREEN_WIDTH / 2;
-	unless (camera.y < map_size.h * zoom_level - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level - SCREEN_HEIGHT / 2;
+	unless(camera.y < map_size.h * zoom_level - SCREEN_HEIGHT / 2) camera.y = map_size.h * zoom_level - SCREEN_HEIGHT / 2;
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 #endif
-	// ポリゴンの全更新
-	for (const auto& _polygons : polygons)
-	{
-		for (const auto& polygon : _polygons.second) polygon->update();
-	}
 }
 
-// 描画処理
-void Stage::draw()
-{
-	auto current = SCNOW;
-	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
-	latest_draw = current;
-
-	// ここから描画処理
-
-	// ソート
-	polygon_vec drawing_polygons;
-	for (const auto& pol_vec : polygons)
-		for (const auto& polygon : pol_vec.second)
-			if(polygon->is_drawing())
-				drawing_polygons.emplace_back(polygon);
-
-	// 大きいものが前に来るように
-	sort(drawing_polygons.begin(), drawing_polygons.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });
-	
-	d3d_device->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
-
-	if (SUCCEEDED(d3d_device->BeginScene()))
-	{
-		for (const auto& _polygons : polygons)
-		{
-			for (const auto& drawing_polygon : drawing_polygons) drawing_polygon->draw();
-		}
-	}
-	d3d_device->EndScene();
-
-	d3d_device->Present(NULL, NULL, NULL, NULL);
-}
-
-// polygonsの指定したラベルにポリゴンを追加
 template<typename _T> _T Stage::emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon)
 {
 	polygons[type].emplace_back(polygon);
