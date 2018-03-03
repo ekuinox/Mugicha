@@ -9,9 +9,9 @@
 
 // 初期値など
 #define PLAYER_SPEED (0.675f) // プレイや移動速度
-#define PLAYER_JUMP_POWER (3.5f) // ジャンプ力，1msにどんだけ飛ぶか
-#define PLAYER_JUMP_TIME (500) // ジャンプ時間(ms)
-#define PLAYER_HOLD_JUMP_TIME (700) // 長押しジャンプ
+#define PLAYER_JUMP_POWER (2.0f) // ジャンプ力，1msにどんだけ飛ぶか
+#define PLAYER_JUMP_TIME (200) // ジャンプ時間(ms)
+#define PLAYER_HOLD_JUMP_TIME (500) // 長押しジャンプ
 #define PLAYER_FALLING (1.0f) // 落下速度
 #define PLAYER_WIDTH (CELL_WIDTH * 0.8) // プレイヤの幅
 #define PLAYER_HEIGHT (CELL_HEIGHT * 0.8) // プレイヤの高さ
