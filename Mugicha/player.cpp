@@ -244,15 +244,33 @@ void Player::head_check(char & result)
 
 void Player::controlls(D3DXVECTOR2 & vector, char & result)
 {
-	if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A))) // 左方向への移動
+	// 左方向への移動
+	if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A)))
 	{
 		vector.x -= speed;
 		vec = Player::Vec::LEFT;
 	}
-	if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D))) // 右方向への移動
+	
+	// 右方向への移動
+	if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D)))
 	{
 		vector.x += speed;
 		vec = Player::Vec::RIGHT;
+	}
+
+	// プレイヤをジャンプさせる
+	if (!controll_lock && ground && GetKeyboardTrigger(DIK_SPACE))
+	{
+		ground = false;
+		jumped_at = SCNOW;
+		jumping = true;
+	}
+
+	// プレイヤに掴ませたりする
+	if (GetKeyboardTrigger(DIK_U))
+	{
+		if (is_holding_item()) release_item();
+		else catch_item();
 	}
 
 #ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
@@ -276,6 +294,31 @@ void Player::jump(D3DXVECTOR2 & vector, char & result)
 void Player::drifting(D3DXVECTOR2 & vector)
 {
 	unless(ground) vector.y -= PLAYER_FALLING;
+}
+
+bool Player::catch_item()
+{
+	for (const auto& _item : polygons[SquarePolygonBase::PolygonTypes::ITEM])
+	{
+		if (static_cast<Item*>(_item)->hold(get_square()))
+		{
+			item = static_cast<Item*>(_item);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Player::release_item()
+{
+	item->release();
+	item = nullptr;
+}
+
+bool Player::is_holding_item()
+{
+	return item != nullptr;
 }
 
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
@@ -383,40 +426,6 @@ void Player::update()
 		
 	// itemを持っているならitemの位置を修正してあげる
 	if (is_holding_item()) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
-}
-
-bool Player::jump()
-{
-	if (controll_lock || !ground) return false;
-	ground = false;
-	jumped_at = SCNOW;
-	jumping = true;
-	return true;
-}
-
-bool Player::catch_item()
-{
-	for (const auto& _item : polygons[SquarePolygonBase::PolygonTypes::ITEM])
-	{
-		if (static_cast<Item*>(_item)->hold(get_square()))
-		{
-			item = static_cast<Item*>(_item);
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void Player::release_item()
-{
-	item->release();
-	item = nullptr;
-}
-
-bool Player::is_holding_item()
-{
-	return item != nullptr;
 }
 
 void Player::lock()

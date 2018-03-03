@@ -448,26 +448,6 @@ void Stage::update()
 #endif
 	}
 	
-	// プレイヤをジャンプさせる
-	if (GetKeyboardTrigger(DIK_SPACE))
-	{
-		player->jump();
-	}
-
-	// プレイヤに掴ませたりする
-	if (GetKeyboardTrigger(DIK_U))
-	{
-		if (player->is_holding_item()) player->release_item();
-		else player->catch_item();
-	}
-
-	// ゲージの消費をテスト
-	if (GetKeyboardTrigger(DIK_J))
-	{
-		gage->consume();
-	}
-
-
 	// 時間を気にするもの
 	auto current = SCNOW;
 	if (time_diff(latest_update, current) < UPDATE_INTERVAL) return;
