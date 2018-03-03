@@ -402,7 +402,7 @@ void Stage::update()
 	}
 
 	// 時間を気にしないタイプの操作をここで呼ぶ
-	player->trigger_controlls();
+	trigger_controlls();
 
 #ifdef _DEBUG
 	
@@ -463,6 +463,47 @@ void Stage::draw()
 
 void Stage::zoom()
 {
+
+	if (zoom_sign == Stage::Sign::PLUS)
+	{
+		if (zoom_level < zoom_level_target)
+		{
+			zoom_level *= 1.01f;
+			zoom_level *= 1.01f;
+		}
+		else
+		{
+			zoom_level = zoom_level_target;
+			zoom_sign = Stage::Sign::ZERO;
+			player->unlock();
+		}
+	}
+
+	if (zoom_sign == Stage::Sign::MINUS)
+	{
+		if (zoom_level > zoom_level_target)
+		{
+			zoom_level /= 1.01f;
+			zoom_level /= 1.01f;
+		}
+		else
+		{
+			zoom_level = zoom_level_target;
+			zoom_sign = Stage::Sign::ZERO;
+			player->unlock();
+		}
+	}
+
+	// 全ズーム変更
+	for (const auto& _polygons : polygons)
+		for (const auto& polygon : _polygons.second)
+			polygon->zoom(zoom_level);
+}
+
+void Stage::trigger_controlls()
+{
+	player->trigger_controlls();
+
 	// プレイヤのジャンプ中は拡縮ができない
 	if (player->is_jumping()) return;
 
@@ -513,41 +554,6 @@ void Stage::zoom()
 		}
 #endif
 	}
-
-	if (zoom_sign == Stage::Sign::PLUS)
-	{
-		if (zoom_level < zoom_level_target)
-		{
-			zoom_level *= 1.01f;
-			zoom_level *= 1.01f;
-		}
-		else
-		{
-			zoom_level = zoom_level_target;
-			zoom_sign = Stage::Sign::ZERO;
-			player->unlock();
-		}
-	}
-
-	if (zoom_sign == Stage::Sign::MINUS)
-	{
-		if (zoom_level > zoom_level_target)
-		{
-			zoom_level /= 1.01f;
-			zoom_level /= 1.01f;
-		}
-		else
-		{
-			zoom_level = zoom_level_target;
-			zoom_sign = Stage::Sign::ZERO;
-			player->unlock();
-		}
-	}
-
-	// 全ズーム変更
-	for (const auto& _polygons : polygons)
-		for (const auto& polygon : _polygons.second)
-			polygon->zoom(zoom_level);
 }
 
 void Stage::controll_camera()

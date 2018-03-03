@@ -67,6 +67,7 @@ private:
 	void update(); // 更新処理
 	void draw(); // 描画処理
 	void zoom(); // ズームに関する処理
+	void trigger_controlls(); // キーのトリガで操作するもの
 	void controll_camera(); // カメラの調節
 	void sort_pols(); // ポリゴンのソート
 	template<typename _T> _T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon); // polygonsの指定されたラベルの最後にで追加する
