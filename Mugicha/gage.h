@@ -16,6 +16,9 @@ public:
 	void update();
 	float consume(); // 一回分消費して残量を返す，コストが足らない場合は負の値を返す
 	bool can_consume();
+#ifdef _DEBUG
+	void cure(); // 全回復させる
+#endif
 private:
 	const float cost = 1.0f; // 一度に消費するコスト
 	const float cost_gage_max = 2.0f; // コストの満タン状態

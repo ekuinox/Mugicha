@@ -401,11 +401,14 @@ void Stage::update()
 		return;
 	}
 
-#ifdef _DEBUG // プレイヤの位置とかを吐かせる
-	if (GetKeyboardTrigger(DIK_F2))
-	{
-		printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);
-	}
+#ifdef _DEBUG
+	
+	// プレイヤの位置とかを吐かせる
+	if (GetKeyboardTrigger(DIK_F2)) printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);
+
+	// ゲージ全回復じゃ～い
+	if (GetKeyboardTrigger(DIK_F3)) gage->cure();
+
 #endif
 
 	// 時間を気にするもの
