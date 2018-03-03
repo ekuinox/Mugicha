@@ -209,6 +209,7 @@
   <ItemGroup>
     <ClCompile Include="air_cannon.cpp" />
     <ClCompile Include="always_displayed_polygon.cpp" />
+    <ClCompile Include="audio_controller.cpp" />
     <ClCompile Include="background.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="collision_checker.cpp" />
@@ -236,6 +237,7 @@
   <ItemGroup>
     <ClInclude Include="air_cannon.h" />
     <ClInclude Include="always_displayed_polygon.h" />
+    <ClInclude Include="audio_controller.h" />
     <ClInclude Include="background.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="collision_checker.h" />

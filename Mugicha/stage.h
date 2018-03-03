@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "polygons_register.h"
 #include "helpers.h"
+#include "audio_controller.h"
 
 #define CAMERA_HEIGHT (200) // カメラのプレイヤからの高さ
 
@@ -58,6 +59,8 @@ private:
 	POLSIZE map_size; // 背景のデカさになります
 	
 	std::map<std::string, bool> switches; // スイッチマップ
+
+	AudioController* audiocontroller; // オーディオ
 
 	// 関数群
 	void multi_texture_loader(std::map<std::string, const char *> _textures); // テクスチャを読み込む

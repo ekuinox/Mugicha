@@ -402,6 +402,13 @@ void Stage::init()
 	if (exec_result) info.status = Stage::Status::Ready;
 	else info.status = Stage::Status::LoadError;
 
+	audiocontroller = new AudioController({
+		{"AUDIO_01", { RESOURCES_DIR "audios/akumu.wav", true}}
+	});
+
+	audiocontroller->play("AUDIO_01");
+
+
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
 	std::cout << time_diff(exec_start) << std::endl;
