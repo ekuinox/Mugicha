@@ -10,7 +10,7 @@ Controller::Controller()
 void Controller::init()
 {
 	std::map<const char*, const char*> texture_files = {
-		{ "TITLE_BG", TEXTURES_DIR "title_bg.png"},
+		{ "TITLE_BG", TEXTURES_DIR "title.jpg"},
 		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.png" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },

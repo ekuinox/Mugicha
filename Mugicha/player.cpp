@@ -411,6 +411,9 @@ void Player::update()
 		// •‚‚¢‚Ä‚¢‚éó‘Ô
 		drifting(vector);
 
+		// u’l‚ğ•Ï‚¦‚Ä‚â‚è‚½‚¢‚ñ‚¾‚ª
+		if (vector.x > 0) u += uw;
+
 		// •ÏX‚ğ‰ÁZ‚µ‚ÄI—¹
 		x += vector.x;
 		y += vector.y;
