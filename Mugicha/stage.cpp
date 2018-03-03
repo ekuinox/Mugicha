@@ -93,7 +93,9 @@ bool Stage::stagefile_loader(const char * filepath)
 	std::vector<std::vector<std::string>> table;
 
 	if (!(csv_loader(filepath, table))) return false; // csvの読み込みに失敗
-	if (table[0].size() != 4) return false; // 一行目にはw,hにしておいて欲しいので
+	
+	// MAP_WIDTH,MAP_HEIGHT,PLAYER_COORD_X, PLAYER_COORD_Y,HELLGATE_START_X, HELLGATE_START_Y
+	if (table[0].size() != 6) return false;
 
 	// すべて無にする　後のことは考えてない　すみません
 	PolygonsContainer().swap(polygons);
@@ -107,6 +109,21 @@ bool Stage::stagefile_loader(const char * filepath)
 	// プレイヤの登録
 	// プレイヤは先に登録しておかないと後々だるいです
 	(player = emplace_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], camera, polygons)))->on();
+
+	// HELLGATEのセット
+	(emplace_polygon_back(
+		SquarePolygonBase::PolygonTypes::HELLGATE,
+		new HellGate(
+			map_size.w / 2,
+			-1000,
+			map_size.w, 300,
+			textures["HELLGATE_01"],
+			0,
+			camera,
+			player,
+			D3DXVECTOR2(std::atof(table[0][4].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][5].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2)
+		)
+	))->on();
 
 	// tmps
 	AirCannon* aircannon;
@@ -341,9 +358,6 @@ bool Stage::stagefile_loader(const char * filepath)
 
 	// ゲージのセット
 	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(25, 50, textures["GAGE_01"])))->on();
-
-	// 下から迫りくるアレ
-	(emplace_polygon_back(SquarePolygonBase::PolygonTypes::HELLGATE, new HellGate(map_size.w / 2, -100, map_size.w, 300, textures["HELLGATE_01"], 0, camera)))->on();
 
 #ifdef _DEBUG // デバッグ用のラインとか
 	// 原点

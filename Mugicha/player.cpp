@@ -173,7 +173,10 @@ bool Player::is_fallen_hellgate()
 {
 	auto self = get_square();
 	self.h *= 0.9; // ŠÃ‚³
-	if (is_collision(self, polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->get_square()))
+	if (
+		polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->is_drawing()
+		&& is_collision(self, polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->get_square())
+		)
 	{
 		// ƒvƒŒƒCƒ„‚Ì•‰‚¯
 		kill(DeadReason::FallenHellGate);
