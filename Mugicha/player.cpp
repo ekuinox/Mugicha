@@ -144,22 +144,22 @@ D3DXVECTOR2 Player::collision_for_knockback_bullets()
 
 			if (result & HitLine::TOP && vec == Bullet::Vec::UP)
 			{
-				knockback.y += CELL_WIDTH;
+				knockback.y += KNOCKBACK_VOLUME;
 				bullet->init();
 			}
 			else if (result & HitLine::BOTTOM && vec == Bullet::Vec::DOWN)
 			{
-				knockback.y -= CELL_WIDTH;
+				knockback.y -= KNOCKBACK_VOLUME;
 				bullet->init();
 			}
 			else if (result & HitLine::LEFT && vec == Bullet::Vec::LEFT)
 			{
-				knockback.x -= CELL_WIDTH;
+				knockback.x -= KNOCKBACK_VOLUME;
 				bullet->init();
 			}
 			else if (result & HitLine::RIGHT && vec == Bullet::Vec::RIGHT)
 			{
-				knockback.x += CELL_WIDTH;
+				knockback.x += KNOCKBACK_VOLUME;
 				bullet->init();
 			}
 		}

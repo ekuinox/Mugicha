@@ -23,6 +23,7 @@
 	SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH \
 	} // 当たり判定を取るポリゴンのタイプまとめ
 #define FALLING_OUT_Y (-10) // 画面外落下の高さ
+#define KNOCKBACK_VOLUME ((CELL_WIDTH + CELL_HEIGHT) / 2) // ノックバック距離
 
 // プレイヤークラス
 
