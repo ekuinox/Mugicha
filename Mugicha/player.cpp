@@ -315,7 +315,7 @@ void Player::generate_vertexes()
 
 	PlainSquarePolygon::generate_vertexes();
 
-	if (vec == Player::Vec::CENTER)
+	if ((vec == Player::Vec::CENTER && old_vec == Player::Vec::LEFT) || vec == Player::Vec::LEFT)
 	{
 		if (old_vec == Player::Vec::LEFT)
 		{
@@ -323,13 +323,6 @@ void Player::generate_vertexes()
 			{
 				vertexes[i].u = u + (i % 3 == 0 ? uw : 0);
 			}
-		}
-	}
-	else if (vec == Player::Vec::LEFT)
-	{
-		for (auto i = 0; i < 4; ++i)
-		{
-			vertexes[i].u = u + (i % 3 == 0 ? uw : 0);
 		}
 	}
 }
