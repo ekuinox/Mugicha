@@ -14,7 +14,12 @@ void Item::update()
 		// “–‚½‚è‚ðŽæ‚Á‚Ä‚¢‚«‚Ü‚·
 		char result = 0x00;
 		for (const auto& type : {
-			SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, SquarePolygonBase::PolygonTypes::THORN, SquarePolygonBase::PolygonTypes::AIRCANNON, SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH
+			SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
+			SquarePolygonBase::PolygonTypes::RAGGED_FLOOR,
+			SquarePolygonBase::PolygonTypes::THORN,
+			SquarePolygonBase::PolygonTypes::AIRCANNON,
+			SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
+			SquarePolygonBase::PolygonTypes::GIMMICK_FLOOR
 			})
 		{
 			for (const auto& polygon : polygons[type])

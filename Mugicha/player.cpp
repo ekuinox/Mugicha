@@ -450,7 +450,7 @@ void Player::update()
 	}
 		
 	// item‚ðŽ‚Á‚Ä‚¢‚é‚È‚çitem‚ÌˆÊ’u‚ðC³‚µ‚Ä‚ ‚°‚é
-	if (is_holding_item()) item->move(D3DXVECTOR2(x + w / (vec == Player::Vec::RIGHT ? 2 : -2), y));
+	if (is_holding_item()) item->move(D3DXVECTOR2(x + w / ( (vec == Player::Vec::CENTER ? old_vec : vec) == Player::Vec::RIGHT ? 2 : -2), y));
 }
 
 void Player::lock()
