@@ -31,7 +31,7 @@ void Enemy::update()
 	{
 		// ìñÇΩÇËê∏ç∏
 		char result = 0x00;
-		for (const auto& type : COLLISION_CHECK_POLYGONTYPES)
+		for (const auto& type : ENEMY_COLLISION_CHECK_POLYGONTYPES)
 			for (const auto& polygon : polygons[type])
 				result |= where_collision(this, polygon, 1.0f);
 

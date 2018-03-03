@@ -183,7 +183,11 @@ bool Stage::stagefile_loader(const char * filepath)
 				)->on();
 				break;
 			case 7:
-				// switchで出現するなにか
+				// Switchで出現するなにか
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::GIMMICK_FLOOR,
+					REGISTER_GIMMICK_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_02"], camera, switches["FLOOR_SWITCH_01"])
+				)->on();
 				break;
 			case 8:
 				// 落ちる床
@@ -307,7 +311,7 @@ bool Stage::stagefile_loader(const char * filepath)
 				// スイッチ
 				emplace_polygon_back(
 					SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH,
-					REGISTER_GIMMICK_SWITCH(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["SWITCH_01"], camera, switches["SAMPLE"])
+					REGISTER_GIMMICK_SWITCH(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["SWITCH_01"], camera, switches["FLOOR_SWITCH_01"])
 				)->on();
 				break;
 			case 33:

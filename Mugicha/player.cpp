@@ -2,6 +2,7 @@
 #include "player.h"
 #include "thorn.h"
 #include "bullet.h"
+#include "gimmick_floor.h"
 
 bool Player::collision_for_enemies()
 {
@@ -192,6 +193,12 @@ char Player::collision_check()
 	for (const auto& type : COLLISION_CHECK_POLYGONTYPES)
 		for (const auto& polygon : polygons[type])
 			result |= where_collision(this, polygon);
+
+	// GIMMICK_FLOOR‚¾‚¯appearing‚ðŒ©‚é
+	for (const auto& polygon : polygons[SquarePolygonBase::PolygonTypes::GIMMICK_FLOOR])
+		if(static_cast<GimmickFloor*>(polygon)->is_appearing())
+			result |= where_collision(this, polygon);
+
 	return result;
 }
 
@@ -355,6 +362,22 @@ void Player::update()
 			}
 			unless(run) break;
 		}
+
+		// GIMMICK_FLOOR‚¾‚¯appearing‚ðŒ©‚é
+		for (const auto& polygon : polygons[SquarePolygonBase::PolygonTypes::GIMMICK_FLOOR])
+		{
+			if (static_cast<GimmickFloor*>(polygon)->is_appearing())
+			{
+				auto sq = polygon->get_square();
+				if (hit_bottom(self, sq))
+				{
+					y += CELL_HEIGHT * zoom_level; // ‚Ó‚í‚Á‚Æ‚ ‚°‚Ä‚â‚é
+					run = false;
+					break;
+				}
+			}
+		}
+		
 	}
 	else
 	{

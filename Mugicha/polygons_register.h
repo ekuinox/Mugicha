@@ -16,6 +16,7 @@
 #include "always_displayed_polygon.h"
 #include "gage.h"
 #include "hellgate.h"
+#include "gimmick_floor.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 
@@ -59,6 +60,8 @@
 #define REGISTER_GIMMICK_SWITCH(x, y, tex, camera, flag) new GimmickSwitch(static_cast<float>(x), static_cast<float>(y - 5), CELL_WIDTH -10, CELL_HEIGHT - 10, tex, 3, camera, flag)
 
 #define REGISTER_MAGMA(x, y, tex, camera) new Magma(static_cast<float>(x), static_cast<float>(y) - 5, CELL_WIDTH, CELL_HEIGHT - 10, tex, 1, camera)
+
+#define REGISTER_GIMMICK_FLOOR(x, y, tex, camera, flag) new GimmickFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, flag)
 
 // 横長なモノ
 

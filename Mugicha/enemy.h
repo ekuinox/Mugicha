@@ -4,7 +4,7 @@
 #include "helpers.h"
 
 // 初期値など
-#define COLLISION_CHECK_POLYGONTYPES { \
+#define ENEMY_COLLISION_CHECK_POLYGONTYPES { \
 	SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, \
 	SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, \
 	SquarePolygonBase::PolygonTypes::THORN, \
@@ -18,6 +18,7 @@
 #define ENEMY_FALLING (1.0f)
 #define ENEMY_JUMP_TIME (300)
 #define RESPAWN_TIME (5000) // リスポーンにかかる時間（初期値）
+
 /*
 * Enemy
 * 敵さんのクラス
