@@ -66,6 +66,7 @@ private:
 	float before_zoom_level; // 前のヤツ
 
 	Player::Vec vec;
+	Player::Vec old_vec;
 	
 	Item *item; // 持っているアイテムを格納する．持っていない場合はnullptrにする．
 
@@ -88,8 +89,9 @@ private:
 	void release_item(); // アイテムを離す
 	bool is_holding_item(); // アイテムを持っているか
 
+	void generate_vertexes();
 public:
-	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer &_polygons, int _layer, float _x, float _y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f / 11.0f, float _vh = 1.0f / 4.0f);
+	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer &_polygons, int _layer, float _x, float _y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 0.1f, float _vh = 0.25f);
 	
 	void init();
 	void update();

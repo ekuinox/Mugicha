@@ -239,11 +239,14 @@ void Player::head_check(char & result)
 
 void Player::controlls(D3DXVECTOR2 & vector, char & result)
 {
+	vec = Player::Vec::CENTER;
+
 	// 左方向への移動
 	if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A)))
 	{
 		vector.x -= speed;
 		vec = Player::Vec::LEFT;
+		old_vec = vec;
 	}
 	
 	// 右方向への移動
@@ -251,6 +254,7 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 	{
 		vector.x += speed;
 		vec = Player::Vec::RIGHT;
+		old_vec = vec;
 	}
 
 #ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
@@ -301,10 +305,39 @@ bool Player::is_holding_item()
 	return item != nullptr;
 }
 
+void Player::generate_vertexes()
+{
+	// u値を変えてやりたいんだが
+	if (vec != Player::Vec::CENTER)
+	{
+		u += uw * (vec == Player::Vec::RIGHT ? 1 : -1);
+	}
+
+	PlainSquarePolygon::generate_vertexes();
+
+	if (vec == Player::Vec::CENTER)
+	{
+		if (old_vec == Player::Vec::LEFT)
+		{
+			for (auto i = 0; i < 4; ++i)
+			{
+				vertexes[i].u = u + (i % 3 == 0 ? uw : 0);
+			}
+		}
+	}
+	else if (vec == Player::Vec::LEFT)
+	{
+		for (auto i = 0; i < 4; ++i)
+		{
+			vertexes[i].u = u + (i % 3 == 0 ? uw : 0);
+		}
+	}
+}
+
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
-	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y)
+	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y), old_vec(Player::Vec::CENTER)
 {
 	init();
 }
@@ -410,9 +443,6 @@ void Player::update()
 
 		// 浮いている状態
 		drifting(vector);
-
-		// u値を変えてやりたいんだが
-		if (vector.x > 0) u += uw;
 
 		// 変更を加算して終了
 		x += vector.x;

@@ -18,10 +18,7 @@
 
 AudioController::AudioController(Params _params)
 {
-	for (const auto& _param : _params)
-	{
-		audios[_param.first] = Audio(_param.second);
-	}
+	for (const auto& _param : _params) audios[_param.first] = Audio(_param.second);
 	init();
 }
 
