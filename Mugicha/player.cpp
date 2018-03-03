@@ -349,6 +349,24 @@ void Player::update()
 		// 移動前の座標と拡縮する前のズームレベルと現在のズームレベルから割り出したモノをかけていく．
 		x = when_locked_coords.x * (zoom_level / before_zoom_level);
 		y = when_locked_coords.y * (zoom_level / before_zoom_level);
+
+		// 当たり精査
+		auto self = get_square();
+		bool run = true;
+		for (const auto& type : COLLISION_CHECK_POLYGONTYPES)
+		{
+			for (const auto& polygon : polygons[type])
+			{
+				auto sq = polygon->get_square();
+				if (hit_bottom(self, sq))
+				{
+					y += CELL_HEIGHT * zoom_level;
+					run = false;
+					break;
+				}
+			}
+			unless(run) break;
+		}
 	}
 	else
 	{
