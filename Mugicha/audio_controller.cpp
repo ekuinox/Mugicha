@@ -17,9 +17,13 @@
 #endif
 
 AudioController::AudioController(Params _params)
+	: Xaudio2(NULL), mastering_voice(NULL)
 {
 	for (const auto& _param : _params) audios[_param.first] = Audio(_param.second);
-	init();
+	if (FAILED(init()))
+	{
+		throw "Audio Load Error";
+	}
 }
 
 AudioController::~AudioController()
@@ -32,7 +36,7 @@ HRESULT AudioController::init()
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
 	/**** Create XAudio2 ****/
-	auto hr = XAudio2Create(&Xaudio2, 0/* , XAUDIO2_DEFAULT_PROCESSOR*/);
+	auto hr = XAudio2Create(&Xaudio2, 0);
 	if (FAILED(hr)) {
 		CoUninitialize();
 		return -1;
@@ -55,6 +59,9 @@ HRESULT AudioController::init()
 
 	for (auto&& audio : audios)
 	{
+		memset(&audio.second.wfx, 0, sizeof(WAVEFORMATEXTENSIBLE));
+		memset(&audio.second.buffer, 0, sizeof(XAUDIO2_BUFFER));
+
 		auto file = CreateFile(audio.second.param.filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		if (file == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
 		if (SetFilePointer(file, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) return HRESULT_FROM_WIN32(GetLastError());
@@ -80,7 +87,7 @@ HRESULT AudioController::init()
 		audio.second.buffer.Flags = XAUDIO2_END_OF_STREAM;
 		audio.second.buffer.LoopCount = (audio.second.param.loop ? XAUDIO2_LOOP_INFINITE : 0);
 
-		Xaudio2->CreateSourceVoice(&audio.second.source_voice, &(audio.second.wfx.Format));
+		Xaudio2->CreateSourceVoice(&audio.second.source_voice, &audio.second.wfx.Format);
 	}
 	
 	return hr;
@@ -109,10 +116,10 @@ void AudioController::uninit()
 void AudioController::play(const char *label)
 {
 	// ソースボイス作成
-	Xaudio2->CreateSourceVoice(&(audios[label].source_voice), &(audios[label].wfx.Format));
+	Xaudio2->CreateSourceVoice(&audios[label].source_voice, &audios[label].wfx.Format);
 	
 	// ボイスキューに新しいオーディオバッファーを追加
-	audios[label].source_voice->SubmitSourceBuffer(&(audios[label].buffer));
+	audios[label].source_voice->SubmitSourceBuffer(&audios[label].buffer);
 	
 	// 再生
 	audios[label].source_voice->Start(0);

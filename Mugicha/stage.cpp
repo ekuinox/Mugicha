@@ -7,6 +7,8 @@
 #include <string>
 #include <typeinfo>
 
+#include "XAudio2.h"
+
 Stage::Stage(char _stage_select)
 	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select)
 {
@@ -408,6 +410,9 @@ void Stage::init()
 
 	audiocontroller->play("AUDIO_01");
 
+	InitSound();
+
+//	PlaySound(SOUND_LABEL_BGM000);
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
