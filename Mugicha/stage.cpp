@@ -403,7 +403,7 @@ void Stage::init()
 	else info.status = Stage::Status::LoadError;
 
 	audiocontroller = new AudioController({
-		{"AUDIO_01", { RESOURCES_DIR "audios/akumu.wav", true}}
+		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}}
 	});
 
 	audiocontroller->play("AUDIO_01");

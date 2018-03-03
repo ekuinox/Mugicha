@@ -17,6 +17,7 @@
 #define RESOURCES_DIR "./resources/"
 #define TEXTURES_DIR RESOURCES_DIR "textures/"
 #define STAGEFILES_DIR RESOURCES_DIR "stages/"
+#define AUDIOS_DIR RESOURCES_DIR "audios/"
 
 #define FRAME_RATES (60)
 #define UPDATE_INTERVAL (1)
