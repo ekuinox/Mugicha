@@ -360,7 +360,7 @@ void Player::update()
 				auto sq = polygon->get_square();
 				if (hit_bottom(self, sq))
 				{
-					y += CELL_HEIGHT * zoom_level;
+					y += CELL_HEIGHT * zoom_level; // ‚Ó‚í‚Á‚Æ‚ ‚°‚Ä‚â‚é
 					run = false;
 					break;
 				}
