@@ -87,6 +87,7 @@ private:
 	bool catch_item(); // アイテムをつかむ
 	void release_item(); // アイテムを離す
 	bool is_holding_item(); // アイテムを持っているか
+
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer &_polygons, int _layer, float _x, float _y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	
@@ -99,6 +100,7 @@ public:
 	void lock();
 	void unlock();
 	void kill(const DeadReason &_dead_reason);
+	bool is_jumping();
 	Player::DeadReason dead();
 	Player::Vec get_vec();
 };

@@ -457,6 +457,9 @@ void Stage::draw()
 
 void Stage::zoom()
 {
+	// ƒvƒŒƒCƒ„‚ÌƒWƒƒƒ“ƒv’†‚ÍŠgk‚ª‚Å‚«‚È‚¢
+	if (player->is_jumping()) return;
+
 	// Šgk
 	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
 	{

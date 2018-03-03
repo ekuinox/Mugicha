@@ -448,6 +448,11 @@ void Player::kill(const DeadReason & _dead_reason)
 #endif
 }
 
+bool Player::is_jumping()
+{
+	return jumping;
+}
+
 Player::DeadReason Player::dead()
 {
 	return dead_reason;
