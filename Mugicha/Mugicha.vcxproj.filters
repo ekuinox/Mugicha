@@ -58,6 +58,9 @@
     <Filter Include="ソース ファイル\utils">
       <UniqueIdentifier>{59ff1f42-9348-4d41-bc36-7b87e9ae7db0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{0406d0fe-004c-4eff-828f-b49c2230d96a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -249,6 +252,9 @@
     </None>
     <None Include="resources\stages\sample.csv">
       <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>etc</Filter>
     </None>
   </ItemGroup>
 </Project>

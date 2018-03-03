@@ -266,6 +266,7 @@
     <ClInclude Include="thorn.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="resources\stages\sample.csv" />
     <None Include="resources\stages\stage_01.csv" />
     <None Include="resources\stages\stage_02.csv" />
