@@ -18,3 +18,8 @@ void GimmickFloor::update()
 		hide();
 	}
 }
+
+bool GimmickFloor::is_appearing()
+{
+	return appearing;
+}
