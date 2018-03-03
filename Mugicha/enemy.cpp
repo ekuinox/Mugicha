@@ -11,8 +11,9 @@ void Enemy::init()
 	on_ground = true;
 }
 
-Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w, float _h, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec), polygons(_polygons), moving(false), jumping(false), jumped_at(SCNOW), on_ground(true)
+Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w, float _h, float _respawn_time, float _u, float _v, float _uw, float _vh)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec),
+	polygons(_polygons), moving(false), jumping(false), jumped_at(SCNOW), on_ground(true), respawn_time(_respawn_time)
 {
 	speed = ENEMY_SPEED;
 	init_coords = { _x, _y };
@@ -73,7 +74,7 @@ void Enemy::update()
 	}
 
 	// ƒŠƒXƒ|[ƒ“
-	if (time_diff(dead_time) > RESPAWN_TIME)
+	if (time_diff(dead_time) > respawn_time)
 	{
 		alive = true;
 		show();

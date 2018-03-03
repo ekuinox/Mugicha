@@ -17,7 +17,7 @@
 #define ENEMY_JUMP_POWER (1.01f)
 #define ENEMY_FALLING PLAYER_FALLING
 #define ENEMY_JUMP_TIME PLAYER_JUMP_TIME
-#define RESPAWN_TIME (5000) // リスポーンにかかる時間
+#define RESPAWN_TIME (5000) // リスポーンにかかる時間（初期値）
 /*
 * Enemy
 * 敵さんのクラス
@@ -31,6 +31,7 @@ private:
 	D3DXVECTOR2 init_coords; // 初期位置
 	bool alive; // 生きているか
 	time_point dead_time; // 死んだタイミング
+	const float respawn_time; // リスポーンにかかる時間
 	bool on_ground; // 接地
 	bool jumping; // ジャンプしている
 	bool moving; // 行動
@@ -40,7 +41,7 @@ private:
 
 	void init(); // 初期化
 public:
-	Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w = ENEMY_WIDTH, float _h = ENEMY_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
+	Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w = ENEMY_WIDTH, float _h = ENEMY_HEIGHT, float _respawn_time = RESPAWN_TIME, float _u = 0.0f, float _v = 0.0f, float _uw = 1.0f, float _vh = 1.0f);
 	void update();
 	bool is_alive();
 	void kill();
