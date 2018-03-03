@@ -120,9 +120,6 @@
     <ClCompile Include="gage.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClCompile>
-    <ClCompile Include="hellgate.cpp">
-      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClCompile>
     <ClCompile Include="collision_checker.cpp">
       <Filter>ソース ファイル\utils</Filter>
     </ClCompile>
@@ -140,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="audio_controller.cpp">
       <Filter>ソース ファイル\io</Filter>
+    </ClCompile>
+    <ClCompile Include="hellgate.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,7 @@ void HellGate::update()
 		puts("HELLGATE STARTED!!");
 #endif
 	//	y = (start.y - (h - CELL_HEIGHT) * AREA) * zoom_level;
-		y = (start.y - CELL_WIDTH * 2);
+		y = (start.y - CELL_HEIGHT * 4);
 		started = true;
 	}
 }
