@@ -527,7 +527,7 @@ void Stage::trigger_controlls()
 		// Å¬‚É‚·‚é => ©•ª‚Í‘å‚«‚­‚È‚é
 		if (zoom_level > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
 		{
-			zoom_level_target = zoom_level_target = 0.5f;
+			zoom_level_target = 0.5f;
 			zoom_sign = Stage::Sign::MINUS;
 			player->lock();
 			gage->consume();
@@ -536,8 +536,8 @@ void Stage::trigger_controlls()
 		// ’Êíó‘Ô
 		if (zoom_level != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
 		{
-			zoom_level_target = zoom_level_target = 1.0f;
-			zoom_sign = (zoom_level < 0 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
+			zoom_level_target = 1.0f;
+			zoom_sign = (zoom_level < 1 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
 			player->lock();
 			gage->consume();
 		}
@@ -545,7 +545,7 @@ void Stage::trigger_controlls()
 		// Å‘å‰» => ©•ª‚Í¬‚³‚­‚È‚é
 		if (zoom_level < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
 		{
-			zoom_level_target = zoom_level_target = 2.0f;
+			zoom_level_target = 2.0f;
 			zoom_sign = Stage::Sign::PLUS;
 			player->lock();
 			gage->consume();
@@ -556,13 +556,11 @@ void Stage::trigger_controlls()
 		{
 			zoom_sign = Stage::Sign::PLUS;
 			zoom_level_target = zoom_level * 2;
-			zoom_level_target = zoom_level * 2;
 			player->lock();
 		}
 		if (GetKeyboardTrigger(DIK_L) && zoom_level > 0.5f) // k¬
 		{
 			zoom_sign = Stage::Sign::MINUS;
-			zoom_level_target = zoom_level / 2;
 			zoom_level_target = zoom_level / 2;
 			player->lock();
 		}
