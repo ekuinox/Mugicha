@@ -27,7 +27,7 @@ private:
 	time_point latest_draw;
 	time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
-	polygon_vec polygons;
+	PolygonsVector polygons;
 	Background *background; // ”wŒiƒ|ƒŠƒSƒ“
 	Selector *selector; // ƒZƒŒƒNƒ^[ƒ|ƒŠƒSƒ“
 	Stage *stage;

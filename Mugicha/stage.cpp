@@ -355,6 +355,11 @@ bool Stage::stagefile_loader(const char * filepath)
 	// y軸ガイドライン
 	emplace_polygon_back(SquarePolygonBase::PolygonTypes::DEBUG_GUIDE, new PlainSquarePolygon(0, 0, 10, 100000, textures["BLOCK2"], 3, camera))->on();
 #endif
+
+	// layerに合わせてソート
+	sort_pols();
+	draw_pols_length = draw_pols.size();
+
 	return true;
 }
 
@@ -428,26 +433,22 @@ void Stage::draw()
 	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
+	// サイズ変わっていたらソートをもう一度行う
+	if (draw_pols.size() != draw_pols_length)
+	{
+		draw_pols_length = draw_pols.size();
+		sort_pols();
+	}
+
 	// ここから描画処理
-
-	// ソート
-	polygon_vec drawing_polygons;
-	for (const auto& pol_vec : polygons)
-		for (const auto& polygon : pol_vec.second)
-			if(polygon->is_drawing())
-				drawing_polygons.emplace_back(polygon);
-
-	// 大きいものが前に来るように
-	sort(drawing_polygons.begin(), drawing_polygons.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });
 	
 	d3d_device->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 
 	if (SUCCEEDED(d3d_device->BeginScene()))
 	{
-		for (const auto& _polygons : polygons)
-		{
-			for (const auto& drawing_polygon : drawing_polygons) drawing_polygon->draw();
-		}
+		for (const auto& drawing_polygon : draw_pols)
+			drawing_polygon->draw();
+			
 	}
 	d3d_device->EndScene();
 
@@ -552,6 +553,18 @@ void Stage::controll_camera()
 	if (camera.x < SCREEN_WIDTH / 2) camera.x = SCREEN_WIDTH / 2;
 	if (camera.y < SCREEN_HEIGHT / 2) camera.y = SCREEN_HEIGHT / 2;
 #endif
+}
+
+void Stage::sort_pols()
+{
+	// ソート
+	for (const auto& pol_vec : polygons)
+		for (const auto& polygon : pol_vec.second)
+			if (polygon->is_drawing())
+				draw_pols.emplace_back(polygon);
+
+	// 大きいものが前に来るように
+	sort(draw_pols.begin(), draw_pols.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });
 }
 
 template<typename _T> _T Stage::emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon)

@@ -9,7 +9,7 @@
 
 #define CAMERA_HEIGHT (200) // カメラのプレイヤからの高さ
 
-using polygon_vec = std::vector<SquarePolygonBase*>;
+using PolygonsVector = std::vector<SquarePolygonBase*>;
 
 class Stage {
 public:
@@ -39,6 +39,9 @@ private:
 	D3DXVECTOR2 camera; // カメラ位置
 	
 	PolygonsContainer polygons; // すべてのポリゴンがここにくる
+	PolygonsVector draw_pols; // 描画用に整列させたもの
+	int draw_pols_length; // 長さ
+
 	Goal *goal; // ゴール
 	Player *player; // プレイヤ
 	Gage* gage; // 拡縮のゲージ
@@ -65,6 +68,7 @@ private:
 	void draw(); // 描画処理
 	void zoom(); // ズームに関する処理
 	void controll_camera(); // カメラの調節
+	void sort_pols(); // ポリゴンのソート
 	template<typename _T> _T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon); // polygonsの指定されたラベルの最後にで追加する
 public:
 	Stage(char _stage_select);

@@ -203,7 +203,7 @@ void Controller::draw()
 	if (time_diff(latest_draw, current) < 1000 / FRAME_RATES) return;
 	latest_draw = current;
 
-	polygon_vec drawing_polygons;
+	PolygonsVector drawing_polygons;
 	for (const auto& polygon : polygons)
 	{
 		drawing_polygons.push_back(polygon);
