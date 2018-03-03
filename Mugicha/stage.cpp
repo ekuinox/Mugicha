@@ -401,6 +401,9 @@ void Stage::update()
 		return;
 	}
 
+	// 時間を気にしないタイプの操作をここで呼ぶ
+	player->trigger_controlls();
+
 #ifdef _DEBUG
 	
 	// プレイヤの位置とかを吐かせる

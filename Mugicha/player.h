@@ -101,6 +101,7 @@ public:
 	void unlock();
 	void kill(const DeadReason &_dead_reason);
 	bool is_jumping();
+	void trigger_controlls();
 	Player::DeadReason dead();
 	Player::Vec get_vec();
 };

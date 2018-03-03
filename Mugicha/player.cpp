@@ -243,21 +243,6 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 		vec = Player::Vec::RIGHT;
 	}
 
-	// プレイヤをジャンプさせる
-	if (!controll_lock && ground && GetKeyboardTrigger(DIK_SPACE))
-	{
-		ground = false;
-		jumped_at = SCNOW;
-		jumping = true;
-	}
-
-	// プレイヤに掴ませたりする
-	if (GetKeyboardTrigger(DIK_U))
-	{
-		if (is_holding_item()) release_item();
-		else catch_item();
-	}
-
 #ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
 	if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
 	if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
@@ -460,6 +445,24 @@ void Player::kill(const DeadReason & _dead_reason)
 bool Player::is_jumping()
 {
 	return jumping;
+}
+
+void Player::trigger_controlls()
+{
+	// プレイヤをジャンプさせる
+	if (!controll_lock && ground && GetKeyboardTrigger(DIK_SPACE))
+	{
+		ground = false;
+		jumped_at = SCNOW;
+		jumping = true;
+	}
+
+	// プレイヤに掴ませたりする
+	if (GetKeyboardTrigger(DIK_U))
+	{
+		if (is_holding_item()) release_item();
+		else catch_item();
+	}
 }
 
 Player::DeadReason Player::dead()
