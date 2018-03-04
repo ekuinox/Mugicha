@@ -5,7 +5,9 @@ FLOOR_01,floor_01.png
 ORIGIN,origin.png
 BLOCK2,block2.png
 SAMPLE1,sample1.png
-ENEMY_01,enemy_01.png
+ENEMY_01,mon_01.png
+ENEMY_02,mon_02.png
+ENEMY_03,mon_03.png
 THORN_UP,thorn_02_up.png
 THORN_RIGHT,thorn_02_right.png
 THORN_LEFT,thorn_02_left.png
