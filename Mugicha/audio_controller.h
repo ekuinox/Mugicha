@@ -25,8 +25,9 @@ public:
 		WAVEFORMATEXTENSIBLE wfx; // WAV Format
 		XAUDIO2_BUFFER buffer;
 		BYTE* data_buffer;
+		bool nowplaying;
 		_Audio() {}
-		_Audio(PARAM _param) : param(_param) {}
+		_Audio(PARAM _param) : param(_param), nowplaying(false) {}
 	};
 
 	using Params = std::map<const char*, PARAM>;
@@ -40,10 +41,12 @@ public:
 	void pause(const char* label);
 private:
 	std::map<const char*, Audio> audios;
+	std::vector<const char*> nowplayings;
 
 	IXAudio2 *Xaudio2;
 	IXAudio2MasteringVoice *mastering_voice;
 
+	HRESULT add_audio(const char* label, Audio _audio);
 	HRESULT find_chunk(HANDLE hFile, DWORD fourcc, DWORD & dwChunkSize, DWORD & dwChunkDataPosition);
 	HRESULT read_chunk_data(HANDLE hFile, void * buffer, DWORD buffersize, DWORD bufferoffset);
 };

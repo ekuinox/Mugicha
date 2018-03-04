@@ -19,10 +19,9 @@
 AudioController::AudioController(Params _params)
 	: Xaudio2(NULL), mastering_voice(NULL)
 {
-	for (const auto& _param : _params) audios[_param.first] = Audio(_param.second);
-	if (FAILED(init()))
+	if (SUCCEEDED(init()))
 	{
-		throw "Audio Load Error";
+		for (const auto& _param : _params) add_audio(_param.first, Audio(_param.second));
 	}
 }
 
@@ -50,45 +49,6 @@ HRESULT AudioController::init()
 		CoUninitialize();
 		return -1;
 	}
-
-	/**** Initalize Sound ****/
-
-	DWORD chunk_size;
-	DWORD chunk_position;
-	DWORD filetype;
-
-	for (auto&& audio : audios)
-	{
-		memset(&audio.second.wfx, 0, sizeof(WAVEFORMATEXTENSIBLE));
-		memset(&audio.second.buffer, 0, sizeof(XAUDIO2_BUFFER));
-
-		auto file = CreateFile(audio.second.param.filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-		if (file == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
-		if (SetFilePointer(file, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) return HRESULT_FROM_WIN32(GetLastError());
-
-		//check the file type, should be fourccWAVE or 'XWMA'
-		find_chunk(file, fourccRIFF, chunk_size, chunk_position);
-		read_chunk_data(file, &filetype, sizeof(DWORD), chunk_position);
-		if (filetype != fourccWAVE) return S_FALSE;
-
-		find_chunk(file, fourccFMT, chunk_size, chunk_position);
-		read_chunk_data(file, &audio.second.wfx, chunk_size, chunk_position);
-
-		//fill out the audio data buffer with the contents of the fourccDATA chunk
-		find_chunk(file, fourccDATA, chunk_size, chunk_position);
-		audio.second.data_buffer = new BYTE[chunk_size];
-		read_chunk_data(file, audio.second.data_buffer, chunk_size, chunk_position);
-
-		CloseHandle(file);
-
-		// 	サブミットボイスで利用するサブミットバッファの設定
-		audio.second.buffer.AudioBytes = chunk_size;
-		audio.second.buffer.pAudioData = audio.second.data_buffer;
-		audio.second.buffer.Flags = XAUDIO2_END_OF_STREAM;
-		audio.second.buffer.LoopCount = (audio.second.param.loop ? XAUDIO2_LOOP_INFINITE : 0);
-
-		Xaudio2->CreateSourceVoice(&audio.second.source_voice, &audio.second.wfx.Format);
-	}
 	
 	return hr;
 }
@@ -115,6 +75,9 @@ void AudioController::uninit()
 
 void AudioController::play(const char *label)
 {
+	// 再生中なら再生しない
+	if (audios[label].nowplaying) return;
+
 	// ソースボイス作成
 	Xaudio2->CreateSourceVoice(&audios[label].source_voice, &audios[label].wfx.Format);
 	
@@ -122,21 +85,67 @@ void AudioController::play(const char *label)
 	audios[label].source_voice->SubmitSourceBuffer(&audios[label].buffer);
 	
 	// 再生
-	audios[label].source_voice->Start(0);
+	if (SUCCEEDED(audios[label].source_voice->Start(0))) audios[label].nowplaying = true;
 }
 
 void AudioController::stop(const char * label)
 {
 	if (audios[label].source_voice == NULL) return;
+	if (!audios[label].nowplaying) return;
 
 	XAUDIO2_VOICE_STATE xa2state;
 	audios[label].source_voice->GetState(&xa2state);
-	if (xa2state.BuffersQueued) audios[label].source_voice->Stop(0);
+	if (xa2state.BuffersQueued)
+		if (SUCCEEDED(audios[label].source_voice->Stop(0)))
+			audios[label].nowplaying = false;
 }
 
 void AudioController::pause(const char *label)
 {
 	// 未実装
+}
+
+HRESULT AudioController::add_audio(const char* label, Audio _audio)
+{
+	/**** Initalize Sound ****/
+
+	DWORD chunk_size;
+	DWORD chunk_position;
+	DWORD filetype;
+
+	memset(&_audio.wfx, 0, sizeof(WAVEFORMATEXTENSIBLE));
+	memset(&_audio.buffer, 0, sizeof(XAUDIO2_BUFFER));
+
+	auto file = CreateFile(_audio.param.filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (file == INVALID_HANDLE_VALUE) return HRESULT_FROM_WIN32(GetLastError());
+	if (SetFilePointer(file, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) return HRESULT_FROM_WIN32(GetLastError());
+
+	//check the file type, should be fourccWAVE or 'XWMA'
+	find_chunk(file, fourccRIFF, chunk_size, chunk_position);
+	read_chunk_data(file, &filetype, sizeof(DWORD), chunk_position);
+	if (filetype != fourccWAVE) return S_FALSE;
+
+	find_chunk(file, fourccFMT, chunk_size, chunk_position);
+	read_chunk_data(file, &_audio.wfx, chunk_size, chunk_position);
+
+	//fill out the audio data buffer with the contents of the fourccDATA chunk
+	find_chunk(file, fourccDATA, chunk_size, chunk_position);
+	_audio.data_buffer = new BYTE[chunk_size];
+	read_chunk_data(file, _audio.data_buffer, chunk_size, chunk_position);
+
+	CloseHandle(file);
+
+	// 	サブミットボイスで利用するサブミットバッファの設定
+	_audio.buffer.AudioBytes = chunk_size;
+	_audio.buffer.pAudioData = _audio.data_buffer;
+	_audio.buffer.Flags = XAUDIO2_END_OF_STREAM;
+	_audio.buffer.LoopCount = (_audio.param.loop ? XAUDIO2_LOOP_INFINITE : 0);
+
+	Xaudio2->CreateSourceVoice(&_audio.source_voice, &_audio.wfx.Format);
+
+	audios[label] =_audio;
+
+	return S_OK;
 }
 
 HRESULT AudioController::find_chunk(HANDLE hFile, DWORD fourcc, DWORD & dwChunkSize, DWORD & dwChunkDataPosition)
