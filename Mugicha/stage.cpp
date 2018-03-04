@@ -7,8 +7,6 @@
 #include <string>
 #include <typeinfo>
 
-#include "XAudio2.h"
-
 Stage::Stage(char _stage_select)
 	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select)
 {
