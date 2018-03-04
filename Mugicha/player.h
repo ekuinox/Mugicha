@@ -6,6 +6,8 @@
 #include "input.h"
 #include "item.h"
 #include "helpers.h"
+#include "audio_controller.h"
+#include <memory>
 
 // 初期値など
 #define PLAYER_SPEED (0.675f) // プレイや移動速度
@@ -69,6 +71,8 @@ private:
 	Player::Vec old_vec;
 	
 	Item *item; // 持っているアイテムを格納する．持っていない場合はnullptrにする．
+	
+	AudioController *audiocontroller;
 
 	bool collision_for_enemies();
 	bool collision_for_thorns();
@@ -92,7 +96,7 @@ private:
 	void generate_vertexes();
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer &_polygons, int _layer, float _x, float _y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 0.1f, float _vh = 0.25f);
-	
+	~Player();
 	void init();
 	void update();
 	void zoom(float _zoom_level);

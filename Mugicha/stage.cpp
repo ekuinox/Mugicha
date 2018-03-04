@@ -7,8 +7,6 @@
 #include <string>
 #include <typeinfo>
 
-#include "XAudio2.h"
-
 Stage::Stage(char _stage_select)
 	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select)
 {
@@ -27,10 +25,18 @@ Stage::~Stage()
 		}
 	}
 
+	
+
 	// ポリゴンの開放
 	for (const auto& _polygons : polygons)
 		for (const auto& polygon : _polygons.second)
-			delete polygon;
+		{
+			if (_polygons.first == SquarePolygonBase::PolygonTypes::PLAYER)
+			{
+				delete static_cast<Player*>(polygon);
+			}
+			else delete polygon;
+		}
 
 	// 音の終了
 	delete audiocontroller;
@@ -136,12 +142,17 @@ bool Stage::stagefile_loader(const char * filepath)
 	// ギミックのスイッチに関して
 	switches["SAMPLE"] = false;
 
-	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
+	for (int i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
-		for (auto j = 0; j < map_size.w / CELL_WIDTH; ++j) // 余計な要素まで読み込まないように
+		for (int j = 0; j < map_size.w / CELL_WIDTH; ++j) // 余計な要素まで読み込まないように
 		{
 			// ここで登録をキメていく
 			auto num = std::atoi(table[i][j].c_str());
+
+#ifdef _DEBUG
+			// どこのセルが読み込まれたかを見る
+			printf("Loading cell... (row=%d, col=%d): %d\n", i + 1, j + 1, num);
+#endif
 			
 			// やること
 			// x, yを計算して出し，マクロ呼出しでポリゴンを登録する．
@@ -408,8 +419,10 @@ void Stage::init()
 	else info.status = Stage::Status::LoadError;
 
 	audiocontroller = new AudioController({
-		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}}
+		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}},
+		{ "WALK_01",{ AUDIOS_DIR "walk_01.wav", true} },
 	});
+
 
 //	audiocontroller->play("AUDIO_01");
 

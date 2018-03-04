@@ -335,11 +335,20 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer 
 	init();
 }
 
+Player::~Player()
+{
+	delete audiocontroller;
+}
+
 void Player::init()
 {
 	speed = PLAYER_SPEED;
 	ground = false;
 	controll_lock = false;
+
+	audiocontroller = new AudioController({
+	//	{ "WALK_01",{ AUDIOS_DIR "ローファー.wav", false } },		
+		});
 }
 
 void Player::zoom(float _zoom_level)

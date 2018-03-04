@@ -41,9 +41,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		hInstance,
 		NULL
 	);
-
+#ifdef _DEBUG
 	DebugConsole::create_console_window();
 	std::cout << "ハロー　ハロー" << std::endl;
+#endif
 
 	if (FAILED(Init(hInstance, hWnd, TRUE))) return -1;
 
