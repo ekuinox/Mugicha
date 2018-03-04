@@ -2,10 +2,10 @@ BACKGROUND,background_01.png
 PLAYER,player_01.png
 FLOOR_01,floor_01.png
 ENEMY_01,enemy_01.png
-THORN_UP,thorns_01.png
-THORN_RIGHT,thorns_02.png
-THORN_LEFT,thorns_04.png
-THORN_DOWN,thorns_03.png
+THORN_UP,thorn_01_up.png
+THORN_RIGHT,thorn_01_right.png
+THORN_LEFT,thorn_01_left.png
+THORN_DOWN,thorn_01_down.png
 GOAL_01,goal_01.png
 MAGMA_01,magma_01.jpg
 AIRCANNON_UP,cannon_01.png

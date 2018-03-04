@@ -6,10 +6,10 @@ ORIGIN,origin.png
 BLOCK2,block2.png
 SAMPLE1,sample1.png
 ENEMY_01,enemy_01.png
-THORN_UP,thorns_01.png
-THORN_RIGHT,thorns_02.png
-THORN_LEFT,thorns_03.png
-THORN_DOWN,thorns_04.png
+THORN_UP,thorn_03_up.png
+THORN_RIGHT,thorn_03_right.png
+THORN_LEFT,thorn_03_left.png
+THORN_DOWN,thorn_03_down.png
 GOAL_01,goal_01.png
 MAGMA_01,magma_01.jpg
 AIRCANNON_01,aircannon_01.png
