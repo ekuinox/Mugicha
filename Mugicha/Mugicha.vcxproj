@@ -233,6 +233,7 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="stage_background.cpp" />
     <ClCompile Include="thorn.cpp" />
+    <ClCompile Include="zooming_z.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="air_cannon.h" />
@@ -266,6 +267,7 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="stage_background.h" />
     <ClInclude Include="thorn.h" />
+    <ClInclude Include="zooming_z.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

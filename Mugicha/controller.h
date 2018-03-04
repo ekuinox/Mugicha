@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "stage.h"
+#include "zooming_z.h"
 #include "selector.h"
 #include "helpers.h"
 
@@ -30,6 +31,7 @@ private:
 	PolygonsVector polygons;
 	Background *background; // 背景ポリゴン
 	Selector *selector; // セレクターポリゴン
+	ZoomingZ *zooming_z; // ZoomingのZ
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();

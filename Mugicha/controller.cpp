@@ -11,6 +11,7 @@ void Controller::init()
 {
 	std::map<const char*, const char*> texture_files = {
 		{ "TITLE_BG", TEXTURES_DIR "title.jpg"},
+		{ "Z", TEXTURES_DIR "z.png" },
 		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.png" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
@@ -32,11 +33,15 @@ void Controller::init()
 	
 	// îwåiÇÃìoò^
 	background = new Background(textures["TITLE_BG"], camera);
-	polygons.push_back(background);
+	polygons.emplace_back(background);
 
 	// ÉZÉåÉNÉ^ÇÃìoò^
 	selector = new Selector(textures["SELECTOR"], camera);
-	polygons.push_back(selector);
+	polygons.emplace_back(selector);
+
+	// Z
+	zooming_z = new ZoomingZ(textures["Z"], camera);
+	polygons.emplace_back(zooming_z);
 
 	// ÉVÅ[ÉìêÿÇËë÷Ç¶
 	switch_scene(Scene::Title);
@@ -69,6 +74,8 @@ void Controller::switch_scene(Scene _scene)
 	switch (scene)
 	{
 	case Scene::Title:
+		background->off();
+		zooming_z->off();
 		break;
 	case Scene::Select:
 		background->off();
@@ -90,6 +97,7 @@ void Controller::switch_scene(Scene _scene)
 	case Scene::Title:
 		background->change_texture(textures["TITLE_BG"]);
 		background->on();
+		zooming_z->on();
 		break;
 	case Scene::Select:
 		// îwåi
