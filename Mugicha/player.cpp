@@ -430,7 +430,7 @@ void Player::update()
 
 		// ŽžŠÔŠÇ—‚µ‚Ü‚·
 		auto current = SCNOW;
-		if (time_diff(latest_update, current) > 1)
+		if (time_diff(latest_update, current) > UPDATE_INTERVAL)
 		{
 			latest_update = current;
 			

@@ -13,7 +13,7 @@ void Enemy::init()
 
 Enemy::Enemy(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, int _layer, float _x, float _y, Vec _vec, PolygonsContainer &_polygons, float _w, float _h, float _respawn_time, float _u, float _v, float _uw, float _vh)
 	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), vec(_vec),
-	polygons(_polygons), moving(false), jumping(false), jumped_at(SCNOW), on_ground(true), respawn_time(_respawn_time)
+	polygons(_polygons), moving(false), jumping(false), jumped_at(_y), on_ground(true), respawn_time(_respawn_time)
 {
 	speed = ENEMY_SPEED;
 	init_coords = { _x, _y };
@@ -49,24 +49,33 @@ void Enemy::update()
 		// 右がぶつかっている
 		if (result & RIGHT) vec = Vec::LEFT;
 		
-		vector.x += speed * (vec == Vec::RIGHT ? 1 : -1);
-
 		// ジャンプ開始から時間が経過
-		if (time_diff(jumped_at) > ENEMY_JUMP_TIME) jumping = false;
-		
-		// ジャンプなう
-		if (jumping) vector.y += ENEMY_JUMP_POWER;
-		
-		// 空中に居る間は落下し続ける
-		if (!on_ground) vector.y -= ENEMY_FALLING;
+		if (y - jumped_at > ENEMY_JUMP_HEIGHT) jumping = false;
 
 		// 次々ジャンプしていけ
 		if (on_ground && !jumping)
 		{
 			jumping = true;
 			on_ground = false;
-			jumped_at = SCNOW;
+			jumped_at = y;
 		}
+
+		// 時間管理する
+		auto current = SCNOW;
+		if (time_diff(latest_update, current) > UPDATE_INTERVAL)
+		{
+			latest_update = current;
+
+			// x移動
+			vector.x += speed * (vec == Vec::RIGHT ? 1 : -1);
+
+			// ジャンプなう
+			if (jumping) vector.y += ENEMY_JUMP_POWER;
+
+			// 空中に居る間は落下し続ける
+			if (!on_ground) vector.y -= ENEMY_FALLING;
+		}
+
 
 		// 反映
 		x += vector.x;

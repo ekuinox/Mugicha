@@ -14,9 +14,9 @@
 #define ENEMY_WIDTH (CELL_WIDTH * 0.8) // 幅
 #define ENEMY_HEIGHT (CELL_HEIGHT * 0.8) // 高さ
 #define ENEMY_SPEED (0.3f)
-#define ENEMY_JUMP_POWER (1.01f)
+#define ENEMY_JUMP_POWER (2.0f)
+#define ENEMY_JUMP_HEIGHT (CELL_HEIGHT * 2.0)
 #define ENEMY_FALLING (1.0f)
-#define ENEMY_JUMP_TIME (300)
 #define RESPAWN_TIME (5000) // リスポーンにかかる時間（初期値）
 
 /*
@@ -36,7 +36,7 @@ private:
 	bool on_ground; // 接地
 	bool jumping; // ジャンプしている
 	bool moving; // 行動
-	time_point jumped_at; // ジャンプした時点の時刻
+	float jumped_at; // ジャンプした時点の時刻
 	Vec vec;
 	PolygonsContainer &polygons;
 

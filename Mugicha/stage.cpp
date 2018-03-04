@@ -411,7 +411,7 @@ void Stage::init()
 		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}}
 	});
 
-	audiocontroller->play("AUDIO_01");
+//	audiocontroller->play("AUDIO_01");
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
