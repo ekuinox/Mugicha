@@ -534,4 +534,12 @@ Player::Vec Player::get_vec()
 	return vec;
 }
 
+SQUARE Player::get_square()
+{
+	// •Ó‚è”¼•ª‚É‚µ‚Ü‚·
+	auto sq = PlainSquarePolygon::get_square();
+	sq.w *= 0.8;
+	return sq;
+}
+
 // === Player END ===

@@ -106,4 +106,5 @@ public:
 	void trigger_controlls();
 	Player::DeadReason dead();
 	Player::Vec get_vec();
+	SQUARE get_square();
 };
