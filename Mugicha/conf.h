@@ -26,8 +26,8 @@
 #define SCREEN_WIDTH (1280)
 #define SCREEN_HEIGHT (720)
 
-#define CELL_WIDTH (50)
-#define CELL_HEIGHT (50)
+#define CELL_WIDTH (75)
+#define CELL_HEIGHT (75)
 
 // ”wŒi‚ÌƒfƒJ‚³
 #define BACKGROUND_WIDTH (SCREEN_WIDTH)
