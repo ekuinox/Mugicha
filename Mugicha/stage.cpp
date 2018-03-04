@@ -142,12 +142,17 @@ bool Stage::stagefile_loader(const char * filepath)
 	// ギミックのスイッチに関して
 	switches["SAMPLE"] = false;
 
-	for (auto i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
+	for (int i = map_size.h / CELL_HEIGHT; i >= 1; --i) // ケツから一番上まで
 	{
-		for (auto j = 0; j < map_size.w / CELL_WIDTH; ++j) // 余計な要素まで読み込まないように
+		for (int j = 0; j < map_size.w / CELL_WIDTH; ++j) // 余計な要素まで読み込まないように
 		{
 			// ここで登録をキメていく
 			auto num = std::atoi(table[i][j].c_str());
+
+#ifdef _DEBUG
+			// どこのセルが読み込まれたかを見る
+			printf("Loading cell... (row=%d, col=%d): %d\n", i + 1, j + 1, num);
+#endif
 			
 			// やること
 			// x, yを計算して出し，マクロ呼出しでポリゴンを登録する．
