@@ -333,6 +333,12 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer 
 	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y), old_vec(Player::Vec::CENTER)
 {
 	init();
+	audiocontroller->play("AUDIO_01");
+}
+
+Player::~Player()
+{
+	delete audiocontroller;
 }
 
 void Player::init()
@@ -340,6 +346,12 @@ void Player::init()
 	speed = PLAYER_SPEED;
 	ground = false;
 	controll_lock = false;
+
+	audiocontroller = new AudioController({
+	//	{ "WALK_01",{ AUDIOS_DIR "ローファー.wav", false } },
+		{ "AUDIO_01",{ AUDIOS_DIR "akumu.wav", true } },
+		});
+	audiocontroller->play("AUDIO_01");
 }
 
 void Player::zoom(float _zoom_level)

@@ -27,10 +27,18 @@ Stage::~Stage()
 		}
 	}
 
+	
+
 	// ƒ|ƒŠƒSƒ“‚ÌŠJ•ú
 	for (const auto& _polygons : polygons)
 		for (const auto& polygon : _polygons.second)
-			delete polygon;
+		{
+			if (_polygons.first == SquarePolygonBase::PolygonTypes::PLAYER)
+			{
+				delete static_cast<Player*>(polygon);
+			}
+			else delete polygon;
+		}
 
 	// ‰¹‚ÌI—¹
 	delete audiocontroller;
@@ -408,8 +416,10 @@ void Stage::init()
 	else info.status = Stage::Status::LoadError;
 
 	audiocontroller = new AudioController({
-		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}}
+		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}},
+		{ "WALK_01",{ AUDIOS_DIR "walk_01.wav", true} },
 	});
+
 
 //	audiocontroller->play("AUDIO_01");
 
