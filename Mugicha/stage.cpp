@@ -410,10 +410,6 @@ void Stage::init()
 
 	audiocontroller->play("AUDIO_01");
 
-	InitSound();
-
-//	PlaySound(SOUND_LABEL_BGM000);
-
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
 	std::cout << time_diff(exec_start) << std::endl;
