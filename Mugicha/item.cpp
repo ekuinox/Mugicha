@@ -53,8 +53,18 @@ void Item::update()
 
 SQUARE Item::get_square()
 {
-	if (held) return PlainSquarePolygon::get_square();
-	else return ScalableObject::get_square();
+	if (held)
+	{
+		auto sq = PlainSquarePolygon::get_square();
+		sq.w *= 0.8;
+		return sq;
+	}
+	else
+	{
+		auto sq = ScalableObject::get_square();
+		sq.w *= 0.8;
+		return sq;
+	}
 }
 
 void Item::hold()
