@@ -428,19 +428,21 @@ void Player::update()
 		// 頭をぶつけていないか
 		head_check(result);
 
-		// 操作
+		// 時間管理します
 		auto current = SCNOW;
 		if (time_diff(latest_update, current) > 1)
 		{
-			controlls(vector, result);
 			latest_update = current;
+			
+			// 操作
+			controlls(vector, result);
+
+			// ジャンプ処理
+			jump(vector, result);
+
+			// 浮いている状態
+			drifting(vector);
 		}
-
-		// ジャンプ処理
-		jump(vector, result);
-
-		// 浮いている状態
-		drifting(vector);
 
 		// 変更を加算して終了
 		x += vector.x;
