@@ -31,6 +31,9 @@ Stage::~Stage()
 	for (const auto& _polygons : polygons)
 		for (const auto& polygon : _polygons.second)
 			delete polygon;
+
+	// âπÇÃèIóπ
+	delete audiocontroller;
 }
 
 Stage::GameInfo Stage::exec()
