@@ -429,7 +429,12 @@ void Player::update()
 		head_check(result);
 
 		// ‘€ì
-		controlls(vector, result);
+		auto current = SCNOW;
+		if (time_diff(latest_update, current) > 1)
+		{
+			controlls(vector, result);
+			latest_update = current;
+		}
 
 		// ƒWƒƒƒ“ƒvˆ—
 		jump(vector, result);
