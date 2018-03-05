@@ -369,6 +369,12 @@ bool Stage::stagefile_loader(const char * filepath)
 				))->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
+			case 99:
+				// ‰EŒü‚«ŠJŽn‚Ì“G
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::ENEMY,
+					REGISTER_ENEMY_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], camera, polygons)
+				)->on();
 			}
 		}
 	}
