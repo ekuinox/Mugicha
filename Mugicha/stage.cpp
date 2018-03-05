@@ -579,7 +579,7 @@ void Stage::trigger_controlls()
 			gage->consume();
 		}
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 		if (GetKeyboardTrigger(DIK_O) && zoom_level < 2.0f) // КgСе
 		{
 			zoom_sign = Stage::Sign::PLUS;

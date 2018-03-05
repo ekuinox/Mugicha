@@ -257,7 +257,7 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 		old_vec = vec;
 	}
 
-#ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
+#if defined(_DEBUG) || defined(_STAGE_DEBUG) // あちこち行っちゃうぜデバッグモード
 	if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
 	if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
 	if (GetKeyboardPress(DIK_LEFTARROW)) vector.x -= 5;
