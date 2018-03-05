@@ -353,9 +353,7 @@ void Player::init()
 	ground = false;
 	controll_lock = false;
 
-	audiocontroller = new AudioController({
-	//	{ "WALK_01",{ AUDIOS_DIR "ローファー.wav", false } },		
-		});
+	audiocontroller = new AudioController();
 }
 
 void Player::zoom(float _zoom_level)

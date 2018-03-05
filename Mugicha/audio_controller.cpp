@@ -17,6 +17,7 @@
 #endif
 
 AudioController::AudioController()
+	: Xaudio2(NULL), mastering_voice(NULL)
 {
 	if (FAILED(init()))
 	{
@@ -35,6 +36,9 @@ AudioController::AudioController(Params _params)
 
 AudioController::~AudioController()
 {
+#ifdef _DEBUG
+	puts("Called AudioController Destructor");
+#endif
 	uninit();
 }
 
@@ -63,6 +67,8 @@ HRESULT AudioController::init()
 
 void AudioController::uninit()
 {
+	mastering_voice->DestroyVoice();
+
 	for (const auto& audio : audios)
 	{
 		if (audio.second.source_voice)
@@ -74,7 +80,7 @@ void AudioController::uninit()
 		}
 	}
 
-	mastering_voice->DestroyVoice();
+
 
 	if (Xaudio2) Xaudio2->Release();
 
