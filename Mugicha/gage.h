@@ -3,6 +3,7 @@
 
 #define GAGE_WIDTH (25)
 #define GAGE_HEIGHT (75)
+#define GAGE_RECOVERY_SPEED (0.0005f) // ゲージ回復速度
 
 /*
 * Gage
@@ -16,13 +17,13 @@ public:
 	void update();
 	float consume(); // 一回分消費して残量を返す，コストが足らない場合は負の値を返す
 	bool can_consume();
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 	void cure(); // 全回復させる
 #endif
 private:
 	const float cost = 1.0f; // 一度に消費するコスト
 	const float cost_gage_max = 2.0f; // コストの満タン状態
-	const float cost_recovery_speed = 0.0001f; // コスト回復速度（毎ms）
+	const float cost_recovery_speed = GAGE_RECOVERY_SPEED; // コスト回復速度（毎ms）
 	float current_cost; // 現在のコスト
 };
 

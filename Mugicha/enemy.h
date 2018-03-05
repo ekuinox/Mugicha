@@ -18,6 +18,8 @@
 #define ENEMY_JUMP_HEIGHT (CELL_HEIGHT * 2.0)
 #define ENEMY_FALLING (1.0f)
 #define RESPAWN_TIME (5000) // リスポーンにかかる時間（初期値）
+#define ACTIVE_AREA_WIDTH (SCREEN_WIDTH * 2)
+#define ACTIVE_AREA_HEIGHT (SCREEN_HEIGHT * 2)
 
 /*
 * Enemy

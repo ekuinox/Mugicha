@@ -31,3 +31,8 @@ void HellGate::update()
 		started = true;
 	}
 }
+
+bool HellGate::is_started()
+{
+	return started;
+}

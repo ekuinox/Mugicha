@@ -4,6 +4,7 @@
 #include <xaudio2.h>
 #include <map>
 #include <vector>
+#include <string>
 
 /*
 * AudioController
@@ -30,23 +31,29 @@ public:
 		_Audio(PARAM _param) : param(_param), nowplaying(false) {}
 	};
 
-	using Params = std::map<const char*, PARAM>;
+	using Params = std::map<std::string, PARAM>;
 
+	AudioController();
 	AudioController(Params _params);
 	~AudioController();
 	HRESULT init();
 	void uninit();
-	void play(const char* label);
-	void stop(const char* label);
-	void pause(const char* label);
+	void play(std::string label);
+	void stop(std::string label);
+	void pause(std::string label);
+	HRESULT add_audio(std::string label, Audio _audio);
+
+#ifdef _DEBUG
+	void dump();
+#endif
+
 private:
-	std::map<const char*, Audio> audios;
-	std::vector<const char*> nowplayings;
+	std::map<std::string, Audio> audios;
+	std::vector<std::string> nowplayings;
 
 	IXAudio2 *Xaudio2;
 	IXAudio2MasteringVoice *mastering_voice;
 
-	HRESULT add_audio(const char* label, Audio _audio);
 	HRESULT find_chunk(HANDLE hFile, DWORD fourcc, DWORD & dwChunkSize, DWORD & dwChunkDataPosition);
 	HRESULT read_chunk_data(HANDLE hFile, void * buffer, DWORD buffersize, DWORD bufferoffset);
 };

@@ -141,8 +141,11 @@
     <ClCompile Include="hellgate.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
+    <ClCompile Include="XInputController.cpp">
+      <Filter>ソース ファイル\io</Filter>
+    </ClCompile>
     <ClCompile Include="zooming_z.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,8 +242,14 @@
     <ClInclude Include="audio_controller.h">
       <Filter>ヘッダー ファイル\io</Filter>
     </ClInclude>
+    <ClInclude Include="keyconf.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="XInputController.h">
+      <Filter>ヘッダー ファイル\io</Filter>
+    </ClInclude>
     <ClInclude Include="zooming_z.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

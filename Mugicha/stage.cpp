@@ -1,6 +1,7 @@
 #include "stage.h"
 #include "collision_checker.h"
 #include "csv_loader.h"
+#include "keyconf.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -122,7 +123,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	(player = emplace_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], camera, polygons)))->on();
 
 	// HELLGATEのセット
-	(emplace_polygon_back(
+	(hellgate = emplace_polygon_back(
 		SquarePolygonBase::PolygonTypes::HELLGATE,
 		new HellGate(
 			map_size.w / 2,
@@ -369,6 +370,12 @@ bool Stage::stagefile_loader(const char * filepath)
 				))->on();
 				emplace_polygon_back(SquarePolygonBase::PolygonTypes::BULLET, aircannon->get_bullet());
 				break;
+			case 99:
+				// 右向き開始の敵
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::ENEMY,
+					REGISTER_ENEMY_RIGHT(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT / 2, textures["ENEMY_01"], camera, polygons)
+				)->on();
 			}
 		}
 	}
@@ -397,6 +404,35 @@ bool Stage::stagefile_loader(const char * filepath)
 	return true;
 }
 
+void Stage::multi_audio_loader(const char * filepath)
+{
+	std::vector<std::vector<std::string>> table;
+
+	if (!(csv_loader(filepath, table))) return;
+
+	audiocontroller = new AudioController();
+
+	for (const auto& record : table)
+	{
+		// label,filepath,loop
+		if (record.size() == 3)
+		{
+			char audio_file[256];
+			bool loop = record[1].c_str() == "1" ? true : false; // 1があればループさせる
+			sprintf_s(audio_file, "%s%s", AUDIOS_DIR, record[1].c_str());
+
+			if (FAILED(audiocontroller->add_audio(record[0], AudioController::Audio({ audio_file , loop }))))
+			{
+#ifdef _DEBUG
+				printf("Failed to load audio file: %s\n", record[1].c_str());
+#endif
+			}
+		}
+	}
+
+
+}
+
 void Stage::init()
 {
 #ifdef _DEBUG
@@ -412,19 +448,21 @@ void Stage::init()
 	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	auto exec_result = stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
+	sprintf_s(filepath, STAGEFILES_DIR "audios_%02d.csv", info.stage_number);
+	multi_audio_loader(filepath); // 音源のリストを読み込む => こっち先
+	
+#ifdef _DEBUG
+	audiocontroller->dump();
+#endif
+
 	zoom_level = 1.0f;
 	zoom_sign = Stage::Sign::ZERO;
 
 	if (exec_result) info.status = Stage::Status::Ready;
 	else info.status = Stage::Status::LoadError;
 
-	audiocontroller = new AudioController({
-		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}},
-		{ "WALK_01",{ AUDIOS_DIR "walk_01.wav", true} },
-	});
-
-
-//	audiocontroller->play("AUDIO_01");
+	// メインのBGMを再生していく
+	audiocontroller->play("MAIN_BGM");
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
@@ -437,7 +475,7 @@ void Stage::update()
 	// 時間を気にしないもの
 
 	// タイトルに戻る（無確認）
-	if (GetKeyboardTrigger(DIK_F5))
+	if (KEY_BACK_TO_TITLE)
 	{
 		info.status = Stage::Status::Retire;
 		return;
@@ -446,7 +484,7 @@ void Stage::update()
 	// 時間を気にしないタイプの操作をここで呼ぶ
 	trigger_controlls();
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 	
 	// プレイヤの位置とかを吐かせる
 	if (GetKeyboardTrigger(DIK_F2)) printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);
@@ -510,8 +548,8 @@ void Stage::zoom()
 	{
 		if (zoom_level < zoom_level_target)
 		{
-			zoom_level *= 1.01f;
-			zoom_level *= 1.01f;
+			zoom_level *= ZOOM_SPEED;
+			zoom_level *= ZOOM_SPEED;
 		}
 		else
 		{
@@ -525,8 +563,8 @@ void Stage::zoom()
 	{
 		if (zoom_level > zoom_level_target)
 		{
-			zoom_level /= 1.01f;
-			zoom_level /= 1.01f;
+			zoom_level /= ZOOM_SPEED;
+			zoom_level /= ZOOM_SPEED;
 		}
 		else
 		{
@@ -550,36 +588,36 @@ void Stage::trigger_controlls()
 	if (player->is_jumping()) return;
 
 	// 拡縮
-	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
+	if (zoom_sign == Stage::Sign::ZERO && (!hellgate->is_started() || gage->can_consume()))
 	{
 		// 最小にする => 自分は大きくなる
-		if (zoom_level > 0.5f && GetKeyboardTrigger(DIK_NUMPAD1))
+		if (zoom_level > 0.5f && ZOOM_MIN)
 		{
 			zoom_level_target = 0.5f;
 			zoom_sign = Stage::Sign::MINUS;
 			player->lock();
-			gage->consume();
+			if(hellgate->is_started()) gage->consume();
 		}
 
 		// 通常状態
-		if (zoom_level != 1 && GetKeyboardTrigger(DIK_NUMPAD2))
+		if (zoom_level != 1 && ZOOM_DEF)
 		{
 			zoom_level_target = 1.0f;
 			zoom_sign = (zoom_level < 1 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
 			player->lock();
-			gage->consume();
+			if (hellgate->is_started()) gage->consume();
 		}
 
 		// 最大化 => 自分は小さくなる
-		if (zoom_level < 2.0f && GetKeyboardTrigger(DIK_NUMPAD3))
+		if (zoom_level < 2.0f && ZOOM_MAX)
 		{
 			zoom_level_target = 2.0f;
 			zoom_sign = Stage::Sign::PLUS;
 			player->lock();
-			gage->consume();
+			if (hellgate->is_started()) gage->consume();
 		}
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 		if (GetKeyboardTrigger(DIK_O) && zoom_level < 2.0f) // 拡大
 		{
 			zoom_sign = Stage::Sign::PLUS;

@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include "collision_checker.h"
+#include "gimmick_floor.h"
 
 void Enemy::init()
 {
@@ -13,7 +14,7 @@ void Enemy::init()
 
 void Enemy::generate_vertexes()
 {
-	PlainSquarePolygon::generate_vertexes();
+	ScalableObject::generate_vertexes();
 
 	// ‹tŒü‚«‚É‚·‚é
 	if (vec == Enemy::Vec::LEFT)
@@ -39,7 +40,7 @@ void Enemy::update()
 	unless (status) return;
 
 	// ‰æ–ÊŠO‚©‚Ç‚¤‚©‚Åmoving‚ğØ‚è•ª‚¯‚é
-	moving = (vertexes[0].x <= SCREEN_WIDTH * 1.25 && vertexes[1].x >= 0 && vertexes[0].y <= SCREEN_HEIGHT * 1.25 && vertexes[2].y >= 0) ? true : false;
+	moving = (vertexes[0].x <= ACTIVE_AREA_WIDTH && vertexes[1].x >= 0 && vertexes[0].y <= ACTIVE_AREA_HEIGHT && vertexes[2].y >= 0) ? true : false;
 
 	if (alive && moving) // 1msŠÔŠu‚Å
 	{
@@ -47,6 +48,11 @@ void Enemy::update()
 		char result = 0x00;
 		for (const auto& type : ENEMY_COLLISION_CHECK_POLYGONTYPES)
 			for (const auto& polygon : polygons[type])
+				result |= where_collision(this, polygon, 1.0f);
+
+		// GIMMICK_FLOOR‚¾‚¯appearing‚ğŒ©‚é
+		for (const auto& polygon : polygons[SquarePolygonBase::PolygonTypes::GIMMICK_FLOOR])
+			if (static_cast<GimmickFloor*>(polygon)->is_appearing())
 				result |= where_collision(this, polygon, 1.0f);
 
 		auto vector = D3DXVECTOR2(0, 0); // ‚¢‚­‚çˆÚ“®‚µ‚½‚©‚ğ‚±‚±‚É

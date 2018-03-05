@@ -4,6 +4,7 @@
 #include "conf.h"
 #include <map>
 #include "input.h"
+#include "XInputController.h"
 #include "item.h"
 #include "helpers.h"
 #include "audio_controller.h"
@@ -12,8 +13,8 @@
 // 初期値など
 #define PLAYER_SPEED (0.675f) // プレイや移動速度
 #define PLAYER_JUMP_POWER (2.0f) // ジャンプ力，1msにどんだけ飛ぶか
-#define PLAYER_JUMP_HEIGHT (CELL_HEIGHT * 2.5) // ジャンプする高さ
-#define PLAYER_HOLD_JUMP_HEIGHT (CELL_HEIGHT * 4.0) // 長押しジャンプする高さ
+#define PLAYER_JUMP_HEIGHT (CELL_HEIGHT * 0.6) // ジャンプする高さ
+#define PLAYER_HOLD_JUMP_HEIGHT (CELL_HEIGHT * 3.2) // 長押しジャンプする高さ
 #define PLAYER_FALLING (1.0f) // 落下速度
 #define PLAYER_WIDTH (CELL_WIDTH * 0.8) // プレイヤの幅
 #define PLAYER_HEIGHT (CELL_HEIGHT * 0.8) // プレイヤの高さ
@@ -26,6 +27,12 @@
 	} // 当たり判定を取るポリゴンのタイプまとめ
 #define FALLING_OUT_Y (-10) // 画面外落下の高さ
 #define KNOCKBACK_VOLUME ((CELL_WIDTH + CELL_HEIGHT) / 2) // ノックバック距離
+
+#define PLAYER_NORMAL_UV_V (0.0f)
+#define PLAYER_JUMPING_UV_V (0.75f)
+#define PLAYER_DIE_UV_V (0.5f)
+
+#define DEATH_HOLD_TIME (1000)
 
 // プレイヤークラス
 
@@ -55,6 +62,8 @@ private:
 	PolygonsContainer &polygons; // 当たり見るように持っときます
 
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
+	time_point death_timing; // 死亡時点
+	float dead_falling_speed; // 死亡落下速度
 	
 	bool jumping; // ジャンプしている
 	float jumped_at;

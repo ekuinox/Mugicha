@@ -3,6 +3,7 @@
 #include "thorn.h"
 #include "bullet.h"
 #include "gimmick_floor.h"
+#include "keyconf.h"
 
 bool Player::collision_for_enemies()
 {
@@ -224,10 +225,12 @@ void Player::ground_check(char &result)
 {
 	if (result & HitLine::BOTTOM)
 	{
+		v = PLAYER_NORMAL_UV_V;
 		ground = true;
 	}
 	else
 	{
+		v = PLAYER_JUMPING_UV_V;
 		ground = false;
 	}
 }
@@ -239,10 +242,13 @@ void Player::head_check(char & result)
 
 void Player::controlls(D3DXVECTOR2 & vector, char & result)
 {
+
+	unless(dead_reason == DeadReason::ALIVE) return;
+
 	vec = Player::Vec::CENTER;
 
 	// 左方向への移動
-	if (!(result & HitLine::LEFT) && (GetKeyboardPress(DIK_A)))
+	if (!(result & HitLine::LEFT) && PLAYER_MOVE_LEFT)
 	{
 		vector.x -= speed;
 		vec = Player::Vec::LEFT;
@@ -250,14 +256,14 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 	}
 	
 	// 右方向への移動
-	if (!(result & HitLine::RIGHT) && (GetKeyboardPress(DIK_D)))
+	if (!(result & HitLine::RIGHT) && PLAYER_MOVE_RIGHT)
 	{
 		vector.x += speed;
 		vec = Player::Vec::RIGHT;
 		old_vec = vec;
 	}
 
-#ifdef _DEBUG // あちこち行っちゃうぜデバッグモード
+#if defined(_DEBUG) || defined(_STAGE_DEBUG) // あちこち行っちゃうぜデバッグモード
 	if (GetKeyboardPress(DIK_UPARROW)) vector.y += 5;
 	if (GetKeyboardPress(DIK_DOWNARROW)) vector.y -= 5;
 	if (GetKeyboardPress(DIK_LEFTARROW)) vector.x -= 5;
@@ -270,8 +276,11 @@ void Player::jump(D3DXVECTOR2 & vector, char & result)
 	if (!(result & HitLine::TOP) && jumping)
 	{
 		auto diff = y - jumped_at;
-		if (diff < PLAYER_JUMP_HEIGHT || (GetKeyboardPress(DIK_SPACE) && diff < PLAYER_HOLD_JUMP_HEIGHT)) vector.y += PLAYER_JUMP_POWER;
-		else jumping = false;
+		if (diff < PLAYER_JUMP_HEIGHT || (PLAYER_JUMP_HOLD && diff < PLAYER_HOLD_JUMP_HEIGHT)) vector.y += PLAYER_JUMP_POWER;
+		else
+		{
+			jumping = false;
+		}
 	}
 }
 
@@ -308,7 +317,7 @@ bool Player::is_holding_item()
 void Player::generate_vertexes()
 {
 	// u値を変えてやりたいんだが
-	if (vec != Player::Vec::CENTER)
+	if (vec != Player::Vec::CENTER && ground && dead_reason == DeadReason::ALIVE)
 	{
 		u += uw * (vec == Player::Vec::RIGHT ? 1 : -1);
 	}
@@ -330,7 +339,8 @@ void Player::generate_vertexes()
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
-	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y), old_vec(Player::Vec::CENTER)
+	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y),
+	old_vec(Player::Vec::CENTER), dead_falling_speed(0.1f)
 {
 	init();
 }
@@ -346,9 +356,7 @@ void Player::init()
 	ground = false;
 	controll_lock = false;
 
-	audiocontroller = new AudioController({
-	//	{ "WALK_01",{ AUDIOS_DIR "ローファー.wav", false } },		
-		});
+	audiocontroller = new AudioController();
 }
 
 void Player::zoom(float _zoom_level)
@@ -442,17 +450,29 @@ void Player::update()
 		if (time_diff(latest_update, current) > UPDATE_INTERVAL)
 		{
 			latest_update = current;
+
+			if (dead_reason == DeadReason::ALIVE)
+			{
+				// 操作
+				controlls(vector, result);
+
+				// ジャンプ処理
+				jump(vector, result);
+
+				// 浮いている状態
+				drifting(vector);
+			}
+			else
+			{
+				y -= dead_falling_speed;
+				dead_falling_speed *= 1.01f; // 加速させる
+			}
 			
-			// 操作
-			controlls(vector, result);
-
-			// ジャンプ処理
-			jump(vector, result);
-
-			// 浮いている状態
-			drifting(vector);
 		}
 
+		// 死んでたらとにかくこのv
+		unless (dead_reason == DeadReason::ALIVE) v = PLAYER_DIE_UV_V;
+		
 		// 変更を加算して終了
 		x += vector.x;
 		y += vector.y;
@@ -504,10 +524,14 @@ void Player::kill(const DeadReason & _dead_reason)
 		puts(STRING(DeadReason::FallenHellGate));
 		break;
 	}
+
 #endif
 #ifndef _NEVER_DIE
+	// 初死のみ
+	if(dead_reason == DeadReason::ALIVE) death_timing = SCNOW;
 	dead_reason = _dead_reason;
 #endif
+	v = PLAYER_DIE_UV_V;
 }
 
 bool Player::is_jumping()
@@ -517,16 +541,25 @@ bool Player::is_jumping()
 
 void Player::trigger_controlls()
 {
+	unless(dead_reason == DeadReason::ALIVE)
+	{
+#ifdef _DEBUG
+		puts("hogee");
+		return;
+#endif
+	}
+
 	// プレイヤをジャンプさせる
-	if (!controll_lock && ground && GetKeyboardTrigger(DIK_SPACE))
+	if (!controll_lock && ground && PLAYER_JUMP)
 	{
 		ground = false;
 		jumped_at = y;
 		jumping = true;
+		v = PLAYER_JUMPING_UV_V;
 	}
 
 	// プレイヤに掴ませたりする
-	if (GetKeyboardTrigger(DIK_U))
+	if (PLAYER_ITEM_USE)
 	{
 		if (is_holding_item()) release_item();
 		else catch_item();
@@ -535,7 +568,7 @@ void Player::trigger_controlls()
 
 Player::DeadReason Player::dead()
 {
-	return dead_reason;
+	return (time_diff(death_timing) > DEATH_HOLD_TIME ? dead_reason : DeadReason::ALIVE);
 }
 
 Player::Vec Player::get_vec()

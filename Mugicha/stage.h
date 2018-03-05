@@ -9,6 +9,7 @@
 #include "audio_controller.h"
 
 #define CAMERA_HEIGHT (200) // カメラのプレイヤからの高さ
+#define ZOOM_SPEED (1.001f) // ズーム速度
 
 using PolygonsVector = std::vector<SquarePolygonBase*>;
 
@@ -46,6 +47,7 @@ private:
 	Goal *goal; // ゴール
 	Player *player; // プレイヤ
 	Gage* gage; // 拡縮のゲージ
+	HellGate *hellgate; // 下から～
 
 	Stage::GameInfo info; // 続行管理と結果
 	
@@ -66,6 +68,7 @@ private:
 	void multi_texture_loader(std::map<std::string, const char *> _textures); // テクスチャを読み込む
 	void multi_texture_loader(const char *filepath); // テクスチャを読み込むためのmapを作成して渡す
 	bool stagefile_loader(const char* filepath); // ステージファイルをロードする
+	void multi_audio_loader(const char* filepath); // 音楽ファイルをロードする
 	void init(); // ステージの初期設定をやる
 	void update(); // 更新処理
 	void draw(); // 描画処理
