@@ -20,24 +20,28 @@ void Bullet::init()
 
 void Bullet::update()
 {
-	// Update‚ÌŠÔŠÇ—‚ÍAirCannon‘¤‚Å‚â‚Á‚Ä‚­‚ê‚Ä‚é‚Ì‚Ål—¶‚µ‚È‚¢
 	if (!triggered) return;
 
-	switch (vec)
+	// ŠÔŠÇ—‚µ‚Ü‚·
+	auto current = SCNOW;
+	if (time_diff(latest_update, current))
 	{
-	case Bullet::Vec::UP:
-		y += speed;
-		break;
-	case Bullet::Vec::DOWN:
-		y -= speed;
-		break;
-	case Bullet::Vec::LEFT:
-		x -= speed;
-		break;
-	case Bullet::Vec::RIGHT:
-		x += speed;
-		break;
-	}
+		switch (vec)
+		{
+		case Bullet::Vec::UP:
+			y += speed;
+			break;
+		case Bullet::Vec::DOWN:
+			y -= speed;
+			break;
+		case Bullet::Vec::LEFT:
+			x -= speed;
+			break;
+		case Bullet::Vec::RIGHT:
+			x += speed;
+			break;
+		}
+	}	
 }
 
 void Bullet::trigger()
