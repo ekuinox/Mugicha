@@ -13,7 +13,7 @@ void Controller::init()
 		{ "TITLE_BG", TEXTURES_DIR "title.jpg"},
 		{ "Z", TEXTURES_DIR "z.png" },
 		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
-		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.png" },
+		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
 		{ "SELECTOR", TEXTURES_DIR "selector.png"},
 	};
