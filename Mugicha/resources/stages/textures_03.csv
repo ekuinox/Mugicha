@@ -1,9 +1,7 @@
 BACKGROUND,background_03.png
 PLAYER,player_01.png
 FLOOR_01,floor_03.png
-ENEMY_01,mon_01.png
-ENEMY_02,mon_02.png
-ENEMY_03,mon_03.png
+ENEMY_01,mon_03.png
 THORN_UP,thorn_01_up.png
 THORN_RIGHT,thorn_01_right.png
 THORN_LEFT,thorn_01_left.png
