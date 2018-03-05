@@ -42,26 +42,36 @@ void Thorn::update()
 {
 	if (falling)
 	{
-		y -= speed;
 
-		// ここをブロックと接触すれば終了にする
-		if (attack)
+		// 時間管理します
+		auto current = SCNOW;
+		if (time_diff(latest_update, current) > UPDATE_INTERVAL)
 		{
-			auto self = get_square();
-			for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR })
+			latest_update = current;
+
+			// 落下マシマシ
+			y -= speed;
+
+			// ここをブロックと接触すれば終了にする
+			if (attack)
 			{
-				for (const auto& block : polygons[type])
+				auto self = get_square();
+				for (const auto& type : { SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT, SquarePolygonBase::PolygonTypes::RAGGED_FLOOR })
 				{
-					auto block_sq = block->get_square();
-					if(hit_bottom(self, block_sq))
+					for (const auto& block : polygons[type])
 					{
-						stop_falling();
-						break;
+						auto block_sq = block->get_square();
+						if (hit_bottom(self, block_sq))
+						{
+							stop_falling();
+							break;
+						}
 					}
 				}
+
 			}
-			
 		}
+
 	}
 	// 高さを設定しなおす
 	else if (floor != nullptr)
