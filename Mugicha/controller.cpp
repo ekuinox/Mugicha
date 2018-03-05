@@ -172,31 +172,40 @@ void Controller::update()
 			}
 			break;
 		case Scene::Select:
-			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW) || GetControllerButtonTrigger(XIP_D_LEFT)) // 選択左
+			// カーソルを左に
+			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW) || GetControllerButtonTrigger(XIP_D_LEFT))
 			{
 				selector->left();
 			}
 
-			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW) || GetControllerButtonTrigger(XIP_D_RIGHT)) // 選択右
+			// カーソルを右に
+			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW) || GetControllerButtonTrigger(XIP_D_RIGHT))
 			{
 				selector->right();
 			}
 
+			// ゲーム開始
 			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
 				switch_scene(Scene::Gaming);
+			}
+
+			// タイトルに戻す
+			if (GetKeyboardTrigger(DIK_F5) || GetControllerButtonTrigger(XIP_BACK))
+			{
+				switch_scene(Scene::Title);
 			}
 			break;
 		case Scene::GameOver:
 			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
-				switch_scene(Scene::Title);
+				switch_scene(Scene::Select);
 			}
 			break;
 		case Scene::GameClear:
 			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
-				switch_scene(Scene::Title);
+				switch_scene(Scene::Select);
 			}
 			break;
 		case Scene::End:
