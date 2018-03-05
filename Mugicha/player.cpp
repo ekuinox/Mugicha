@@ -336,7 +336,8 @@ void Player::generate_vertexes()
 Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer & _polygons, int _layer, float _x, float _y, float _w, float _h, float _u, float _v, float _uw, float _vh)
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
-	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y), old_vec(Player::Vec::CENTER)
+	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y),
+	old_vec(Player::Vec::CENTER), dead_falling_speed(0.1f)
 {
 	init();
 }
@@ -366,11 +367,6 @@ void Player::update()
 {
 	// statusみて切る
 	unless (status) return; 
-
-	if (dead_reason != DeadReason::ALIVE)
-	{
-		y -= 1.0f;
-	}
 
 	if (
 		collision_for_enemies() // 敵との当たり判定
@@ -453,15 +449,24 @@ void Player::update()
 		if (time_diff(latest_update, current) > UPDATE_INTERVAL)
 		{
 			latest_update = current;
+
+			if (dead_reason == DeadReason::ALIVE)
+			{
+				// 操作
+				controlls(vector, result);
+
+				// ジャンプ処理
+				jump(vector, result);
+
+				// 浮いている状態
+				drifting(vector);
+			}
+			else
+			{
+				y -= dead_falling_speed;
+				dead_falling_speed *= 1.01f; // 加速させる
+			}
 			
-			// 操作
-			controlls(vector, result);
-
-			// ジャンプ処理
-			jump(vector, result);
-
-			// 浮いている状態
-			drifting(vector);
 		}
 
 		// 変更を加算して終了
