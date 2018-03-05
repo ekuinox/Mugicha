@@ -243,7 +243,7 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 	vec = Player::Vec::CENTER;
 
 	// 左方向への移動
-	if (!(result & HitLine::LEFT) && (GetKeyboardPress(PLAYER_MOVE_LEFT) || GetControllerButtonPress(XIP_D_LEFT)))
+	if (!(result & HitLine::LEFT) && PLAYER_MOVE_LEFT)
 	{
 		vector.x -= speed;
 		vec = Player::Vec::LEFT;
@@ -251,7 +251,7 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 	}
 	
 	// 右方向への移動
-	if (!(result & HitLine::RIGHT) && (GetKeyboardPress(PLAYER_MOVE_RIGHT) || GetControllerButtonPress(XIP_D_RIGHT)))
+	if (!(result & HitLine::RIGHT) && PLAYER_MOVE_RIGHT)
 	{
 		vector.x += speed;
 		vec = Player::Vec::RIGHT;
@@ -271,7 +271,7 @@ void Player::jump(D3DXVECTOR2 & vector, char & result)
 	if (!(result & HitLine::TOP) && jumping)
 	{
 		auto diff = y - jumped_at;
-		if (diff < PLAYER_JUMP_HEIGHT || ((GetKeyboardPress(PLAYER_JUMP) || GetControllerButtonPress(XIP_A)) && diff < PLAYER_HOLD_JUMP_HEIGHT)) vector.y += PLAYER_JUMP_POWER;
+		if (diff < PLAYER_JUMP_HEIGHT || (PLAYER_JUMP_HOLD && diff < PLAYER_HOLD_JUMP_HEIGHT)) vector.y += PLAYER_JUMP_POWER;
 		else jumping = false;
 	}
 }
@@ -519,7 +519,7 @@ bool Player::is_jumping()
 void Player::trigger_controlls()
 {
 	// プレイヤをジャンプさせる
-	if (!controll_lock && ground && (GetKeyboardTrigger(PLAYER_JUMP) || GetControllerButtonTrigger(XIP_A)))
+	if (!controll_lock && ground && PLAYER_JUMP)
 	{
 		ground = false;
 		jumped_at = y;
@@ -527,7 +527,7 @@ void Player::trigger_controlls()
 	}
 
 	// プレイヤに掴ませたりする
-	if (GetKeyboardTrigger(PLAYER_ITEM_USE))
+	if (PLAYER_ITEM_USE)
 	{
 		if (is_holding_item()) release_item();
 		else catch_item();

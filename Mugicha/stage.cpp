@@ -444,7 +444,7 @@ void Stage::update()
 	// 時間を気にしないもの
 
 	// タイトルに戻る（無確認）
-	if (GetKeyboardTrigger(KEY_BACK_TO_TITLE))
+	if (KEY_BACK_TO_TITLE)
 	{
 		info.status = Stage::Status::Retire;
 		return;
@@ -560,7 +560,7 @@ void Stage::trigger_controlls()
 	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
 	{
 		// 最小にする => 自分は大きくなる
-		if (zoom_level > 0.5f && GetKeyboardTrigger(ZOOM_MIN))
+		if (zoom_level > 0.5f && ZOOM_MIN)
 		{
 			zoom_level_target = 0.5f;
 			zoom_sign = Stage::Sign::MINUS;
@@ -569,7 +569,7 @@ void Stage::trigger_controlls()
 		}
 
 		// 通常状態
-		if (zoom_level != 1 && GetKeyboardTrigger(ZOOM_DEF))
+		if (zoom_level != 1 && ZOOM_DEF)
 		{
 			zoom_level_target = 1.0f;
 			zoom_sign = (zoom_level < 1 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
@@ -578,7 +578,7 @@ void Stage::trigger_controlls()
 		}
 
 		// 最大化 => 自分は小さくなる
-		if (zoom_level < 2.0f && GetKeyboardTrigger(ZOOM_MAX))
+		if (zoom_level < 2.0f && ZOOM_MAX)
 		{
 			zoom_level_target = 2.0f;
 			zoom_sign = Stage::Sign::PLUS;
