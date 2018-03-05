@@ -28,6 +28,10 @@
 #define FALLING_OUT_Y (-10) // 画面外落下の高さ
 #define KNOCKBACK_VOLUME ((CELL_WIDTH + CELL_HEIGHT) / 2) // ノックバック距離
 
+#define PLAYER_NORMAL_UV_V (0.0f)
+#define PLAYER_JUMPING_UV_V (0.75f)
+#define PLAYER_DIE_UV_V (0.5f)
+
 // プレイヤークラス
 
 class Player : public PlainSquarePolygon

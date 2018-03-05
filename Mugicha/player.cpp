@@ -225,10 +225,12 @@ void Player::ground_check(char &result)
 {
 	if (result & HitLine::BOTTOM)
 	{
+		v = PLAYER_NORMAL_UV_V;
 		ground = true;
 	}
 	else
 	{
+		v = PLAYER_JUMPING_UV_V;
 		ground = false;
 	}
 }
@@ -272,7 +274,10 @@ void Player::jump(D3DXVECTOR2 & vector, char & result)
 	{
 		auto diff = y - jumped_at;
 		if (diff < PLAYER_JUMP_HEIGHT || (PLAYER_JUMP_HOLD && diff < PLAYER_HOLD_JUMP_HEIGHT)) vector.y += PLAYER_JUMP_POWER;
-		else jumping = false;
+		else
+		{
+			jumping = false;
+		}
 	}
 }
 
@@ -309,7 +314,7 @@ bool Player::is_holding_item()
 void Player::generate_vertexes()
 {
 	// u’l‚ð•Ï‚¦‚Ä‚â‚è‚½‚¢‚ñ‚¾‚ª
-	if (vec != Player::Vec::CENTER)
+	if (vec != Player::Vec::CENTER && ground && dead_reason == DeadReason::ALIVE)
 	{
 		u += uw * (vec == Player::Vec::RIGHT ? 1 : -1);
 	}
@@ -505,10 +510,13 @@ void Player::kill(const DeadReason & _dead_reason)
 		puts(STRING(DeadReason::FallenHellGate));
 		break;
 	}
+
 #endif
 #ifndef _NEVER_DIE
 	dead_reason = _dead_reason;
 #endif
+
+	v = PLAYER_DIE_UV_V;
 }
 
 bool Player::is_jumping()
@@ -524,6 +532,7 @@ void Player::trigger_controlls()
 		ground = false;
 		jumped_at = y;
 		jumping = true;
+		v = PLAYER_JUMPING_UV_V;
 	}
 
 	// ƒvƒŒƒCƒ„‚É’Í‚Ü‚¹‚½‚è‚·‚é
