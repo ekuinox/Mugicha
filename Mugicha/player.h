@@ -63,7 +63,7 @@ private:
 
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
 	time_point death_timing; // 死亡時点
-	float dead_falling_speed;
+	float dead_falling_speed; // 死亡落下速度
 	
 	bool jumping; // ジャンプしている
 	float jumped_at;
