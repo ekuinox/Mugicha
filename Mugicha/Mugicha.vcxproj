@@ -303,6 +303,7 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="stage_background.cpp" />
     <ClCompile Include="thorn.cpp" />
+    <ClCompile Include="XInputController.cpp" />
     <ClCompile Include="zooming_z.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +339,7 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="stage_background.h" />
     <ClInclude Include="thorn.h" />
+    <ClInclude Include="XInputController.h" />
     <ClInclude Include="zooming_z.h" />
   </ItemGroup>
   <ItemGroup>

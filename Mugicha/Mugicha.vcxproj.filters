@@ -144,6 +144,9 @@
     <ClCompile Include="zooming_z.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="XInputController.cpp">
+      <Filter>ソース ファイル\io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="keyconf.h">
       <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="XInputController.h">
+      <Filter>ヘッダー ファイル\io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
