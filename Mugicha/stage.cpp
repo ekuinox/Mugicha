@@ -410,6 +410,7 @@ void Stage::multi_audio_loader(const char * filepath)
 
 	if (!(csv_loader(filepath, table))) return;
 
+	audiocontroller = new AudioController();
 
 	for (const auto& record : table)
 	{
@@ -447,7 +448,6 @@ void Stage::init()
 	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	auto exec_result = stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
-	audiocontroller = new AudioController();
 	sprintf_s(filepath, STAGEFILES_DIR "audios_%02d.csv", info.stage_number);
 	multi_audio_loader(filepath); // 音源のリストを読み込む => こっち先
 	
