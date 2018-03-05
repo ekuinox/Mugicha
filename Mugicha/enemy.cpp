@@ -14,7 +14,7 @@ void Enemy::init()
 
 void Enemy::generate_vertexes()
 {
-	PlainSquarePolygon::generate_vertexes();
+	ScalableObject::generate_vertexes();
 
 	// ‹tŒü‚«‚É‚·‚é
 	if (vec == Enemy::Vec::LEFT)
