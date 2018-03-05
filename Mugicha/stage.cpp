@@ -404,6 +404,34 @@ bool Stage::stagefile_loader(const char * filepath)
 	return true;
 }
 
+void Stage::multi_audio_loader(const char * filepath)
+{
+	std::vector<std::vector<std::string>> table;
+
+	if (!(csv_loader(filepath, table))) return;
+
+
+	for (const auto& record : table)
+	{
+		// label,filepath,loop
+		if (record.size() == 3)
+		{
+			char audio_file[256];
+			bool loop = record[1].c_str() == "1" ? true : false; // 1があればループさせる
+			sprintf_s(audio_file, "%s%s", AUDIOS_DIR, record[1].c_str());
+
+			if (FAILED(audiocontroller->add_audio(record[0], AudioController::Audio({ audio_file , loop }))))
+			{
+#ifdef _DEBUG
+				printf("Failed to load audio file: %s\n", record[1].c_str());
+#endif
+			}
+		}
+	}
+
+
+}
+
 void Stage::init()
 {
 #ifdef _DEBUG
@@ -419,19 +447,22 @@ void Stage::init()
 	sprintf_s(filepath, STAGEFILES_DIR "stage_%02d.csv", info.stage_number);
 	auto exec_result = stagefile_loader(filepath); // ポリゴンファイルパスを指定して読み込む
 
+	audiocontroller = new AudioController();
+	sprintf_s(filepath, STAGEFILES_DIR "audios_%02d.csv", info.stage_number);
+	multi_audio_loader(filepath); // 音源のリストを読み込む => こっち先
+	
+#ifdef _DEBUG
+	audiocontroller->dump();
+#endif
+
 	zoom_level = 1.0f;
 	zoom_sign = Stage::Sign::ZERO;
 
 	if (exec_result) info.status = Stage::Status::Ready;
 	else info.status = Stage::Status::LoadError;
 
-	audiocontroller = new AudioController({
-		{"AUDIO_01", { AUDIOS_DIR "akumu.wav", true}},
-		{ "WALK_01",{ AUDIOS_DIR "walk_01.wav", true} },
-	});
 
-
-//	audiocontroller->play("AUDIO_01");
+	audiocontroller->play("AUDIO_01");
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";

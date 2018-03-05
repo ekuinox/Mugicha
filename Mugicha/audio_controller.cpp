@@ -16,6 +16,14 @@
 #define fourccDPDS 'sdpd'
 #endif
 
+AudioController::AudioController()
+{
+	if (FAILED(init()))
+	{
+		throw "error";
+	}
+}
+
 AudioController::AudioController(Params _params)
 	: Xaudio2(NULL), mastering_voice(NULL)
 {
@@ -73,7 +81,7 @@ void AudioController::uninit()
 	CoUninitialize();
 }
 
-void AudioController::play(const char *label)
+void AudioController::play(std::string label)
 {
 	// Ä¶’†‚È‚çÄ¶‚µ‚È‚¢
 	if (audios[label].nowplaying) return;
@@ -88,7 +96,7 @@ void AudioController::play(const char *label)
 	if (SUCCEEDED(audios[label].source_voice->Start(0))) audios[label].nowplaying = true;
 }
 
-void AudioController::stop(const char * label)
+void AudioController::stop(std::string label)
 {
 	if (audios[label].source_voice == NULL) return;
 	if (!audios[label].nowplaying) return;
@@ -100,12 +108,12 @@ void AudioController::stop(const char * label)
 			audios[label].nowplaying = false;
 }
 
-void AudioController::pause(const char *label)
+void AudioController::pause(std::string label)
 {
 	// –¢ŽÀ‘•
 }
 
-HRESULT AudioController::add_audio(const char* label, Audio _audio)
+HRESULT AudioController::add_audio(std::string label, Audio _audio)
 {
 	/**** Initalize Sound ****/
 
@@ -147,6 +155,16 @@ HRESULT AudioController::add_audio(const char* label, Audio _audio)
 
 	return S_OK;
 }
+
+#ifdef _DEBUG
+void AudioController::dump()
+{
+	for (const auto& audio : audios)
+	{
+		printf("LABEL: %s, FILE: %s\n", audio.first.c_str(), audio.second.param.filename);
+	}
+}
+#endif
 
 HRESULT AudioController::find_chunk(HANDLE hFile, DWORD fourcc, DWORD & dwChunkSize, DWORD & dwChunkDataPosition)
 {
