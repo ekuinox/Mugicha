@@ -517,8 +517,8 @@ void Stage::zoom()
 	{
 		if (zoom_level < zoom_level_target)
 		{
-			zoom_level *= 1.01f;
-			zoom_level *= 1.01f;
+			zoom_level *= ZOOM_SPEED;
+			zoom_level *= ZOOM_SPEED;
 		}
 		else
 		{
@@ -532,8 +532,8 @@ void Stage::zoom()
 	{
 		if (zoom_level > zoom_level_target)
 		{
-			zoom_level /= 1.01f;
-			zoom_level /= 1.01f;
+			zoom_level /= ZOOM_SPEED;
+			zoom_level /= ZOOM_SPEED;
 		}
 		else
 		{

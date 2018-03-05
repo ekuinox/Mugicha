@@ -9,6 +9,7 @@
 #include "audio_controller.h"
 
 #define CAMERA_HEIGHT (200) // カメラのプレイヤからの高さ
+#define ZOOM_SPEED (1.001f) // ズーム速度
 
 using PolygonsVector = std::vector<SquarePolygonBase*>;
 
