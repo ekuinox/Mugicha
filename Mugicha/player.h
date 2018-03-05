@@ -4,6 +4,7 @@
 #include "conf.h"
 #include <map>
 #include "input.h"
+#include "XInputController.h"
 #include "item.h"
 #include "helpers.h"
 #include "audio_controller.h"

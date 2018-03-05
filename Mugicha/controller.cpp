@@ -135,6 +135,9 @@ void Controller::update()
 {
 	UpdateInput();
 
+	// xbox
+	UpdateController();
+
 	if (scene == Scene::Gaming)
 	{
 		game_info = stage->exec();
@@ -163,35 +166,35 @@ void Controller::update()
 		switch (scene)
 		{
 		case Scene::Title:
-			if (GetKeyboardTrigger(DIK_RETURN))
+			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
 				switch_scene(Scene::Select);
 			}
 			break;
 		case Scene::Select:
-			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW)) // 選択左
+			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW) || GetControllerButtonTrigger(XIP_D_LEFT)) // 選択左
 			{
 				selector->left();
 			}
 
-			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW)) // 選択右
+			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW) || GetControllerButtonTrigger(XIP_D_RIGHT)) // 選択右
 			{
 				selector->right();
 			}
 
-			if (GetKeyboardTrigger(DIK_RETURN))
+			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
 				switch_scene(Scene::Gaming);
 			}
 			break;
 		case Scene::GameOver:
-			if (GetKeyboardTrigger(DIK_RETURN))
+			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
 				switch_scene(Scene::Title);
 			}
 			break;
 		case Scene::GameClear:
-			if (GetKeyboardTrigger(DIK_RETURN))
+			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
 				switch_scene(Scene::Title);
 			}
