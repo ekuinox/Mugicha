@@ -1,4 +1,5 @@
 #include "gage.h"
+#include "helpers.h"
 
 Gage::Gage(float _x, float _y, LPDIRECT3DTEXTURE9 _tex)
 	: AlwaysDisplayedPolygon(_x, _y, GAGE_WIDTH, GAGE_HEIGHT, _tex, 1.0f / 3.0f * cost_gage_max, 0, 0, 1, 1.0f / 3.0f), current_cost(cost_gage_max)
@@ -9,11 +10,17 @@ void Gage::update()
 {
 	if (!status) return; // status‚Ý‚ÄØ‚é
 
-	current_cost += cost_recovery_speed;
+	auto current = SCNOW;
+	if (time_diff(latest_update, current) > UPDATE_INTERVAL)
+	{
+		latest_update = current;
 
-	if (current_cost > cost_gage_max) current_cost = cost_gage_max;
+		current_cost += cost_recovery_speed;
 
-	v = current_cost / 3.0f;
+		if (current_cost > cost_gage_max) current_cost = cost_gage_max;
+
+		v = current_cost / 3.0f;
+	}
 }
 
 float Gage::consume()
