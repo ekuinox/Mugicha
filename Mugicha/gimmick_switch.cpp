@@ -10,12 +10,14 @@ GimmickSwitch::GimmickSwitch(float _x, float _y, float _w, float _h, LPDIRECT3DT
 void GimmickSwitch::press()
 {
 	pressed = true;
+	u = 0.5f;
 	flag = true;
 }
 
 void GimmickSwitch::release()
 {
 	pressed = false;
+	u = 0.0f;
 	flag = false;
 }
 
