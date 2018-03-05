@@ -461,8 +461,8 @@ void Stage::init()
 	if (exec_result) info.status = Stage::Status::Ready;
 	else info.status = Stage::Status::LoadError;
 
-
-	audiocontroller->play("AUDIO_01");
+	// ƒƒCƒ“‚ÌBGM‚ðÄ¶‚µ‚Ä‚¢‚­
+	audiocontroller->play("MAIN_BGM");
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
