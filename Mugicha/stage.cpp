@@ -418,7 +418,7 @@ void Stage::multi_audio_loader(const char * filepath)
 		if (record.size() == 3)
 		{
 			char audio_file[256];
-			bool loop = record[1].c_str() == "1" ? true : false; // 1があればループさせる
+			bool loop = strcmp(record[2].c_str(), "1") == 0 ? true : false; // 1があればループさせる
 			sprintf_s(audio_file, "%s%s", AUDIOS_DIR, record[1].c_str());
 
 			if (FAILED(audiocontroller->add_audio(record[0], AudioController::Audio({ audio_file , loop }))))
