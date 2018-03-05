@@ -3,6 +3,7 @@
 
 #define GAGE_WIDTH (25)
 #define GAGE_HEIGHT (75)
+#define GAGE_RECOVERY_SPEED (0.0005f) // ゲージ回復速度
 
 /*
 * Gage
@@ -22,7 +23,7 @@ public:
 private:
 	const float cost = 1.0f; // 一度に消費するコスト
 	const float cost_gage_max = 2.0f; // コストの満タン状態
-	const float cost_recovery_speed = 0.0001f; // コスト回復速度（毎ms）
+	const float cost_recovery_speed = GAGE_RECOVERY_SPEED; // コスト回復速度（毎ms）
 	float current_cost; // 現在のコスト
 };
 
