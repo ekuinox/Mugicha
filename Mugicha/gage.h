@@ -16,7 +16,7 @@ public:
 	void update();
 	float consume(); // 一回分消費して残量を返す，コストが足らない場合は負の値を返す
 	bool can_consume();
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 	void cure(); // 全回復させる
 #endif
 private:

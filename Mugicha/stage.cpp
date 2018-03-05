@@ -453,7 +453,7 @@ void Stage::update()
 	// 時間を気にしないタイプの操作をここで呼ぶ
 	trigger_controlls();
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 	
 	// プレイヤの位置とかを吐かせる
 	if (GetKeyboardTrigger(DIK_F2)) printf("Camera: (%f, %f) Player: (%f, %f)\n", camera.x, camera.y, player->get_coords().x, player->get_coords().y);

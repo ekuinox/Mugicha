@@ -41,7 +41,7 @@ bool Gage::can_consume()
 	return current_cost >= cost;
 }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_STAGE_DEBUG)
 void Gage::cure()
 {
 	current_cost = cost_gage_max;
