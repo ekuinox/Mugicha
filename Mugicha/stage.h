@@ -47,6 +47,7 @@ private:
 	Goal *goal; // ƒS[ƒ‹
 	Player *player; // ƒvƒŒƒCƒ„
 	Gage* gage; // Šgk‚ÌƒQ[ƒW
+	HellGate *hellgate; // ‰º‚©‚ç`
 
 	Stage::GameInfo info; // ‘±sŠÇ—‚ÆŒ‹‰Ê
 	

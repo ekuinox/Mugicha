@@ -123,7 +123,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	(player = emplace_polygon_back(SquarePolygonBase::PolygonTypes::PLAYER, REGISTER_PLAYER(std::atof(table[0][2].c_str()) * CELL_WIDTH - CELL_WIDTH / 2, std::atof(table[0][3].c_str()) * CELL_HEIGHT - CELL_HEIGHT / 2, textures["PLAYER"], camera, polygons)))->on();
 
 	// HELLGATE‚ÌƒZƒbƒg
-	(emplace_polygon_back(
+	(hellgate = emplace_polygon_back(
 		SquarePolygonBase::PolygonTypes::HELLGATE,
 		new HellGate(
 			map_size.w / 2,
@@ -588,7 +588,7 @@ void Stage::trigger_controlls()
 	if (player->is_jumping()) return;
 
 	// Šgk
-	if (zoom_sign == Stage::Sign::ZERO && gage->can_consume())
+	if (zoom_sign == Stage::Sign::ZERO && (!hellgate->is_started() || gage->can_consume()))
 	{
 		// Å¬‚É‚·‚é => ©•ª‚Í‘å‚«‚­‚È‚é
 		if (zoom_level > 0.5f && ZOOM_MIN)
@@ -596,7 +596,7 @@ void Stage::trigger_controlls()
 			zoom_level_target = 0.5f;
 			zoom_sign = Stage::Sign::MINUS;
 			player->lock();
-			gage->consume();
+			if(hellgate->is_started()) gage->consume();
 		}
 
 		// ’Êíó‘Ô
@@ -605,7 +605,7 @@ void Stage::trigger_controlls()
 			zoom_level_target = 1.0f;
 			zoom_sign = (zoom_level < 1 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
 			player->lock();
-			gage->consume();
+			if (hellgate->is_started()) gage->consume();
 		}
 
 		// Å‘å‰» => ©•ª‚Í¬‚³‚­‚È‚é
@@ -614,7 +614,7 @@ void Stage::trigger_controlls()
 			zoom_level_target = 2.0f;
 			zoom_sign = Stage::Sign::PLUS;
 			player->lock();
-			gage->consume();
+			if (hellgate->is_started()) gage->consume();
 		}
 
 #if defined(_DEBUG) || defined(_STAGE_DEBUG)
