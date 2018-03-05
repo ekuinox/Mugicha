@@ -242,6 +242,9 @@ void Player::head_check(char & result)
 
 void Player::controlls(D3DXVECTOR2 & vector, char & result)
 {
+
+	unless(dead_reason == DeadReason::ALIVE) return;
+
 	vec = Player::Vec::CENTER;
 
 	// 左方向への移動
@@ -467,6 +470,9 @@ void Player::update()
 			
 		}
 
+		// 死んでたらとにかくこのv
+		unless (dead_reason == DeadReason::ALIVE) v = PLAYER_DIE_UV_V;
+		
 		// 変更を加算して終了
 		x += vector.x;
 		y += vector.y;
@@ -535,6 +541,14 @@ bool Player::is_jumping()
 
 void Player::trigger_controlls()
 {
+	unless(dead_reason == DeadReason::ALIVE)
+	{
+#ifdef _DEBUG
+		puts("hogee");
+		return;
+#endif
+	}
+
 	// プレイヤをジャンプさせる
 	if (!controll_lock && ground && PLAYER_JUMP)
 	{
