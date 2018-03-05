@@ -242,6 +242,9 @@
     <ClInclude Include="zooming_z.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="keyconf.h">
+      <Filter>ヘッダー ファイル\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\stages\stage_01.csv">

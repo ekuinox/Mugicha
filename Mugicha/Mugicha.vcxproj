@@ -325,6 +325,7 @@
     <ClInclude Include="helpers.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
+    <ClInclude Include="keyconf.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
