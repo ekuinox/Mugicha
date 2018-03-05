@@ -32,6 +32,8 @@
 #define PLAYER_JUMPING_UV_V (0.75f)
 #define PLAYER_DIE_UV_V (0.5f)
 
+#define DEATH_HOLD_TIME (1000)
+
 // プレイヤークラス
 
 class Player : public PlainSquarePolygon
@@ -60,6 +62,7 @@ private:
 	PolygonsContainer &polygons; // 当たり見るように持っときます
 
 	DeadReason dead_reason; // 生きているか，また死んでいるならその理由
+	time_point death_timing; // 死亡時点
 	
 	bool jumping; // ジャンプしている
 	float jumped_at;

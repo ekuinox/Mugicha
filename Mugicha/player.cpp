@@ -367,6 +367,11 @@ void Player::update()
 	// status‚Ý‚ÄØ‚é
 	unless (status) return; 
 
+	if (dead_reason != DeadReason::ALIVE)
+	{
+		y -= 1.0f;
+	}
+
 	if (
 		collision_for_enemies() // “G‚Æ‚Ì“–‚½‚è”»’è
 		|| collision_for_thorns() // ƒgƒQ‚Æ‚Ì“–‚½‚è”»’è
@@ -513,9 +518,10 @@ void Player::kill(const DeadReason & _dead_reason)
 
 #endif
 #ifndef _NEVER_DIE
+	// ‰Ž€‚Ì‚Ý
+	if(dead_reason == DeadReason::ALIVE) death_timing = SCNOW;
 	dead_reason = _dead_reason;
 #endif
-
 	v = PLAYER_DIE_UV_V;
 }
 
@@ -545,7 +551,7 @@ void Player::trigger_controlls()
 
 Player::DeadReason Player::dead()
 {
-	return dead_reason;
+	return (time_diff(death_timing) > DEATH_HOLD_TIME ? dead_reason : DeadReason::ALIVE);
 }
 
 Player::Vec Player::get_vec()
