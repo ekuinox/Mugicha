@@ -20,6 +20,7 @@ void Controller::init()
 		{ "HYOUSIKI", TEXTURES_DIR "hyousiki.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.jpg" },
+		{ "GAMECLEAR_LOGO", TEXTURES_DIR "gameclear.png" },
 		{ "SELECTOR", TEXTURES_DIR "selector.png"},
 	};
 
@@ -155,11 +156,13 @@ void Controller::switch_scene(Scene _scene)
 		// ”wŒi
 		background->change_texture(textures["GAMEOVER_BG"]);
 		background->on();
+		camera.x = SCREEN_WIDTH / 2;
 		break;
 	case Scene::GameClear:
 		// ”wŒi
 		background->change_texture(textures["GAMECLEAR_BG"]);
 		background->on();
+		camera.x = SCREEN_WIDTH / 2;
 		break;
 	case Scene::End:
 		break;
