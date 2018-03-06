@@ -149,8 +149,8 @@ void Controller::switch_scene(Scene _scene)
 
 		// ステージのサムネ
 		for (const auto& thumb : stage_thumbnails) thumb->on();
-		
 		hyousiki->on();
+		camera.x = SCREEN_WIDTH * 1.5f;
 
 		break;
 	case Scene::Gaming:
