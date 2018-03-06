@@ -174,7 +174,7 @@ void Player::collision_for_knockback_bullets(D3DXVECTOR2 & vector, char & result
 bool Player::is_fallen_hellgate()
 {
 	auto self = get_square();
-	self.h *= 0.9; // ŠÃ‚³
+	self.y += h / 2; // ŠÃ‚³
 	if (
 		polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->is_drawing()
 		&& is_collision(self, polygons[PlainSquarePolygon::PolygonTypes::HELLGATE].front()->get_square())
