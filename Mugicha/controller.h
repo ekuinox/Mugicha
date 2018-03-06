@@ -7,6 +7,7 @@
 #include "selector.h"
 #include "helpers.h"
 #include "stage_thumbnail.h"
+#include "always_displayed_polygon.h"
 
 // ƒQ[ƒ€ŠÇ——p‚ÌƒNƒ‰ƒX
 class Controller
@@ -31,7 +32,7 @@ private:
 	time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
 	PolygonsVector polygons;
-	Background *background; // ”wŒiƒ|ƒŠƒSƒ“
+	AlwaysDisplayedPolygon *background; // ”wŒiƒ|ƒŠƒSƒ“
 	Selector *selector; // ƒZƒŒƒNƒ^[ƒ|ƒŠƒSƒ“
 	ZoomingZ *zooming_z; // Zooming‚ÌZ
 	StageThumbnail* stage_thumbnails[3];

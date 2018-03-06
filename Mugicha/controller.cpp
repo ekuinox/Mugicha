@@ -32,11 +32,10 @@ void Controller::init()
 	camera = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
 	
 	// 背景の登録
-	background = new Background(textures["TITLE_BG"], camera);
+	background = new AlwaysDisplayedPolygon(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, textures["TITLE_BG"], INT_MAX);
 	polygons.emplace_back(background);
-
 	// セレクタの登録
-	selector = new Selector(textures["SELECTOR"], camera);
+	selector = new Selector(textures["SELECTOR"]);
 	polygons.emplace_back(selector);
 
 	// Z
@@ -79,6 +78,7 @@ void Controller::switch_scene(Scene _scene)
 		break;
 	case Scene::Select:
 		background->off();
+		camera.x += SCREEN_WIDTH;
 		break;
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
@@ -101,7 +101,7 @@ void Controller::switch_scene(Scene _scene)
 		break;
 	case Scene::Select:
 		// 背景
-		background->change_texture(textures["STAGE_SELECT_BG"]);
+		background->change_texture(textures["TITLE_BG"]);
 		background->on();
 
 		// セレクタ
