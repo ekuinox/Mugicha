@@ -18,7 +18,8 @@ private:
 	bool held; // ƒvƒŒƒCƒ„‚É’Í‚Ü‚ê‚Ä‚¢‚é‚©
 	bool on_ground;
 	GimmickSwitch *gimmick_switch;
-
+	float def_w;
+	float def_h;
 	void generate_vertexes();
 };
 
