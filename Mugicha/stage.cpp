@@ -339,6 +339,27 @@ bool Stage::stagefile_loader(const char * filepath)
 					REGISTER_MAGMA(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["MAGMA_01"], camera)
 				)->on();
 				break;
+
+			// Tutorials
+			case 51:
+				// A
+				
+				break;
+			case 52:
+				// B
+				break;
+			case 53:
+				// X
+				break;
+			case 54:
+				// RB
+				break;
+			case 55:
+				// LB
+				break;
+			case 56:
+				// 十字キー
+				break;
 			case 99:
 				// 右向き開始の敵
 				emplace_polygon_back(
