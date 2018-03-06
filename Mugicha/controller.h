@@ -6,6 +6,7 @@
 #include "zooming_z.h"
 #include "selector.h"
 #include "helpers.h"
+#include "stage_thumbnail.h"
 
 // ゲーム管理用のクラス
 class Controller
@@ -16,6 +17,7 @@ public:
 	{
 		Ready,
 		Title,
+		AnimetionTitleToSelect,
 		Select,
 		Gaming,
 		GameOver,
@@ -32,6 +34,7 @@ private:
 	Background *background; // 背景ポリゴン
 	Selector *selector; // セレクターポリゴン
 	ZoomingZ *zooming_z; // ZoomingのZ
+	StageThumbnail* stage_thumbnails[3];
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();

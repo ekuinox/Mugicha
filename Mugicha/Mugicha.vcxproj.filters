@@ -147,6 +147,9 @@
     <ClCompile Include="zooming_z.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
+    <ClCompile Include="stage_thumbnail.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -249,6 +252,9 @@
       <Filter>ヘッダー ファイル\io</Filter>
     </ClInclude>
     <ClInclude Include="zooming_z.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="stage_thumbnail.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
