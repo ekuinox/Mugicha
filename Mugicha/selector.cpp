@@ -35,7 +35,7 @@ void Selector::init()
 	y = SCREEN_HEIGHT - 100;
 	drawing = false;
 	status = false;
-	selection = 2;
+	selection = 1;
 }
 
 void Selector::left()
