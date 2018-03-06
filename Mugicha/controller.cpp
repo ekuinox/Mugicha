@@ -13,6 +13,7 @@ void Controller::init()
 		{ "TITLE_BG", TEXTURES_DIR "title.jpg"},
 		{ "Z", TEXTURES_DIR "z.png" },
 		{ "OOMING", TEXTURES_DIR "ooming.png" },
+		{ "PRESS_START", TEXTURES_DIR "pressstart.png" },
 		{ "STAGE_01", TEXTURES_DIR "stage_01.png" },
 		{ "STAGE_02", TEXTURES_DIR "stage_02.png" },
 		{ "STAGE_03", TEXTURES_DIR "stage_03.png" },
@@ -51,6 +52,10 @@ void Controller::init()
 	zooming_ooming = new PlainSquarePolygon(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT - 200, SCREEN_WIDTH * 0.75f, 500, textures["OOMING"], 0, camera);
 	polygons.emplace_back(zooming_ooming);
 	
+	// press_start
+	press_start = new PlainSquarePolygon(SCREEN_WIDTH / 2, 200, SCREEN_WIDTH * 0.8f, 500, textures["PRESS_START"], 0, camera);
+	polygons.emplace_back(press_start);
+
 	// ステージ用のサムネ
 	stage_thumbnails[0] = new StageThumbnail(textures["STAGE_01"], camera, SCREEN_WIDTH * 1.25f, SCREEN_HEIGHT / 2);
 	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2);
@@ -58,7 +63,7 @@ void Controller::init()
 	for (const auto& thumb : stage_thumbnails) polygons.emplace_back(thumb);
 
 	// サムネの上のアレ
-	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT - 200, SCREEN_WIDTH * 0.6, 100, textures["HYOUSIKI"], 0, camera);
+	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT - 100, SCREEN_WIDTH * 0.6, 100, textures["HYOUSIKI"], 0, camera);
 	polygons.emplace_back(hyousiki);
 
 	// シーン切り替え
@@ -117,12 +122,14 @@ void Controller::switch_scene(Scene _scene)
 		background->on();
 		zooming_z->on();
 		zooming_ooming->on();
+		press_start->on();
 		camera.x = SCREEN_WIDTH / 2;
 		break;
 	case Scene::AnimetionTitleToSelect:
 		for (const auto& thumb : stage_thumbnails) thumb->on();
 		background->on();
 		hyousiki->on();
+		press_start->on();
 		zooming_z->on();
 		zooming_ooming->on();
 		break;
@@ -222,12 +229,16 @@ void Controller::update()
 			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW) || GetControllerButtonTrigger(XIP_D_LEFT))
 			{
 				selector->left();
+				for (const auto& thumb : stage_thumbnails) thumb->release();
+				stage_thumbnails[selector->get_selection() - 1]->trigger();
 			}
 
 			// カーソルを右に
 			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW) || GetControllerButtonTrigger(XIP_D_RIGHT))
 			{
 				selector->right();
+				for (const auto& thumb : stage_thumbnails) thumb->release();
+				stage_thumbnails[selector->get_selection() - 1]->trigger();
 			}
 
 			// ゲーム開始

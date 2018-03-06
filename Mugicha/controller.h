@@ -40,6 +40,7 @@ private:
 	PlainSquarePolygon *zooming_ooming;
 	StageThumbnail* stage_thumbnails[3];
 	PlainSquarePolygon *hyousiki;
+	PlainSquarePolygon *press_start;
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();
