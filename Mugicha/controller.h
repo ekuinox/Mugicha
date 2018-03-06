@@ -9,7 +9,7 @@
 #include "stage_thumbnail.h"
 #include "always_displayed_polygon.h"
 
-#define CAMERA_MOVE_SPEED (1.0f)
+#define CAMERA_MOVE_SPEED (2.0f)
 
 // ゲーム管理用のクラス
 class Controller
@@ -37,6 +37,7 @@ private:
 	AlwaysDisplayedPolygon *background; // 背景ポリゴン
 	Selector *selector; // セレクターポリゴン
 	ZoomingZ *zooming_z; // ZoomingのZ
+	PlainSquarePolygon *zooming_ooming;
 	StageThumbnail* stage_thumbnails[3];
 	PlainSquarePolygon *hyousiki;
 	Stage *stage;

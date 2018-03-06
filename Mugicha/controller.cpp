@@ -47,6 +47,10 @@ void Controller::init()
 	zooming_z = new ZoomingZ(textures["Z"], camera);
 	polygons.emplace_back(zooming_z);
 
+	// ooming!
+	zooming_ooming = new PlainSquarePolygon(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT - 200, SCREEN_WIDTH * 0.75f, 500, textures["OOMING"], 0, camera);
+	polygons.emplace_back(zooming_ooming);
+	
 	// ステージ用のサムネ
 	stage_thumbnails[0] = new StageThumbnail(textures["STAGE_01"], camera, SCREEN_WIDTH * 1.25f, SCREEN_HEIGHT / 2);
 	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2);
@@ -85,21 +89,14 @@ void Controller::switch_scene(Scene _scene)
 	}
 
 	// 変更前のシーンの終了処理
+	// 前の処理で全てはoffにされているのでわざわざまたoffをする必要はない
 	switch (scene)
 	{
 	case Scene::Title:
-		background->off();
-		zooming_z->off();
 		break;
 	case Scene::AnimetionTitleToSelect:
-		background->off();
-		for (const auto& thumb : stage_thumbnails) thumb->off();
-		hyousiki->off();
 		break;
 	case Scene::Select:
-		background->off();
-		for (const auto& thumb : stage_thumbnails) thumb->off();
-		hyousiki->off();
 		break;
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
@@ -119,12 +116,15 @@ void Controller::switch_scene(Scene _scene)
 		background->change_texture(textures["TITLE_BG"]);
 		background->on();
 		zooming_z->on();
+		zooming_ooming->on();
 		camera.x = SCREEN_WIDTH / 2;
 		break;
 	case Scene::AnimetionTitleToSelect:
 		for (const auto& thumb : stage_thumbnails) thumb->on();
 		background->on();
 		hyousiki->on();
+		zooming_z->on();
+		zooming_ooming->on();
 		break;
 	case Scene::Select:
 		// 背景
