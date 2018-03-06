@@ -2,6 +2,14 @@
 #include <map>
 #include "gimmick_switch.h"
 
+/*
+* Item
+* スイッチ押したりするためのアイテム
+* プレイヤに掴まれている時は拡縮の影響を受けない
+* プレイヤに掴まれる，また離されるときにはそのサイズを保持する
+*/
+
+
 class Item : public ScalableObject
 {
 public:
@@ -17,9 +25,8 @@ private:
 	PolygonsContainer &polygons; // 当たり見るように持っときます
 	bool held; // プレイヤに掴まれているか
 	bool on_ground;
+	POLSIZE default_size;
 	GimmickSwitch *gimmick_switch;
-	float def_w;
-	float def_h;
 	void generate_vertexes();
 };
 
