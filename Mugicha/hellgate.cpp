@@ -19,15 +19,13 @@ void HellGate::update()
 	{
 		y += speed;
 	}
-//	else if(is_collision(SQUARE(start.x, start.y, CELL_WIDTH * AREA, CELL_HEIGHT * AREA) * zoom_level, player->get_square()))
-	else if(player->get_square().y - start.y * zoom_level > CELL_HEIGHT)
+	else if(player->get_square().y > start.y * zoom_level)
 	{
 		// スタート
 #ifdef _DEBUG
 		puts("HELLGATE STARTED!!");
 #endif
-	//	y = (start.y - (h - CELL_HEIGHT) * AREA) * zoom_level;
-		y = (start.y - CELL_HEIGHT * 4);
+		y = start.y - h - CELL_HEIGHT * 2;
 		started = true;
 	}
 }
