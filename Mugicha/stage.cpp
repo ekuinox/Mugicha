@@ -343,22 +343,63 @@ bool Stage::stagefile_loader(const char * filepath)
 			// Tutorials
 			case 51:
 				// A
-				
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 0), TutorialObject::CELL(1, 0)
+					)
+				)->on();
 				break;
 			case 52:
 				// B
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 1), TutorialObject::CELL(1, 1)
+					)
+				)->on();
 				break;
 			case 53:
 				// X
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 2), TutorialObject::CELL(1, 2)
+					)
+				)->on();
 				break;
 			case 54:
 				// RB
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 3), TutorialObject::CELL(1, 3)
+					)
+				)->on();
 				break;
 			case 55:
 				// LB
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 4), TutorialObject::CELL(1, 4)
+					)
+				)->on();
 				break;
 			case 56:
 				// 十字キー
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 5), TutorialObject::CELL(1, 5)
+					)
+				)->on();
 				break;
 			case 99:
 				// 右向き開始の敵
