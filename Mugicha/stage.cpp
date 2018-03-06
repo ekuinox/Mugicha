@@ -392,12 +392,22 @@ bool Stage::stagefile_loader(const char * filepath)
 				)->on();
 				break;
 			case 56:
-				// 十字キー
+				// 十字キー 右
 				emplace_polygon_back(
 					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
 					new TutorialObject(
 						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
 						TutorialObject::CELL(0, 5), TutorialObject::CELL(1, 5)
+					)
+				)->on();
+				break;
+			case 57:
+				// 十字キー 左
+				emplace_polygon_back(
+					SquarePolygonBase::PolygonTypes::TUTORIAL_OBJECTS,
+					new TutorialObject(
+						j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, CELL_WIDTH, CELL_HEIGHT, textures["TUTORIALS_01"], camera,
+						TutorialObject::CELL(0, 5), TutorialObject::CELL(2, 5)
 					)
 				)->on();
 				break;
