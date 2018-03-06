@@ -287,6 +287,7 @@
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="gage.cpp" />
+    <ClCompile Include="game_clear_logo.cpp" />
     <ClCompile Include="gimmick_floor.cpp" />
     <ClCompile Include="gimmick_switch.cpp" />
     <ClCompile Include="goal.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="controller.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="gage.h" />
+    <ClInclude Include="game_clear_logo.h" />
     <ClInclude Include="gimmick_floor.h" />
     <ClInclude Include="gimmick_switch.h" />
     <ClInclude Include="goal.h" />

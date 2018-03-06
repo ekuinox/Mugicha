@@ -153,6 +153,9 @@
     <ClCompile Include="tutorial_object.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
+    <ClCompile Include="game_clear_logo.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -262,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="tutorial_object.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="game_clear_logo.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

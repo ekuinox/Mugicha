@@ -8,6 +8,7 @@
 #include "helpers.h"
 #include "stage_thumbnail.h"
 #include "always_displayed_polygon.h"
+#include "game_clear_logo.h"
 
 #define CAMERA_MOVE_SPEED (2.0f)
 
@@ -41,6 +42,7 @@ private:
 	StageThumbnail* stage_thumbnails[3];
 	PlainSquarePolygon *hyousiki;
 	PlainSquarePolygon *press_start;
+	GameClearLogo *gclogo;
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();

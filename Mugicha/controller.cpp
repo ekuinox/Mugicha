@@ -66,6 +66,10 @@ void Controller::init()
 	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, textures["HYOUSIKI"], 0, camera);
 	polygons.emplace_back(hyousiki);
 
+	// ƒQ[ƒ€ƒNƒŠƒA‚Ì‚Æ‚«‚Éo‚·ƒƒS
+	gclogo = new GameClearLogo(textures["GAMECLEAR_LOGO"], camera);
+	polygons.emplace_back(gclogo);
+
 	// ƒV[ƒ“Ø‚è‘Ö‚¦
 	switch_scene(Scene::Title);
 }
@@ -162,6 +166,7 @@ void Controller::switch_scene(Scene _scene)
 		// ”wŒi
 		background->change_texture(textures["GAMECLEAR_BG"]);
 		background->on();
+		gclogo->on();
 		camera.x = SCREEN_WIDTH / 2;
 		break;
 	case Scene::End:
