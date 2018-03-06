@@ -26,6 +26,8 @@ private:
 	bool held; // プレイヤに掴まれているか
 	bool on_ground;
 	POLSIZE default_size;
+	POLSIZE held_size; // 掴まれているときのサイズ
+	POLSIZE noheld_size; // 掴まれていないときのサイズ
 	GimmickSwitch *gimmick_switch;
 	void generate_vertexes();
 };
