@@ -18,7 +18,6 @@ void Controller::init()
 		{ "STAGE_02", TEXTURES_DIR "stage_02.png" },
 		{ "STAGE_03", TEXTURES_DIR "stage_03.png" },
 		{ "HYOUSIKI", TEXTURES_DIR "hyousiki.png" },
-		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
 		{ "SELECTOR", TEXTURES_DIR "selector.png"},
