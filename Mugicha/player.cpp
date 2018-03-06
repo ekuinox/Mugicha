@@ -15,9 +15,18 @@ bool Player::collision_for_enemies()
 		{
 			if (zoom_level >= 1.0f)
 			{
-				// プレイヤの負け
-				kill(DeadReason::HitEnemy);
-				return true;
+				if (life <= 1)
+				{
+					// プレイヤの負け
+					kill(DeadReason::HitEnemy);
+					return true;
+				}
+				else
+				{
+					--life;
+					enemy->kill();
+				}
+				
 			}
 			else
 			{
@@ -340,7 +349,7 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer 
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
 	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y),
-	old_vec(Player::Vec::CENTER), dead_falling_speed(0.1f)
+	old_vec(Player::Vec::CENTER), dead_falling_speed(0.1f), life(PLAYER_LIFE_COUNT_MAX)
 {
 	init();
 }
@@ -582,6 +591,11 @@ SQUARE Player::get_square()
 	auto sq = PlainSquarePolygon::get_square();
 	sq.w *= 0.8;
 	return sq;
+}
+
+char Player::get_life()
+{
+	return life;
 }
 
 // === Player END ===

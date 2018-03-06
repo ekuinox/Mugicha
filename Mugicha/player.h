@@ -34,6 +34,8 @@
 
 #define DEATH_HOLD_TIME (1000)
 
+#define PLAYER_LIFE_COUNT_MAX (2) // 2回食らうと死ぬ // 敵に当たった場合のみ，ほかは一撃死
+
 // プレイヤークラス
 
 class Player : public PlainSquarePolygon
@@ -83,6 +85,8 @@ private:
 	
 	AudioController *audiocontroller;
 
+	char life; // playerのイノチ
+
 	bool collision_for_enemies();
 	bool collision_for_thorns();
 	bool collision_for_magmas();
@@ -120,4 +124,5 @@ public:
 	Player::DeadReason dead();
 	Player::Vec get_vec();
 	SQUARE get_square();
+	char get_life();
 };
