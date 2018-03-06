@@ -9,7 +9,8 @@
 	SquarePolygonBase::PolygonTypes::RAGGED_FLOOR, \
 	SquarePolygonBase::PolygonTypes::THORN, \
 	SquarePolygonBase::PolygonTypes::AIRCANNON, \
-	SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH \
+	SquarePolygonBase::PolygonTypes::GIMMICK_SWITCH, \
+	SquarePolygonBase::PolygonTypes::MAGMA \
 	} // 当たり判定を取るポリゴンのタイプまとめ
 #define ENEMY_WIDTH (CELL_WIDTH * 0.8) // 幅
 #define ENEMY_HEIGHT (CELL_HEIGHT * 0.8) // 高さ
