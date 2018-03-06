@@ -1,8 +1,8 @@
 #pragma once
 #include "always_displayed_polygon.h"
 
-#define GAGE_WIDTH (25)
-#define GAGE_HEIGHT (75)
+#define GAGE_WIDTH (40)
+#define GAGE_HEIGHT (120)
 #define GAGE_RECOVERY_SPEED (0.0005f) // ÉQÅ[ÉWâÒïúë¨ìx
 
 /*
