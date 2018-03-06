@@ -128,7 +128,8 @@ bool Stage::stagefile_loader(const char * filepath)
 		new HellGate(
 			map_size.w / 2,
 			-1000,
-			map_size.w * 2.0f, 300,
+			map_size.w * 2.0f, 
+			500,
 			textures["HELLGATE_01"],
 			0,
 			camera,
