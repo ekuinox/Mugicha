@@ -12,6 +12,10 @@ void Controller::init()
 	std::map<const char*, const char*> texture_files = {
 		{ "TITLE_BG", TEXTURES_DIR "title.jpg"},
 		{ "Z", TEXTURES_DIR "z.png" },
+		{ "OOMING", TEXTURES_DIR "ooming.png" },
+		{ "STAGE_01", TEXTURES_DIR "stage_01.png" },
+		{ "STAGE_02", TEXTURES_DIR "stage_02.png" },
+		{ "STAGE_03", TEXTURES_DIR "stage_03.png" },
 		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
@@ -41,6 +45,12 @@ void Controller::init()
 	// Z
 	zooming_z = new ZoomingZ(textures["Z"], camera);
 	polygons.emplace_back(zooming_z);
+
+	// ステージ用のサムネ
+	stage_thumbnails[0] = new StageThumbnail(textures["STAGE_01"], camera, SCREEN_WIDTH * 1.25f, SCREEN_HEIGHT / 2);
+	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2);
+	stage_thumbnails[2] = new StageThumbnail(textures["STAGE_03"], camera, SCREEN_WIDTH * 1.75f, SCREEN_HEIGHT / 2);
+	for (const auto& thumb : stage_thumbnails) polygons.emplace_back(thumb);
 
 	// シーン切り替え
 	switch_scene(Scene::Title);
@@ -76,9 +86,13 @@ void Controller::switch_scene(Scene _scene)
 		background->off();
 		zooming_z->off();
 		break;
+	case Scene::AnimetionTitleToSelect:
+		background->off();
+		for (const auto& thumb : stage_thumbnails) thumb->off();
+		break;
 	case Scene::Select:
 		background->off();
-		camera.x += SCREEN_WIDTH;
+		for (const auto& thumb : stage_thumbnails) thumb->off();
 		break;
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
@@ -98,6 +112,11 @@ void Controller::switch_scene(Scene _scene)
 		background->change_texture(textures["TITLE_BG"]);
 		background->on();
 		zooming_z->on();
+		camera.x = SCREEN_WIDTH / 2;
+		break;
+	case Scene::AnimetionTitleToSelect:
+		for (const auto& thumb : stage_thumbnails) thumb->on();
+		background->on();
 		break;
 	case Scene::Select:
 		// 背景
@@ -108,6 +127,8 @@ void Controller::switch_scene(Scene _scene)
 		selector->init();
 		selector->on();
 
+		for (const auto& thumb : stage_thumbnails) thumb->on();
+		
 		break;
 	case Scene::Gaming:
 		stage = new Stage(selector->get_selection());
@@ -162,14 +183,28 @@ void Controller::update()
 	else
 	{
 		for (const auto& polygon : polygons) polygon->update();
-
+		auto current = SCNOW;
 		switch (scene)
 		{
 		case Scene::Title:
 			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
-				switch_scene(Scene::Select);
+				switch_scene(Scene::AnimetionTitleToSelect);
 			}
+			break;
+		case Scene::AnimetionTitleToSelect:
+			//  アニメーションする
+			if (camera.x < SCREEN_WIDTH * 1.5f)
+			{
+				if (time_diff(latest_update, current) > UPDATE_INTERVAL)
+				{
+					latest_update = current;
+					camera.x += CAMERA_MOVE_SPEED;
+				}
+				
+			}
+			else switch_scene(Scene::Select);
+			
 			break;
 		case Scene::Select:
 			// カーソルを左に

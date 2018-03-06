@@ -9,6 +9,8 @@
 #include "stage_thumbnail.h"
 #include "always_displayed_polygon.h"
 
+#define CAMERA_MOVE_SPEED (1.0f)
+
 // ゲーム管理用のクラス
 class Controller
 {
