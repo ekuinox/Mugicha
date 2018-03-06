@@ -124,5 +124,5 @@ public:
 	Player::DeadReason dead();
 	Player::Vec get_vec();
 	SQUARE get_square();
-	char get_life();
+	char& get_life();
 };

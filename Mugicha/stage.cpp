@@ -417,6 +417,9 @@ bool Stage::stagefile_loader(const char * filepath)
 	// ゲージのセット
 	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(25, 50, textures["GAGE_01"])))->on();
 
+	// ライフゲージのセット
+	emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new LifeGage(textures["LIFE_GAGE_01"], player->get_life()))->on();
+
 #ifdef _DEBUG // デバッグ用のラインとか
 	// 原点
 	emplace_polygon_back(SquarePolygonBase::PolygonTypes::DEBUG_GUIDE, new PlainSquarePolygon(0, 0, 20, 20, textures["ORIGIN"], 2, camera))->on();

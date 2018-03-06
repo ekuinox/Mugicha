@@ -156,6 +156,9 @@
     <ClCompile Include="game_clear_logo.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClCompile>
+    <ClCompile Include="life_gage.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -268,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="game_clear_logo.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="life_gage.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

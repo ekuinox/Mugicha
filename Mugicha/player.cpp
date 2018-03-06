@@ -19,6 +19,7 @@ bool Player::collision_for_enemies()
 				{
 					// ƒvƒŒƒCƒ„‚Ì•‰‚¯
 					kill(DeadReason::HitEnemy);
+					life = 0;
 					return true;
 				}
 				else
@@ -593,7 +594,7 @@ SQUARE Player::get_square()
 	return sq;
 }
 
-char Player::get_life()
+char& Player::get_life()
 {
 	return life;
 }

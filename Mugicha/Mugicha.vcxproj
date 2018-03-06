@@ -294,6 +294,7 @@
     <ClCompile Include="hellgate.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
+    <ClCompile Include="life_gage.cpp" />
     <ClCompile Include="magma.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -331,6 +332,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="keyconf.h" />
+    <ClInclude Include="life_gage.h" />
     <ClInclude Include="magma.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />

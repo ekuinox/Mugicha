@@ -18,6 +18,7 @@
 #include "hellgate.h"
 #include "gimmick_floor.h"
 #include "tutorial_object.h"
+#include "life_gage.h"
 
 // CELL_WIDTH * CELL_HEIGHTな1コマサイズのポリゴンレジスタマクロ
 
