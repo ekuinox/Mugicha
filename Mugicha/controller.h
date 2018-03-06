@@ -6,6 +6,10 @@
 #include "zooming_z.h"
 #include "selector.h"
 #include "helpers.h"
+#include "stage_thumbnail.h"
+#include "always_displayed_polygon.h"
+
+#define CAMERA_MOVE_SPEED (2.0f)
 
 // ƒQ[ƒ€ŠÇ——p‚ÌƒNƒ‰ƒX
 class Controller
@@ -16,6 +20,7 @@ public:
 	{
 		Ready,
 		Title,
+		AnimetionTitleToSelect,
 		Select,
 		Gaming,
 		GameOver,
@@ -29,9 +34,13 @@ private:
 	time_point latest_update;
 	std::map<const char*, LPDIRECT3DTEXTURE9> textures;
 	PolygonsVector polygons;
-	Background *background; // ”wŒiƒ|ƒŠƒSƒ“
+	AlwaysDisplayedPolygon *background; // ”wŒiƒ|ƒŠƒSƒ“
 	Selector *selector; // ƒZƒŒƒNƒ^[ƒ|ƒŠƒSƒ“
 	ZoomingZ *zooming_z; // Zooming‚ÌZ
+	PlainSquarePolygon *zooming_ooming;
+	StageThumbnail* stage_thumbnails[3];
+	PlainSquarePolygon *hyousiki;
+	PlainSquarePolygon *press_start;
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();

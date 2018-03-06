@@ -12,7 +12,12 @@ void Controller::init()
 	std::map<const char*, const char*> texture_files = {
 		{ "TITLE_BG", TEXTURES_DIR "title.jpg"},
 		{ "Z", TEXTURES_DIR "z.png" },
-		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
+		{ "OOMING", TEXTURES_DIR "ooming.png" },
+		{ "PRESS_START", TEXTURES_DIR "pressstart.png" },
+		{ "STAGE_01", TEXTURES_DIR "stage_01.png" },
+		{ "STAGE_02", TEXTURES_DIR "stage_02.png" },
+		{ "STAGE_03", TEXTURES_DIR "stage_03.png" },
+		{ "HYOUSIKI", TEXTURES_DIR "hyousiki.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
 		{ "SELECTOR", TEXTURES_DIR "selector.png"},
@@ -32,16 +37,33 @@ void Controller::init()
 	camera = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
 	
 	// 背景の登録
-	background = new Background(textures["TITLE_BG"], camera);
+	background = new AlwaysDisplayedPolygon(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, textures["TITLE_BG"], INT_MAX);
 	polygons.emplace_back(background);
-
 	// セレクタの登録
-	selector = new Selector(textures["SELECTOR"], camera);
+	selector = new Selector(textures["SELECTOR"]);
 	polygons.emplace_back(selector);
 
 	// Z
 	zooming_z = new ZoomingZ(textures["Z"], camera);
 	polygons.emplace_back(zooming_z);
+
+	// ooming!
+	zooming_ooming = new PlainSquarePolygon(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT - 200, SCREEN_WIDTH * 0.75f, 500, textures["OOMING"], 0, camera);
+	polygons.emplace_back(zooming_ooming);
+	
+	// press_start
+	press_start = new PlainSquarePolygon(SCREEN_WIDTH / 2, 200, SCREEN_WIDTH * 0.8f, 500, textures["PRESS_START"], 0, camera);
+	polygons.emplace_back(press_start);
+
+	// ステージ用のサムネ
+	stage_thumbnails[0] = new StageThumbnail(textures["STAGE_01"], camera, SCREEN_WIDTH * 1.25f, SCREEN_HEIGHT / 2);
+	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2);
+	stage_thumbnails[2] = new StageThumbnail(textures["STAGE_03"], camera, SCREEN_WIDTH * 1.75f, SCREEN_HEIGHT / 2);
+	for (const auto& thumb : stage_thumbnails) polygons.emplace_back(thumb);
+
+	// サムネの上のアレ
+	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT - 100, SCREEN_WIDTH * 0.6, 100, textures["HYOUSIKI"], 0, camera);
+	polygons.emplace_back(hyousiki);
 
 	// シーン切り替え
 	switch_scene(Scene::Title);
@@ -71,14 +93,14 @@ void Controller::switch_scene(Scene _scene)
 	}
 
 	// 変更前のシーンの終了処理
+	// 前の処理で全てはoffにされているのでわざわざまたoffをする必要はない
 	switch (scene)
 	{
 	case Scene::Title:
-		background->off();
-		zooming_z->off();
+		break;
+	case Scene::AnimetionTitleToSelect:
 		break;
 	case Scene::Select:
-		background->off();
 		break;
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
@@ -98,15 +120,31 @@ void Controller::switch_scene(Scene _scene)
 		background->change_texture(textures["TITLE_BG"]);
 		background->on();
 		zooming_z->on();
+		zooming_ooming->on();
+		press_start->on();
+		camera.x = SCREEN_WIDTH / 2;
+		break;
+	case Scene::AnimetionTitleToSelect:
+		for (const auto& thumb : stage_thumbnails) thumb->on();
+		background->on();
+		hyousiki->on();
+		press_start->on();
+		zooming_z->on();
+		zooming_ooming->on();
 		break;
 	case Scene::Select:
 		// 背景
-		background->change_texture(textures["STAGE_SELECT_BG"]);
+		background->change_texture(textures["TITLE_BG"]);
 		background->on();
 
 		// セレクタ
 		selector->init();
 		selector->on();
+
+		// ステージのサムネ
+		for (const auto& thumb : stage_thumbnails) thumb->on();
+		
+		hyousiki->on();
 
 		break;
 	case Scene::Gaming:
@@ -162,26 +200,44 @@ void Controller::update()
 	else
 	{
 		for (const auto& polygon : polygons) polygon->update();
-
+		auto current = SCNOW;
 		switch (scene)
 		{
 		case Scene::Title:
 			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
 			{
-				switch_scene(Scene::Select);
+				switch_scene(Scene::AnimetionTitleToSelect);
 			}
+			break;
+		case Scene::AnimetionTitleToSelect:
+			//  アニメーションする
+			if (camera.x < SCREEN_WIDTH * 1.5f)
+			{
+				if (time_diff(latest_update, current) > UPDATE_INTERVAL)
+				{
+					latest_update = current;
+					camera.x += CAMERA_MOVE_SPEED;
+				}
+				
+			}
+			else switch_scene(Scene::Select);
+			
 			break;
 		case Scene::Select:
 			// カーソルを左に
 			if (GetKeyboardTrigger(DIK_A) || GetKeyboardTrigger(DIK_LEFTARROW) || GetControllerButtonTrigger(XIP_D_LEFT))
 			{
 				selector->left();
+				for (const auto& thumb : stage_thumbnails) thumb->release();
+				stage_thumbnails[selector->get_selection() - 1]->trigger();
 			}
 
 			// カーソルを右に
 			if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHTARROW) || GetControllerButtonTrigger(XIP_D_RIGHT))
 			{
 				selector->right();
+				for (const auto& thumb : stage_thumbnails) thumb->release();
+				stage_thumbnails[selector->get_selection() - 1]->trigger();
 			}
 
 			// ゲーム開始

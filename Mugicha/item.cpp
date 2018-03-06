@@ -3,7 +3,9 @@
 #include "player.h"
 
 Item::Item(float _x, float _y, float _w, float _h, LPDIRECT3DTEXTURE9 _tex, int _layer, D3DXVECTOR2 & _camera, PolygonsContainer& _polygons, float _u, float _v, float _uw, float _vh)
-	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh), held(false), polygons(_polygons), on_ground(false), gimmick_switch(nullptr)
+	: ScalableObject(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
+	held(false), polygons(_polygons), on_ground(false), gimmick_switch(nullptr),
+	default_size(_w, _h)
 {
 }
 
@@ -68,7 +70,13 @@ SQUARE Item::get_square()
 }
 
 void Item::hold()
-{
+{	
+	{
+		w *= zoom_level;
+		h *= zoom_level;
+	}
+	
+
 	held = true;
 	if(gimmick_switch != nullptr) gimmick_switch->release();
 }
@@ -85,7 +93,15 @@ bool Item::hold(SQUARE sq)
 
 void Item::release()
 {
+	// –ß‚µ‚Ä‚â‚é
+	{
+		w /= zoom_level;
+		h /= zoom_level;
+	}
+	
+
 	// ƒY[ƒ€ƒŒƒxƒ‹‚É‡‚í‚µ‚½êŠ‚É–ß‚µ‚Ä‚â‚é
+
 	x /= zoom_level;
 	y /= zoom_level;
 	held = false;

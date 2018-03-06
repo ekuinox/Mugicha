@@ -1,17 +1,17 @@
 #pragma once
 
-#include "plain_square_polygon.h"
+#include "always_displayed_polygon.h"
 #include "conf.h"
 #include <map>
 
 // プレイヤークラス
 
-class Selector : public PlainSquarePolygon
+class Selector : public AlwaysDisplayedPolygon
 {
 private:
 	char selection;
 public:
-	Selector(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera);
+	Selector(LPDIRECT3DTEXTURE9 _tex);
 	~Selector();
 	void update();
 	// 独自

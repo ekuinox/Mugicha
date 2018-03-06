@@ -129,9 +129,6 @@
     <ClCompile Include="input.cpp">
       <Filter>ソース ファイル\io</Filter>
     </ClCompile>
-    <ClCompile Include="selector.cpp">
-      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
-    </ClCompile>
     <ClCompile Include="gimmick_floor.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
     </ClCompile>
@@ -146,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="zooming_z.cpp">
       <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="stage_thumbnail.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClCompile>
+    <ClCompile Include="selector.cpp">
+      <Filter>ソース ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,9 +175,6 @@
     </ClInclude>
     <ClInclude Include="ragged_floor.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\ScalableObjectDerived</Filter>
-    </ClInclude>
-    <ClInclude Include="selector.h">
-      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
@@ -250,6 +250,12 @@
     </ClInclude>
     <ClInclude Include="zooming_z.h">
       <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="stage_thumbnail.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\PlainSquarePolygonDerived</Filter>
+    </ClInclude>
+    <ClInclude Include="selector.h">
+      <Filter>ヘッダー ファイル\SquarePolygonBase\AlwaysDisplayedPolygonDerived</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
