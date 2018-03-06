@@ -2,14 +2,14 @@
 #include "helpers.h"
 
 StageThumbnail::StageThumbnail(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 & _camera, float _x, float _y, float _w, float _h)
-	: PlainSquarePolygon(_x, _y, _w, _h, _tex, STAGE_THUMBNAIL_LAYER, _camera, 0, 0, 1, 1), plus(STAGE_THUMBNAIL_SIZE_PLUS), triggered(false), init_coords(_x, _y)
+	: PlainSquarePolygon(SCREEN_WIDTH + _x, _y, _w, _h, _tex, STAGE_THUMBNAIL_LAYER, _camera, 0, 0, 1, 1), plus(STAGE_THUMBNAIL_SIZE_PLUS), triggered(false), init_coords(_x, _y)
 {
 	speed = STAGE_THUMBNAIL_ZOOM_SPEED;
 }
 
 void StageThumbnail::trigger()
 {
-	layer = 0;
+	layer = 1;
 	triggered = true;
 }
 

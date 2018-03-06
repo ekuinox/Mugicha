@@ -56,13 +56,13 @@ void Controller::init()
 	polygons.emplace_back(press_start);
 
 	// ステージ用のサムネ
-	stage_thumbnails[0] = new StageThumbnail(textures["STAGE_01"], camera, SCREEN_WIDTH * 1.25f, SCREEN_HEIGHT / 2);
-	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2);
-	stage_thumbnails[2] = new StageThumbnail(textures["STAGE_03"], camera, SCREEN_WIDTH * 1.75f, SCREEN_HEIGHT / 2);
+	stage_thumbnails[0] = new StageThumbnail(textures["STAGE_01"], camera, 210, SCREEN_HEIGHT / 2);
+	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT / 2);
+	stage_thumbnails[2] = new StageThumbnail(textures["STAGE_03"], camera, SCREEN_WIDTH - 210, SCREEN_HEIGHT / 2);
 	for (const auto& thumb : stage_thumbnails) polygons.emplace_back(thumb);
 
 	// サムネの上のアレ
-	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT - 100, SCREEN_WIDTH * 0.6, 100, textures["HYOUSIKI"], 0, camera);
+	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, textures["HYOUSIKI"], 0, camera);
 	polygons.emplace_back(hyousiki);
 
 	// シーン切り替え
@@ -101,6 +101,7 @@ void Controller::switch_scene(Scene _scene)
 	case Scene::AnimetionTitleToSelect:
 		break;
 	case Scene::Select:
+		for (const auto& thumb : stage_thumbnails) thumb->release();
 		break;
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;

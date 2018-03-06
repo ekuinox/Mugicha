@@ -1,7 +1,7 @@
 #pragma once
 #include "plain_square_polygon.h"
 
-#define ZOOMING_Z_X (150) // 初期位置Z
+#define ZOOMING_Z_X (250) // 初期位置Z
 #define ZOOMING_Z_Y (500) // 初期位置Y
 #define ZOOMING_Z_SIZE (300) // 初期サイズ
 #define ZOOMING_Z_MAX (500) // 最大サイズ
