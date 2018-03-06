@@ -38,6 +38,7 @@ private:
 	Selector *selector; // セレクターポリゴン
 	ZoomingZ *zooming_z; // ZoomingのZ
 	StageThumbnail* stage_thumbnails[3];
+	PlainSquarePolygon *hyousiki;
 	Stage *stage;
 	D3DXVECTOR2 camera;
 	void update();

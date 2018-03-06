@@ -16,6 +16,7 @@ void Controller::init()
 		{ "STAGE_01", TEXTURES_DIR "stage_01.png" },
 		{ "STAGE_02", TEXTURES_DIR "stage_02.png" },
 		{ "STAGE_03", TEXTURES_DIR "stage_03.png" },
+		{ "HYOUSIKI", TEXTURES_DIR "hyousiki.png" },
 		{ "STAGE_SELECT_BG", TEXTURES_DIR "stage_select_bg.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.png" },
@@ -51,6 +52,10 @@ void Controller::init()
 	stage_thumbnails[1] = new StageThumbnail(textures["STAGE_02"], camera, SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2);
 	stage_thumbnails[2] = new StageThumbnail(textures["STAGE_03"], camera, SCREEN_WIDTH * 1.75f, SCREEN_HEIGHT / 2);
 	for (const auto& thumb : stage_thumbnails) polygons.emplace_back(thumb);
+
+	// サムネの上のアレ
+	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT - 200, SCREEN_WIDTH * 0.6, 100, textures["HYOUSIKI"], 0, camera);
+	polygons.emplace_back(hyousiki);
 
 	// シーン切り替え
 	switch_scene(Scene::Title);
@@ -89,10 +94,12 @@ void Controller::switch_scene(Scene _scene)
 	case Scene::AnimetionTitleToSelect:
 		background->off();
 		for (const auto& thumb : stage_thumbnails) thumb->off();
+		hyousiki->off();
 		break;
 	case Scene::Select:
 		background->off();
 		for (const auto& thumb : stage_thumbnails) thumb->off();
+		hyousiki->off();
 		break;
 	case Scene::Gaming: // ステージから抜けて来たときの処理
 		delete stage;
@@ -117,6 +124,7 @@ void Controller::switch_scene(Scene _scene)
 	case Scene::AnimetionTitleToSelect:
 		for (const auto& thumb : stage_thumbnails) thumb->on();
 		background->on();
+		hyousiki->on();
 		break;
 	case Scene::Select:
 		// 背景
@@ -127,8 +135,11 @@ void Controller::switch_scene(Scene _scene)
 		selector->init();
 		selector->on();
 
+		// ステージのサムネ
 		for (const auto& thumb : stage_thumbnails) thumb->on();
 		
+		hyousiki->on();
+
 		break;
 	case Scene::Gaming:
 		stage = new Stage(selector->get_selection());
