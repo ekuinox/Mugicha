@@ -9,7 +9,7 @@
 #include <typeinfo>
 
 Stage::Stage(char _stage_select)
-	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select)
+	: latest_update(std::chrono::system_clock::now()), latest_draw(SCNOW), info(0, Stage::Status::Prep, _stage_select), bgm_main(true), nowplaying(Stage::SongPlaying::Main)
 {
 	init();
 }
@@ -637,12 +637,8 @@ void Stage::trigger_controlls()
 {
 	player->trigger_controlls();
 
-	if (GetKeyboardTrigger(DIK_0))
-	{
-		if (audiocontroller->is_playing("ETC_BGM_01"))audiocontroller->stop("ETC_BGM_01");
-		else audiocontroller->play("ETC_BGM_01");
-	}
-
+	// 隠し的な
+	switch_song();
 
 	// プレイヤのジャンプ中は拡縮ができない
 	if (player->is_jumping()) return;
@@ -731,6 +727,51 @@ void Stage::sort_pols()
 
 	// 大きいものが前に来るように
 	sort(draw_pols.begin(), draw_pols.end(), [](const SquarePolygonBase* x, const SquarePolygonBase* y) {return x->layer > y->layer; });
+}
+
+void Stage::switch_song()
+{
+	// キーに合わせて音楽を変更する
+	auto new_playing = nowplaying;
+	if (GetKeyboardTrigger(DIK_NUMPAD1) && nowplaying != SongPlaying::Back1)
+	{
+		new_playing = SongPlaying::Back1;
+		audiocontroller->play("ETC_BGM_01");
+	}
+	if (GetKeyboardTrigger(DIK_NUMPAD2) && nowplaying != SongPlaying::Back2)
+	{
+		new_playing = SongPlaying::Back2;
+		audiocontroller->play("ETC_BGM_02");
+	}
+	if (GetKeyboardTrigger(DIK_NUMPAD3) && nowplaying != SongPlaying::Back3)
+	{
+		new_playing = SongPlaying::Back3;
+		audiocontroller->play("ETC_BGM_03");
+	}
+	if (GetKeyboardTrigger(DIK_NUMPAD5) && nowplaying != SongPlaying::Main)
+	{
+		new_playing = SongPlaying::Main;
+		audiocontroller->play("MAIN_BGM");
+	}
+	if (new_playing != nowplaying)
+	{
+		switch (nowplaying)
+		{
+		case SongPlaying::Back1:
+			audiocontroller->stop("ETC_BGM_01");
+			break;
+		case SongPlaying::Back2:
+			audiocontroller->stop("ETC_BGM_02");
+			break;
+		case SongPlaying::Back3:
+			audiocontroller->stop("ETC_BGM_03");
+			break;
+		case SongPlaying::Main:
+			audiocontroller->stop("MAIN_BGM");
+			break;
+		}
+		nowplaying = new_playing;
+	}
 }
 
 template<typename _T> _T Stage::emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon)

@@ -63,6 +63,13 @@ private:
 	std::map<std::string, bool> switches; // スイッチマップ
 
 	AudioController* audiocontroller; // オーディオ
+	bool bgm_main; // 本来のBGMが流れているか
+	enum class SongPlaying {
+		Main,
+		Back1,
+		Back2,
+		Back3,
+	} nowplaying;
 
 	// 関数群
 	void multi_texture_loader(std::map<std::string, const char *> _textures); // テクスチャを読み込む
@@ -76,6 +83,8 @@ private:
 	void trigger_controlls(); // キーのトリガで操作するもの
 	void controll_camera(); // カメラの調節
 	void sort_pols(); // ポリゴンのソート
+	void switch_song(); // キーによって音楽を変えるバカ機能
+
 	template<typename _T> _T emplace_polygon_back(SquarePolygonBase::PolygonTypes type, _T polygon); // polygonsの指定されたラベルの最後にで追加する
 public:
 	Stage(char _stage_select);
