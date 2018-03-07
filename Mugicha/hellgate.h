@@ -2,7 +2,7 @@
 #include "scalable_object.h"
 #include "player.h"
 
-#define HELLGATE_SPEED (0.01f)
+#define HELLGATE_SPEED (0.05f)
 #define AREA (2)
 /*
 * HellGate

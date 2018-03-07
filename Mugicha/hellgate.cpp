@@ -17,7 +17,13 @@ void HellGate::update()
 
 	if (started)
 	{
-		y += speed;
+		auto current = SCNOW;
+		if(time_diff(latest_update, current) > UPDATE_INTERVAL)
+		{
+			latest_update = current;
+
+			y += speed;
+		}
 	}
 	else if(player->get_square().y > start.y * zoom_level)
 	{
