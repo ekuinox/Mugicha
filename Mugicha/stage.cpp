@@ -183,21 +183,21 @@ bool Stage::stagefile_loader(const char * filepath)
 				// 壁床
 				emplace_polygon_back(
 					SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
-					REGISTER_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera)
+					REGISTER_RAGGED_FLOOR(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.5, textures["FLOOR_01"], camera, player)
 				)->on();
 				break;
 			case 5:
 				// ハーフ床（上）
 				emplace_polygon_back(
 					SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
-					REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player)
+					REGISTER_RAGGED_FLOOR_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.75, textures["FLOOR_01"], camera, player)
 				)->on();
 				break;
 			case 6:
 				// ハーフ床（下）
 				emplace_polygon_back(
 					SquarePolygonBase::PolygonTypes::SCALABLE_OBJECT,
-					REGISTER_HALF_BLOCK(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player)
+					REGISTER_RAGGED_FLOOR_HALF(j * CELL_WIDTH + CELL_WIDTH / 2, map_size.h - i * CELL_HEIGHT + CELL_HEIGHT * 0.25, textures["FLOOR_01"], camera, player)
 				)->on();
 				break;
 			case 7:
