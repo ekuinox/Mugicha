@@ -295,9 +295,6 @@
     <None Include="resources\stages\textures_03.csv">
       <Filter>リソース ファイル\resources\stages</Filter>
     </None>
-    <None Include="resources\stages\sample.csv">
-      <Filter>リソース ファイル\resources\stages</Filter>
-    </None>
     <None Include="..\README.md">
       <Filter>etc</Filter>
     </None>

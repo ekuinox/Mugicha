@@ -355,7 +355,6 @@
     <None Include="resources\stages\audios_01.csv" />
     <None Include="resources\stages\audios_02.csv" />
     <None Include="resources\stages\audios_03.csv" />
-    <None Include="resources\stages\sample.csv" />
     <None Include="resources\stages\stage_01.csv" />
     <None Include="resources\stages\stage_02.csv" />
     <None Include="resources\stages\stage_03.csv" />
