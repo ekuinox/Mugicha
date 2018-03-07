@@ -257,12 +257,15 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 
 	vec = Player::Vec::CENTER;
 
+	bool walking = false;
+
 	// 左方向への移動
 	if (!(result & HitLine::LEFT) && PLAYER_MOVE_LEFT)
 	{
 		vector.x -= speed;
 		vec = Player::Vec::LEFT;
 		old_vec = vec;
+		walking = true;
 	}
 	
 	// 右方向への移動
@@ -271,6 +274,16 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 		vector.x += speed;
 		vec = Player::Vec::RIGHT;
 		old_vec = vec;
+		walking = true;
+	}
+
+	if (walking)
+	{
+	//	audiocontroller->play(SE_WALK);
+	}
+	else
+	{
+	//	audiocontroller->stop(SE_WALK);
 	}
 
 #if defined(_DEBUG) || defined(_STAGE_DEBUG) // あちこち行っちゃうぜデバッグモード
@@ -366,7 +379,9 @@ void Player::init()
 	ground = false;
 	controll_lock = false;
 
-	audiocontroller = new AudioController();
+	audiocontroller = new AudioController(
+		PLAYER_AUDIO_PARAMS
+	);
 }
 
 void Player::zoom(float _zoom_level)
@@ -490,6 +505,9 @@ void Player::update()
 		
 	// itemを持っているならitemの位置を修正してあげる
 	if (is_holding_item()) item->move(D3DXVECTOR2(x + w / ( (vec == Player::Vec::CENTER ? old_vec : vec) == Player::Vec::RIGHT ? 2 : -2), y));
+
+	// 音の更新
+	audiocontroller->reload();
 }
 
 void Player::lock()
@@ -566,6 +584,7 @@ void Player::trigger_controlls()
 		jumped_at = y;
 		jumping = true;
 		v = PLAYER_JUMPING_UV_V;
+		audiocontroller->play(SE_JUMP);
 	}
 
 	// プレイヤに掴ませたりする

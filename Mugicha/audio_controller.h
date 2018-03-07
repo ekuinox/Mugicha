@@ -42,14 +42,13 @@ public:
 	void stop(std::string label);
 	void pause(std::string label);
 	HRESULT add_audio(std::string label, Audio _audio);
-
+	void reload();
 #ifdef _DEBUG
 	void dump();
 #endif
 
 private:
 	std::map<std::string, Audio> audios;
-	std::vector<std::string> nowplayings;
 
 	IXAudio2 *Xaudio2;
 	IXAudio2MasteringVoice *mastering_voice;

@@ -36,6 +36,17 @@
 
 #define PLAYER_LIFE_COUNT_MAX (2) // 2回食らうと死ぬ // 敵に当たった場合のみ，ほかは一撃死
 
+
+// 音
+
+#define SE_JUMP "SE_JUMP_01"
+#define SE_WALK "SE_WALK_01"
+
+#define PLAYER_AUDIO_PARAMS { \
+	{SE_JUMP, {AUDIOS_DIR "se/player_jump_01.wav", false}}, \
+	{SE_WALK, {AUDIOS_DIR "se/player_walk_01.wav", false}}, \
+}
+
 // プレイヤークラス
 
 class Player : public PlainSquarePolygon
@@ -114,8 +125,7 @@ public:
 	void update();
 	void zoom(float _zoom_level);
 
-	// 独自関数
-	
+	// 独自関数	
 	void lock();
 	void unlock();
 	void kill(const DeadReason &_dead_reason);

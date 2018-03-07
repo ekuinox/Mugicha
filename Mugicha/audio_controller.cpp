@@ -162,6 +162,17 @@ HRESULT AudioController::add_audio(std::string label, Audio _audio)
 	return S_OK;
 }
 
+void AudioController::reload()
+{
+	for (auto&& audio : audios)
+	{
+		if (audio.second.source_voice != NULL)
+		{
+			audio.second.nowplaying = false;
+		}
+	}
+}
+
 #ifdef _DEBUG
 void AudioController::dump()
 {
