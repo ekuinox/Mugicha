@@ -17,6 +17,7 @@ void StageThumbnail::release()
 {
 	layer = STAGE_THUMBNAIL_LAYER;
 	triggered = false;
+	speed = STAGE_THUMBNAIL_ZOOM_SPEED;
 }
 
 bool StageThumbnail::is_triggered()
@@ -35,7 +36,21 @@ void StageThumbnail::update()
 		if (triggered)
 		{
 			// ƒgƒŠƒK‚³‚ê‚Ä‚¢‚éó‘Ô‚È‚çCplus‚É‡‚í‚¹‚ÄŠg‘åk¬‚·‚é
-			if(w < STAGE_THUMBNAIL_SIZE_MAX) w = h += speed;
+
+			if (plus)
+			{
+				if (w < STAGE_THUMBNAIL_TRIGGERD_SIZE_MAX) w = h += speed;
+				else
+				{
+					plus = false;
+					speed = STAGE_THUMBNAIL_ZOOM_SPEED * 0.1f;
+				}
+			}
+			else
+			{
+				if (STAGE_THUMBNAIL_TRIGGERD_SIZE_MIN < w) w = h -= speed;
+				else plus = true;
+			}
 
 		}
 		else
