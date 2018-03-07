@@ -247,7 +247,11 @@ void Player::ground_check(char &result)
 
 void Player::head_check(char & result)
 {
-	if (result & HitLine::TOP) jumping = false;
+	if (result & HitLine::TOP)
+	{
+		jumping = false;
+		audiocontroller->stop(SE_JUMP);
+	}
 }
 
 void Player::controlls(D3DXVECTOR2 & vector, char & result)

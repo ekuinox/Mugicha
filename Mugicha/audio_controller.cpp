@@ -161,10 +161,15 @@ HRESULT AudioController::add_audio(std::string label, Audio _audio)
 	_audio.buffer.LoopCount = (_audio.param.loop ? XAUDIO2_LOOP_INFINITE : 0);
 
 	Xaudio2->CreateSourceVoice(&_audio.source_voice, &_audio.wfx.Format);
-
 	audios[label] =_audio;
+	set_volume(label, _audio.param.volume);
 
 	return S_OK;
+}
+
+void AudioController::set_volume(std::string label, float volume)
+{
+	audios[label].source_voice->SetVolume(volume);
 }
 
 void AudioController::reload()
@@ -178,6 +183,7 @@ void AudioController::reload()
 
 			audio.second.source_voice->GetState(&state);
 
+			// ƒLƒ…[‚ª‚à‚¤‚Ë‚¦‚Æ‚¢‚¤‚±‚Æ‚ÍÄ¶‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚¢‚¤‚±‚Æ‚¾‚Æv‚¤
 			if(state.BuffersQueued == 0) audio.second.nowplaying = false;
 		}
 	}

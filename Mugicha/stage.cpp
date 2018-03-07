@@ -507,6 +507,7 @@ void Stage::init()
 
 	// ƒƒCƒ“‚ÌBGM‚ðÄ¶‚µ‚Ä‚¢‚­
 	audiocontroller->play("MAIN_BGM");
+	audiocontroller->set_volume("MAIN_BGM", 0.5f);
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";

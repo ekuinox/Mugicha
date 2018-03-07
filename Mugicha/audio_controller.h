@@ -17,8 +17,10 @@ public:
 	using PARAM = struct _PARAM {
 		LPCSTR filename; // file
 		bool loop; // ループさせるか
+		float volume; // ボリューム
 		_PARAM() {}
-		_PARAM(LPCSTR _filename, bool _loop) : filename(_filename), loop(_loop) {}
+		_PARAM(LPCSTR _filename, bool _loop) : filename(_filename), loop(_loop), volume(1.0f) {}
+		_PARAM(LPCSTR _filename, bool _loop, float _volume) : filename(_filename), loop(_loop), volume(_volume) {}
 	};
 	using Audio = struct _Audio {
 		PARAM param;
@@ -43,6 +45,7 @@ public:
 	void stop(std::string label);
 	void pause(std::string label);
 	HRESULT add_audio(std::string label, Audio _audio);
+	void set_volume(std::string label, float volume);
 	void reload(); // 音楽が実際に再生されているかを確認し，nowplayingをfalseにする
 #ifdef _DEBUG
 	void dump();
