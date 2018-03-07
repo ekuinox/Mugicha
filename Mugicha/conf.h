@@ -9,7 +9,11 @@
 
 // window‚ÌƒAƒŒ
 #define CLASS_NAME "AppClass"
+#ifndef _DEBUG
 #define WINDOW_NAME "Zooming"
+#else
+#define WINDOW_NAME "Zooming (Debug)"
+#endif
 
 // ŒÅ’è‚Ìİ’è‚ğ‚±‚±‚Éƒxƒ^‘‚«‚·‚é
 
