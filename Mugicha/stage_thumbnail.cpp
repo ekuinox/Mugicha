@@ -43,7 +43,7 @@ void StageThumbnail::update()
 				else
 				{
 					plus = false;
-					speed = STAGE_THUMBNAIL_ZOOM_SPEED * 0.1f;
+					speed = STAGE_THUMBNAIL_ZOOM_SPEED * 0.5f;
 				}
 			}
 			else
