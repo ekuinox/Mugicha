@@ -194,7 +194,7 @@ void AudioController::dump()
 {
 	for (const auto& audio : audios)
 	{
-		printf("LABEL: %s, FILE: %s\n", audio.first.c_str(), audio.second.param.filename);
+		printf("LABEL: %s, LOOP: %s, VOLUME: %f, FILE: %s\n", audio.first.c_str(), audio.second.param.loop ? "TRUE" : "FALSE", audio.second.param.volume, audio.second.param.filename);
 	}
 }
 #endif

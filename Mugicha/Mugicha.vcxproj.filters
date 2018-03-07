@@ -301,5 +301,14 @@
     <None Include="..\README.md">
       <Filter>etc</Filter>
     </None>
+    <None Include="resources\stages\audios_02.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\audios_03.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
+    <None Include="resources\stages\audios_01.csv">
+      <Filter>リソース ファイル\resources\stages</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -458,14 +458,20 @@ void Stage::multi_audio_loader(const char * filepath)
 
 	for (const auto& record : table)
 	{
-		// label,filepath,loop
-		if (record.size() == 3)
+		// label,filepath,loop,(volume)
+		if (record.size() >= 3)
 		{
 			char audio_file[256];
 			bool loop = strcmp(record[2].c_str(), "1") == 0 ? true : false; // 1‚ª‚ ‚ê‚Îƒ‹[ƒv‚³‚¹‚é
+			float volume = 1.0f;
 			sprintf_s(audio_file, "%s%s", AUDIOS_DIR, record[1].c_str());
 
-			if (FAILED(audiocontroller->add_audio(record[0], AudioController::Audio({ audio_file , loop }))))
+			if (record.size() == 4)
+			{
+				volume = std::atof(record[3].c_str());
+			}
+
+			if (FAILED(audiocontroller->add_audio(record[0], AudioController::Audio({ audio_file , loop , volume }))))
 			{
 #ifdef _DEBUG
 				printf("Failed to load audio file: %s\n", record[1].c_str());
@@ -507,7 +513,6 @@ void Stage::init()
 
 	// ƒƒCƒ“‚ÌBGM‚ðÄ¶‚µ‚Ä‚¢‚­
 	audiocontroller->play("MAIN_BGM");
-	audiocontroller->set_volume("MAIN_BGM", 0.5f);
 
 #ifdef _DEBUG
 	std::cout << "Stage Load Time: ";
