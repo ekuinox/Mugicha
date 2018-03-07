@@ -657,6 +657,11 @@ void Stage::trigger_controlls()
 			zoom_sign = Stage::Sign::MINUS;
 			player->lock();
 			if(hellgate->is_started()) gage->consume();
+
+			// ズーム音
+			if (audiocontroller->is_playing("SE_ZOOMING")) audiocontroller->stop("SE_ZOOMING");
+			audiocontroller->play("SE_ZOOMING");
+
 		}
 
 		// 通常状態
@@ -666,6 +671,10 @@ void Stage::trigger_controlls()
 			zoom_sign = (zoom_level < 1 ? Stage::Sign::PLUS : Stage::Sign::MINUS);
 			player->lock();
 			if (hellgate->is_started()) gage->consume();
+
+			// ズーム音
+			if (audiocontroller->is_playing("SE_ZOOMING")) audiocontroller->stop("SE_ZOOMING");
+			audiocontroller->play("SE_ZOOMING");
 		}
 
 		// 最大化 => 自分は小さくなる
@@ -675,6 +684,10 @@ void Stage::trigger_controlls()
 			zoom_sign = Stage::Sign::PLUS;
 			player->lock();
 			if (hellgate->is_started()) gage->consume();
+		
+			// ズーム音
+			if(audiocontroller->is_playing("SE_ZOOMING")) audiocontroller->stop("SE_ZOOMING");
+			audiocontroller->play("SE_ZOOMING");
 		}
 
 #if defined(_DEBUG) || defined(_STAGE_DEBUG)
