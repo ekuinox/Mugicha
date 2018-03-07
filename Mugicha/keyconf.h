@@ -15,4 +15,4 @@
 #define ZOOM_DEF (GetKeyboardTrigger(DIK_K) || GetControllerButtonTrigger(XIP_X)) // 普通
 #define ZOOM_MAX (GetKeyboardTrigger(DIK_J) || GetControllerButtonTrigger(XIP_RB)) // 最大
 
-#define KEY_BACK_TO_TITLE (GetKeyboardTrigger(DIK_F5) || GetControllerButtonTrigger(XIP_START)) // タイトルに戻るためのキー
+#define KEY_BACK_TO_TITLE (GetKeyboardTrigger(DIK_F5)) // タイトルに戻るためのキー
