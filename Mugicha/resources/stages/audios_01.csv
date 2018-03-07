@@ -1,5 +1,5 @@
 MAIN_BGM,bgm/kill_all_enemies.wav,1,0.4f
 ETC_BGM_01,bgm/towanoutage-tanuki-remix.wav,1
-ETC_BGM_02,bgm/towanoutage-tanuki-remix.wav,1
-ETC_BGM_03,bgm/towanoutage-tanuki-remix.wav,1
+ETC_BGM_02,bgm/akumu.wav,1
+ETC_BGM_03,bgm/FREQUENCY.wav,1
 SE_ZOOMING,se/zooming.wav,0,1
