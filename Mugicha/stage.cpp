@@ -425,7 +425,7 @@ bool Stage::stagefile_loader(const char * filepath)
 	for (const auto& thorn : polygons[SquarePolygonBase::PolygonTypes::THORN]) static_cast<Thorn*>(thorn)->set_floor();
 
 	// ゲージのセット
-	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(25, 50, textures["GAGE_01"])))->on();
+	(gage = emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new Gage(textures["GAGE_01"])))->on();
 
 	// ライフゲージのセット
 	emplace_polygon_back(SquarePolygonBase::PolygonTypes::GAGE, new LifeGage(textures["LIFE_GAGE_01"], player->get_life()))->on();

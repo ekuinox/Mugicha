@@ -1,8 +1,8 @@
 #include "gage.h"
 #include "helpers.h"
 
-Gage::Gage(float _x, float _y, LPDIRECT3DTEXTURE9 _tex)
-	: AlwaysDisplayedPolygon(_x, _y, GAGE_WIDTH, GAGE_HEIGHT, _tex, 1.0f / 3.0f * cost_gage_max, 0, 0, 1, 1.0f / 3.0f), current_cost(cost_gage_max)
+Gage::Gage(LPDIRECT3DTEXTURE9 _tex)
+	: AlwaysDisplayedPolygon(GAGE_X, GAGE_Y, GAGE_WIDTH, GAGE_HEIGHT, _tex, 1.0f / 3.0f * cost_gage_max, 0, 0, 1, 1.0f / 3.0f), current_cost(cost_gage_max)
 {
 }
 

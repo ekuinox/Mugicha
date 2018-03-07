@@ -4,6 +4,8 @@
 #define GAGE_WIDTH (40)
 #define GAGE_HEIGHT (120)
 #define GAGE_RECOVERY_SPEED (0.0005f) // ゲージ回復速度
+#define GAGE_X (25)
+#define GAGE_Y (70)
 
 /*
 * Gage
@@ -13,7 +15,7 @@
 class Gage : public AlwaysDisplayedPolygon
 {
 public:
-	Gage(float _x, float _y, LPDIRECT3DTEXTURE9 _tex);
+	Gage(LPDIRECT3DTEXTURE9 _tex);
 	void update();
 	float consume(); // 一回分消費して残量を返す，コストが足らない場合は負の値を返す
 	bool can_consume();
