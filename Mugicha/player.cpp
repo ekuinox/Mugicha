@@ -15,19 +15,23 @@ bool Player::collision_for_enemies()
 		{
 			if (zoom_level >= 1.0f)
 			{
-				if (life <= 1)
+				if (!unrivaled)
 				{
-					// プレイヤの負け
-					kill(DeadReason::HitEnemy);
-					life = 0;
-					return true;
+
+					if (life <= 1)
+					{
+						// プレイヤの負け
+						kill(DeadReason::HitEnemy);
+						life = 0;
+						return true;
+					}
+					else
+					{
+						--life;
+						unrivaled = true; // 無敵にする
+						unrivaled_time = SCNOW;
+					}
 				}
-				else
-				{
-					--life;
-					enemy->kill();
-				}
-				
 			}
 			else
 			{
@@ -341,6 +345,24 @@ bool Player::is_holding_item()
 	return item != nullptr;
 }
 
+void Player::update_unrivaled()
+{
+	unless(unrivaled) return;
+
+	// 点滅
+	if (time_diff(unrivaled_time) % 100 == 0)
+	{
+		is_drawing() ? hide() : show();
+	}
+
+	// 無敵時間のチェック
+	if (time_diff(unrivaled_time) > UNRIVALED_TIME)
+	{
+		unrivaled = false;
+		show();
+	}
+}
+
 void Player::generate_vertexes()
 {
 	// u値を変えてやりたいんだが
@@ -367,7 +389,8 @@ Player::Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer 
 	: PlainSquarePolygon(_x, _y, _w, _h, _tex, _layer, _camera, _u, _v, _uw, _vh),
 	polygons(_polygons), before_zoom_level(1.0f), dead_reason(DeadReason::ALIVE),
 	vec(Player::Vec::CENTER), item(nullptr), jumping(false), jumped_at(_y),
-	old_vec(Player::Vec::CENTER), dead_falling_speed(0.1f), life(PLAYER_LIFE_COUNT_MAX)
+	old_vec(Player::Vec::CENTER), dead_falling_speed(0.1f), life(PLAYER_LIFE_COUNT_MAX),
+	unrivaled(false), unrivaled_time(SCNOW)
 {
 	init();
 }
@@ -512,6 +535,9 @@ void Player::update()
 
 	// 音の更新
 	audiocontroller->reload();
+
+	// 無敵について更新
+	update_unrivaled();
 }
 
 void Player::lock()

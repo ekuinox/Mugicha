@@ -32,7 +32,9 @@
 #define PLAYER_JUMPING_UV_V (0.75f)
 #define PLAYER_DIE_UV_V (0.5f)
 
-#define DEATH_HOLD_TIME (1000)
+#define UNRIVALED_TIME (2000) // 無敵状態時間
+
+#define DEATH_HOLD_TIME (1000) // ギャーってなってる時間
 
 #define PLAYER_LIFE_COUNT_MAX (2) // 2回食らうと死ぬ // 敵に当たった場合のみ，ほかは一撃死
 
@@ -43,8 +45,8 @@
 #define SE_WALK "SE_WALK_01"
 
 #define PLAYER_AUDIO_PARAMS { \
-	{SE_JUMP, {AUDIOS_DIR "se/player_jump_01.wav", false}}, \
-	{SE_WALK, {AUDIOS_DIR "se/player_walk_01.wav", false}}, \
+	{SE_JUMP, {AUDIOS_DIR "se/player_jump_01.wav", false, 0.5f}}, \
+	{SE_WALK, {AUDIOS_DIR "se/player_walk_01.wav", false, 0.5f}}, \
 }
 
 // プレイヤークラス
@@ -97,6 +99,8 @@ private:
 	AudioController *audiocontroller;
 
 	char life; // playerのイノチ
+	bool unrivaled; // 無敵状態
+	time_point unrivaled_time; // 無敵になった時点
 
 	bool collision_for_enemies();
 	bool collision_for_thorns();
@@ -116,7 +120,7 @@ private:
 	bool catch_item(); // アイテムをつかむ
 	void release_item(); // アイテムを離す
 	bool is_holding_item(); // アイテムを持っているか
-
+	void update_unrivaled(); // 無敵に関する更新処理
 	void generate_vertexes();
 public:
 	Player(LPDIRECT3DTEXTURE9 _tex, D3DXVECTOR2 &_camera, PolygonsContainer &_polygons, int _layer, float _x, float _y, float _w = PLAYER_WIDTH, float _h = PLAYER_HEIGHT, float _u = 0.0f, float _v = 0.0f, float _uw = 0.1f, float _vh = 0.25f);
