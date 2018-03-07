@@ -32,7 +32,7 @@ void StageThumbnail::update()
 	auto current = SCNOW;
 	if (time_diff(latest_update, current) > UPDATE_INTERVAL)
 	{
-
+		latest_update = current;
 		if (triggered)
 		{
 			// ƒgƒŠƒK‚³‚ê‚Ä‚¢‚éó‘Ô‚È‚çCplus‚É‡‚í‚¹‚ÄŠg‘åk¬‚·‚é
@@ -43,7 +43,7 @@ void StageThumbnail::update()
 				else
 				{
 					plus = false;
-					speed = STAGE_THUMBNAIL_ZOOM_SPEED * 0.1f;
+					speed = STAGE_THUMBNAIL_ZOOM_SPEED * 0.5f;
 				}
 			}
 			else
