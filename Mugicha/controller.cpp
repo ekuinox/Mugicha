@@ -18,6 +18,7 @@ void Controller::init()
 		{ "STAGE_02", TEXTURES_DIR "stage_02.png" },
 		{ "STAGE_03", TEXTURES_DIR "stage_03.png" },
 		{ "HYOUSIKI", TEXTURES_DIR "hyousiki.png" },
+		{ "PUSH_A", TEXTURES_DIR "pushA.png" },
 		{ "GAMEOVER_BG", TEXTURES_DIR "gameover_bg.jpg" },
 		{ "GAMECLEAR_BG", TEXTURES_DIR "gameclear_bg.jpg" },
 		{ "GAMECLEAR_LOGO", TEXTURES_DIR "gameclear.png" },
@@ -66,6 +67,9 @@ void Controller::init()
 	hyousiki = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, textures["HYOUSIKI"], 0, camera);
 	polygons.emplace_back(hyousiki);
 
+	// PUSH A
+	push_a = new PlainSquarePolygon(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, textures["PUSH_A"], 0, camera);
+	polygons.emplace_back(push_a);
 	// ÉQÅ[ÉÄÉNÉäÉAÇÃÇ∆Ç´Ç…èoÇ∑ÉçÉS
 	gclogo = new GameClearLogo(textures["GAMECLEAR_LOGO"], camera);
 	polygons.emplace_back(gclogo);
@@ -137,6 +141,7 @@ void Controller::switch_scene(Scene _scene)
 		press_start->on();
 		zooming_z->on();
 		zooming_ooming->on();
+		push_a->on();
 		break;
 	case Scene::Select:
 		// îwåi
@@ -153,6 +158,8 @@ void Controller::switch_scene(Scene _scene)
 	
 		for (const auto& thumb : stage_thumbnails) thumb->release();
 		stage_thumbnails[selector->get_selection() - 1]->trigger();
+
+		push_a->on();
 
 		camera.x = SCREEN_WIDTH * 1.5f;
 
@@ -254,7 +261,7 @@ void Controller::update()
 			}
 
 			// ÉQÅ[ÉÄäJén
-			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_START))
+			if (GetKeyboardTrigger(DIK_RETURN) || GetControllerButtonTrigger(XIP_A))
 			{
 				switch_scene(Scene::Gaming);
 			}

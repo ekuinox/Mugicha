@@ -39,6 +39,7 @@ private:
 	Selector *selector; // セレクターポリゴン
 	ZoomingZ *zooming_z; // ZoomingのZ
 	PlainSquarePolygon *zooming_ooming;
+	PlainSquarePolygon *push_a;
 	StageThumbnail* stage_thumbnails[3];
 	PlainSquarePolygon *hyousiki;
 	PlainSquarePolygon *press_start;
