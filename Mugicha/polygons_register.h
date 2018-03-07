@@ -38,7 +38,7 @@
 #define REGISTER_HALF_WALL(x, y, tex, camera, player) new ScalableObject(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH / 2, CELL_HEIGHT, tex, 1, camera)
 
 #define REGISTER_RAGGED_FLOOR(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
-#define REGISTER_RAGGED_FLOOR_HALF(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH / 2, CELL_HEIGHT, tex, 1, camera, player)
+#define REGISTER_RAGGED_FLOOR_HALF(x, y, tex, camera, player) new RaggedFloor(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT / 2, tex, 1, camera, player)
 
 #define REGISTER_GOAL(x, y, tex, camera, player) new Goal(static_cast<float>(x), static_cast<float>(y), CELL_WIDTH, CELL_HEIGHT, tex, 1, camera, player)
 
