@@ -150,6 +150,10 @@ void Controller::switch_scene(Scene _scene)
 		// ステージのサムネ
 		for (const auto& thumb : stage_thumbnails) thumb->on();
 		hyousiki->on();
+	
+		for (const auto& thumb : stage_thumbnails) thumb->release();
+		stage_thumbnails[selector->get_selection() - 1]->trigger();
+
 		camera.x = SCREEN_WIDTH * 1.5f;
 
 		break;
