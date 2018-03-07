@@ -279,11 +279,11 @@ void Player::controlls(D3DXVECTOR2 & vector, char & result)
 
 	if (walking)
 	{
-	//	audiocontroller->play(SE_WALK);
+		audiocontroller->play(SE_WALK);
 	}
 	else
 	{
-	//	audiocontroller->stop(SE_WALK);
+		audiocontroller->stop(SE_WALK);
 	}
 
 #if defined(_DEBUG) || defined(_STAGE_DEBUG) // あちこち行っちゃうぜデバッグモード

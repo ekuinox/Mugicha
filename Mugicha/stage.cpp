@@ -555,6 +555,9 @@ void Stage::update()
 			for (const auto& polygon : _polygons.second)
 				polygon->update();
 	}
+
+	// 音に関しての更新
+	audiocontroller->reload();
 }
 
 void Stage::draw()
@@ -627,6 +630,13 @@ void Stage::zoom()
 void Stage::trigger_controlls()
 {
 	player->trigger_controlls();
+
+	if (GetKeyboardTrigger(DIK_0))
+	{
+		if (audiocontroller->is_playing("ETC_BGM_01"))audiocontroller->stop("ETC_BGM_01");
+		else audiocontroller->play("ETC_BGM_01");
+	}
+
 
 	// プレイヤのジャンプ中は拡縮ができない
 	if (player->is_jumping()) return;

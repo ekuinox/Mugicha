@@ -102,6 +102,11 @@ void AudioController::play(std::string label)
 	if (SUCCEEDED(audios[label].source_voice->Start(0))) audios[label].nowplaying = true;
 }
 
+bool AudioController::is_playing(std::string label)
+{
+	return audios[label].nowplaying;
+}
+
 void AudioController::stop(std::string label)
 {
 	if (audios[label].source_voice == NULL) return;
@@ -166,9 +171,14 @@ void AudioController::reload()
 {
 	for (auto&& audio : audios)
 	{
-		if (audio.second.source_voice != NULL)
+		//  まずフラグをチェック
+		if (audio.second.nowplaying)
 		{
-			audio.second.nowplaying = false;
+			XAUDIO2_VOICE_STATE state;
+
+			audio.second.source_voice->GetState(&state);
+
+			if(state.BuffersQueued == 0) audio.second.nowplaying = false;
 		}
 	}
 }

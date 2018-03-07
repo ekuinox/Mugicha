@@ -39,10 +39,11 @@ public:
 	HRESULT init();
 	void uninit();
 	void play(std::string label);
+	bool is_playing(std::string label);
 	void stop(std::string label);
 	void pause(std::string label);
 	HRESULT add_audio(std::string label, Audio _audio);
-	void reload();
+	void reload(); // 音楽が実際に再生されているかを確認し，nowplayingをfalseにする
 #ifdef _DEBUG
 	void dump();
 #endif
